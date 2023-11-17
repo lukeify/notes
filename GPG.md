@@ -11,7 +11,7 @@ Finally and crucially, how to configure both autosigning within git as well as a
 ```sh
 git config --global commit.gpgsign true
 brew install pinentry-mac
-echo "pinentry-program /usr/local/bin/pinentry-mac" >> ~/.gnupg/gpg.conf
+echo "pinentry-program /usr/local/bin/pinentry-mac" >> ~/.gnupg/gpg-agent.conf
 gpgconf --kill gpg-agent
 ```
 
