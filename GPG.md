@@ -13,8 +13,8 @@ This only needs to be done once, the configuration below then becomes per machin
 
 To configure a key locally, or otherwise use an existing key on a machine:
 
-* [Telling Git about your signing key][3]
-* [Sign git commits on GitHub with GPG in macOS][4]
+- [Telling Git about your signing key][3]
+- [Sign git commits on GitHub with GPG in macOS][4]
 
 I used these guides to configure a GPG key to be used for autosigning via `git`, in this order:
 
