@@ -28,7 +28,7 @@ This means you don't need to use services like [AltStore][1] or [SideStore][2] t
 
 2. Create a Wildcard App Identifier in the [_Identifiers_ section][6] of developer.apple.com.
    The _Description_ will end up being the displayed name of the identifier.
-Set the _Bundle ID_ to _Wildcard_ with an asterisk.
+   Set the _Bundle ID_ to _Wildcard_ with an asterisk.
    No capabilities or app services seem to be needed.
 
 3. Ensure the device you'd like to load the application on is present in the [_Devices_ section][7] of developer.apple.com.
