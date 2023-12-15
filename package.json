@@ -6,6 +6,9 @@
     "type": "git",
     "url": "https://github.com/lukeify/notes.git"
   },
+  "scripts": {
+    "test": "prettier . --check"
+  },
   "devDependencies": {
     "prettier": "3.1.1"
   }
