@@ -12,17 +12,24 @@ With a paid Apple Developer account, you can sideload apps onto an iOS device fo
         > 
         > You can identify this account by looking in the accounts tab of the Xcode preferences. It is also displayed in the team menu displayed in a target's general build settings. Your personal account will be the account with the string '(Personal Team)' beside the name.
 
+     ![](images/xcode-signing-certificates.png)
+
     * Once created, visit `Keychain Access.app` and you will see two new entries:
         1. A private key titled `Apple Development: <Name> (<Team Name>)`
         2. A certificate title `Apple Development: <Name> (<Team ID>)`
    
-    * You can also visit "[Certificates, Identifiers & Profiles][5]" and see the certificate present there.
+    * You can also visit "[Certificates, Identifiers & Profiles][5]" and see and download the certificate there.
+   
+     ![](images/certificate-download.png)
    
 2. Create a Wildcard App Identifier in the [Identifiers section][6] of developer.apple.com. The "Description" will end up being the identifier of the identifier, set the "Bundle ID" to "Wildcard" with an asterisk. No capabilities or app servces seem to be needed.
 
 3. Ensure the device you'd like to load the application on is present in the [Devices section][7] of developer.apple.com. You can have up to 100 iPhones present within a one-year period (you have a once-a-year opportunity to unregister previous devices that occurs on the anniversary of your developer membership). Set the "Platform" to "iOS, iPadOS, tvOS, watchOS, visionOS", the "Device Name" to anything (although preferably it's the same device name within the device).
 
     * The "Device ID" or UDID (Unique Device Identifier) can be found in both Finder and Apple Configurator when the device is connected. For Finder, when the device is connected, navigate to the iPhone's pane, and click the device details under the name (for example "iPhone 15 Pro — 511.87GB (xxx.xxGB available)") once. The UDID will be shown alongside the Serial Number and Device Model.
+    
+    ![](images/iphone-udid-in-finder.png)
+   
 
 4. Finally, relate all of these entities together using a "Profile", which is, as Apple describes it: 
 
