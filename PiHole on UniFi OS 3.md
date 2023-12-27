@@ -1,6 +1,6 @@
 # PiHole on UniFi OS 3
 
-I previously have [written a guide][1] for my own benefit on how to configure PiHole running inside a UniFi Dream Machine (UDM) running UniFi OS 1.x.
+I have previously [written a guide][1] for my own benefit on how to configure PiHole running inside a UniFi Dream Machine (UDM) running UniFi OS 1.x.
 This guide amends those instructions for UniFi OS 3.x, which contains many large architectural changes; this requires us to use [`nspawn`][2] instead of `podman`—which we used with UniFi OS 1.x—for containerization of our PiHole installation.
 
 We will be following the stellar [containerization][3] and [pihole configuration][4] guides from the `unifi-utilities` repo, adapted here with some personal preference adjustments to configuration
@@ -19,8 +19,9 @@ If you're migrating from a previous PiHole configuration that you're planning to
 
 ### Part 1. UniFi OS configuration
 
-1.  Create a new VLAN in your UDM [here][5], with the following settings.
+1.  Create a new VLAN in your UDM [here][5], with the settings from the following table.
     I have chosen to use `192.168.2.x` as the address range for this network—with a corresponding VLAN ID of 2—as it is the next integer beyond `192.168.1.x`, which is the VLAN containing all my client devices.
+    A netmask of 26 will provide more than enough IPs for client devices (and in fact could be significantly reduced further—a netmask of 28 would still allow for 14 devices).
     We will assign our PiHole instance an IP of `192.168.2.2` within this VLAN, which will be used for configuration later.
 
     | Setting            | Value          |
@@ -41,7 +42,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
     Note that specifying a "secondary" DNS server within the Unifi OS configuration here _will not_ act as a "fallback" server as one might assume, but rather DNS lookups will be distributed _amongst_ these servers.
     This defeats the blocking nature of PiHole and thus this field should be left blank.
 
-        ![WAN DNS configuration](./images/dns-configuration-in-wan.png)
+    ![WAN DNS configuration](./images/dns-configuration-in-wan.png)
 
 3.  Likewise, configure your primary LAN's "DHCP Mode" to "DHCP Server", and set the DNS server to point to `192.168.2.2`—ensuring the "Auto" checkbox is off.
 
@@ -49,8 +50,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
 
 ### Part 2. SSH into your UniFi console
 
-1. Under the _OS Settings_ tab in your UniFi console, click _Console Settings_ → _Advanced_ and tick the _SSH_ checkbox.
-   This will let us SSH into our UniFi console.
+1. If you haven't previously enabled SSH access to your UniFi console, under the _OS Settings_ tab in your UniFi console, click _Console Settings_ → _Advanced_ and tick the _SSH_ checkbox.
 
     ![SSH checkbox in Console settings](./images/ssh-checkbox-in-console-settings.png)
 
@@ -120,7 +120,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
     MACVLAN=br2
     ```
 
-6.  Grab a copy of the `10-setup-network.sh` [script][7] from the `unifios-utilities` repository, place it in `/data/on_boot.d` and edit it with the VLAN and IP configuration for your container and gateway from the above table.
+6.  Grab a copy of the `10-setup-network.sh` [script][7] from the `unifios-utilities` repository, place it in `/data/on_boot.d` and edit it with the VLAN and IP configuration for your container and gateway from the VLAN configuration table in part 1 of this guide.
     Amend the arguments like so:
 
     -   Modify `VLAN` to match the identifier of your PiHole's VLAN (for me, `2`).
@@ -137,7 +137,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
     ```
 
 7.  Create a `mv-br2.network` file within the `etc/systemd/network` directory _inside your container_.
-    I have chosen to name of this network (`mv-br2`) to use the same integer as my VLAN for consistency.
+    I have chosen the name of this network (`mv-br2`) to use the same integer as my VLAN for consistency.
 
     ```shell
     cd /data/custom/machines/pihole/etc/systemd/network
@@ -255,11 +255,11 @@ If you're migrating from a previous PiHole configuration that you're planning to
     You should now set a password, or configure PiHole to use your previous password if you're migrating from a previous PiHole installation.
     Run the [PiHole password command][9], and then follow the prompts to set a password:
 
-        ```shell
-        # -a flag indicates "admin"
-        # -p flag indicates "password"
-        pihole -a -p
-        ```
+    ```shell
+    # -a flag indicates "admin"
+    # -p flag indicates "password"
+    pihole -a -p
+    ```
 
 10. PiHole's web admin interface should now be accessible at [pi.hole/admin][10]—login using the password you set in the previous step.
 
