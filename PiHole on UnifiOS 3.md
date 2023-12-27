@@ -1,27 +1,27 @@
 # PiHole on UnifiOS 3
 
 I previously have [written a guide][1] for my own benefit on how to configure PiHole running inside a UniFi Dream Machine (UDM) running UniFi OS 1.x.
-This guide amends those instructions for UniFi OS 3.x, which contains large architectural changes by using [`nspawn`][2] instead of `podman`—which was used by UniFi OS 1.x—is no longer supported as a containerization implementation.
+This guide amends those instructions for UniFi OS 3.x, which contains many large architectural changes; this requires us to use [`nspawn`][2] instead of `podman`—which we used with UniFi OS 1.x—for containerization of our PiHole installation.
 
-We will be following the [unifi-utilities/unifios-utilities guide][3], adapted here with some personal preference adjustments to configuration
+We will be following the stellar [containerization][3] and [pihole configuration][4] guides from the `unifi-utilities` repo, adapted here with some personal preference adjustments to configuration
 (but many thanks to the contributors of that guide for the prior art).
-This involves using `systemd-nspawn` to create a container that will run our `pihole` functionality, that can be controlled via `machinectl`.
+This involves using `systemd-nspawn` to create a container—that can be controlled via `machinectl`—that will run our `pihole` instance.
 
 ## Steps
 
 ### Prerequisites
 
-If you're migrating from a previous PiHole configuration that you're planning on using again, be sure to back up your PiHole configuration using its _Teleporter_ functionality.
+If you're migrating from a previous PiHole configuration that you're planning to use again, be sure to back up your PiHole configuration using the _Teleporter_ functionality.
 
-1. Navigate to the PiHole web admin interface, navigate to _Settings_ → _Teleporter_, and export a backup from this screen.
+1. Navigate to the PiHole web admin interface, _Settings_ → _Teleporter_, and export a backup from this screen.
 
     ![PiHole Teleporter Backup UI](./images/pihole-teleporter-backup-ui.png)
 
 ### Part 1. UniFi OS configuration
 
-1. Create a new VLAN in your UDM [here][4], with the following settings.
-   I have chosen to use `192.168.2.x` as the address range for this network—with a corresponding VLAN ID of 2—as it is the next incremented integer beyond `192.168.1.x`, which contains all my client devices.
-   We will assign out PiHole an IP of 192.168.2.2 which will be used later.
+1. Create a new VLAN in your UDM [here][5], with the following settings.
+   I have chosen to use `192.168.2.x` as the address range for this network—with a corresponding VLAN ID of 2—as it is the next integer beyond `192.168.1.x`, which is the VLAN containing all my client devices.
+   We will assign our PiHole instance an IP of `192.168.2.2` within this VLAN, which will be used for configuration later.
 
     | Setting            | Value          |
     | ------------------ | -------------- |
@@ -36,29 +36,30 @@ If you're migrating from a previous PiHole configuration that you're planning on
 
     ![PiHole VLAN configuration](./images/pihole-vlan.png)
 
-2. Configure your primary WAN such that its primary DNS Server is set to the IP address of your PiHole instance, in my case `192.168.2.2`—PiHole will forward DNS requests it allows to cloudflare as we've specified (`1.1.1.1`).
-   Note that specifying a "secondary" DNS server will not act as a fallback, rather DNS lookups will be distributed _amongst_ these servers.
-   This defeats the blocking nature of PiHole and thus should be left blank.
+2. Configure your primary WAN such that its primary DNS Server is set to the IP address of your PiHole instance (as mentioned before, `192.168.2.2`).
+PiHole will then forward DNS requests it determines should be allowed to cloudflare.
+   Note that specifying a "secondary" DNS server within the Unifi OS configuration here _will not_ act as a "fallback" server as one might assume, but rather DNS lookups will be distributed _amongst_ these servers.
+   This defeats the blocking nature of PiHole and thus this field should be left blank.
 
-   ![WAN DNS configuration](./images/dns-configuration-in-wan.png)
+    ![WAN DNS configuration](./images/dns-configuration-in-wan.png)
 
-3. Likewise, configure your primary LAN's "DHCP Mode" to "DHCP Server", set the DNS server to point to `192.168.2.2`—ensuring the "Auto" checkbox is off.
+3. Likewise, configure your primary LAN's "DHCP Mode" to "DHCP Server", and set the DNS server to point to `192.168.2.2`—ensuring the "Auto" checkbox is off.
 
     ![LAN DNS & DHCP configuration](./images/dns-dhcp-configuration-in-lan.png)
 
 ### Part 2. SSH into your UniFi console
 
 1. Under the _OS Settings_ tab in your UniFi console, click _Console Settings_ → _Advanced_ and tick the _SSH_ checkbox.
-    This will let us SSH into our UniFi console.
+   This will let us SSH into our UniFi console.
 
     ![SSH checkbox in Console settings](./images/ssh-checkbox-in-console-settings.png)
 
     Note there is also an SSH-related configuration under the _Network_ tab in your UniFi console (_Device SSH Authentication_, click _System_ → _Advanced_ to see it).
-    This is unrelated to SSHing into your UniFi OS controller.
+    This is unrelated to SSHing into your UniFi OS controller, but is shown in the image below for posterity.
 
     ![Device authentication checkbox in Network settings](./images/device-authentication-checkbox-in-network-settings.png)
 
-2. I also add a `Host` configuration into my `.ssh/config` to make this less typing:
+2. I also added a `Host` configuration into my `.ssh/config` to make SSHing into my console less typing:
 
     ```ssh
     Host udm
@@ -72,7 +73,8 @@ If you're migrating from a previous PiHole configuration that you're planning on
 
 ### Part 3. Container creation and configuration
 
-1.  Install `systemd-container` and `debootstrap` to create a directory with a base debian system, and then use `systemd-nspawn` to boot the container.
+1.  Install `systemd-container` and `debootstrap` to create a directory with a base debian system.
+    We will then use `systemd-nspawn` to boot the container.
 
     ```shell
     apt -y install systemd-container debootstrap
@@ -82,7 +84,7 @@ If you're migrating from a previous PiHole configuration that you're planning on
 
     ```shell
     mkdir -p /data/custom/machines
-    cd /data/cstom/machines
+    cd /data/custom/machines
     debootstrap --include=systemd,dbus unstable pihole
     ```
 
@@ -97,16 +99,16 @@ If you're migrating from a previous PiHole configuration that you're planning on
     exit
     ```
 
-4.  Now on the host OS of the UDM device, link the container to `/var/lib/machines` so we can control it with `machinectl`.
+4.  Now back on the host OS of the UDM device, symlink the container directory to `/var/lib/machines` so we can control it with `machinectl`.
 
     ```shell
     mkdir -p /var/lib/machines
     ln -s /data/custom/machines/pihole /var/lib/machines
     ```
 
-5.  Create a `pihole.nspawn` file (using `vim`, etc) to configure parameters of the container (such as bind mounts and networking), and is used by `systemd-nspawn`.
-    The file should be named after the container that is being configured.
-    There is some useful documentation on the configuration of this file at [debian.org][5].
+5.  Create a `pihole.nspawn` file (using `vim`, etc) to configure parameters of the container (such as bind mounts and networking).
+    The file should be named after the container that is being configured, and will be used by `systemd-nspawn`.
+    There is some useful documentation on the configuration options of this file at [debian.org][6].
     Here is the configuration we will use going forward, take note of the `MACVLAN` parameter being set to `br2`—this relates to the VLAN network we will isolate our container on.
 
     ```nspawn
@@ -118,7 +120,7 @@ If you're migrating from a previous PiHole configuration that you're planning on
     MACVLAN=br2
     ```
 
-6.  Grab a copy of the `10-setup-network.sh` script, place it in `/data/on_boot.d` and write to it with the VLAN and IP configuration for your container and gateway from the above table.
+6.  Grab a copy of the `10-setup-network.sh` [script][7] from the `unifios-utilities` repository, place it in `/data/on_boot.d` and edit it with the VLAN and IP configuration for your container and gateway from the above table.
     Amend the arguments like so:
 
     -   Modify `VLAN` to match the identifier of your PiHole's VLAN (for me, `2`).
@@ -127,7 +129,7 @@ If you're migrating from a previous PiHole configuration that you're planning on
     -   Leave `IPV6_GW` and `IPV6_IP` as empty strings.
 
     Executing this script will create a `brX.mac` interface as a gateway bridge.
-    We have already ensured our `pihole.nspawn` file properly references this VLAN bridge in step 5.
+    We have already ensured our `pihole.nspawn` file properly references this VLAN bridge in the previous step.
 
     ```shell
     mkdir -p /data/on_boot.d && cd /data/on_boot.d
@@ -135,7 +137,7 @@ If you're migrating from a previous PiHole configuration that you're planning on
     ```
 
 7.  Create a `mv-br2.network` file within the `etc/systemd/network` directory _inside your container_.
-    I have chosen to name of this network (`mv-br2`) also contain the identifier of my VLAN for consistency.
+    I have chosen to name of this network (`mv-br2`) to use the same integer as my VLAN for consistency.
 
     ```shell
     cd /data/custom/machines/pihole/etc/systemd/network
@@ -181,28 +183,28 @@ If you're migrating from a previous PiHole configuration that you're planning on
 
     Run `ping -c4 1.1.1.1` to confirm connections to the outside world are working.
 
-9.  This network configuration script needs to be run on boot—this can be accomplished with the UDM boot script from `unifios-utilities`, that will execute any script placed into `/data/on_boot.d`.
+9.  This network configuration script needs to be run on boot—this can be accomplished with the [UDM boot script][8] from `unifios-utilities`, that will execute any script placed into `/data/on_boot.d`.
 
     ```shell
     curl -fsL "https://raw.githubusercontent.com/unifi-utilities/unifios-utilities/HEAD/on-boot-script/remote_install.sh" | /bin/sh
     ```
 
-### Part 4. Check your container is working
+### Part 4. Check your container is working and final steps
 
 1. Let's run through some checks:
 
-    * Typing `machinectl status pihole` should show us a running container.
-    * We can enter into a shell in this container via `machinectl shell pihole` (typing `exit` from within this shell will place us back in UniFi OS).
-    * Typing `machinectl login pihole` will present us a login prompt like a Normal linux system.
+    - Typing `machinectl status pihole` should show us the details of our running container.
+    - We can enter into a shell in this container via `machinectl shell pihole` (typing `exit` from within this shell will place us back in UniFi OS).
+    - Typing `machinectl login pihole` will present us a login prompt as expected from a linux system.
 
 2. To start our container on system boot, run `machinectl enable pihole`.
 
 ### Part 5. Firmware persistence
 
-1. When the firmware on your UDM is updated, `/data` and `/etc/systemd` will be preserved. These contain our container storage and boot scripts, respectively. But! `/var` and `/usr` will be deleted.
+1. When the firmware on your UDM is updated, `/data` and `/etc/systemd` will be preserved. These contain our container storage and boot scripts, respectively. But—`/var` and `/usr` will be deleted!
    This is where we symlink our container to (via `machinectl`).
-   Any additional debian packages that are installed on the host OS (like `systemd-container`) will also be deleted.
-   To mitigate this, we can run a boot script to reinstall our packages and re-symlink our container so `machinectl` can control it, which is again provided by `unifios-utilities`:
+   Furthermore, any additional debian packages that are installed on the host OS (like `systemd-container`) will also be deleted.
+   To mitigate this, we can run a script on boot to reinstall our packages and re-symlink our container so `machinectl` can control it, which is again provided by `unifios-utilities`:
 
     ```shell
     cd /data/on_boot.d
@@ -217,56 +219,56 @@ If you're migrating from a previous PiHole configuration that you're planning on
     apt download systemd-container libnss-mymachines debootstrap arch-test
     ```
 
-    Because we've installed the unifios-utilities `on-boot-script`, this means `0-setup-system.sh` itself will be started on boot.
+    Because we've installed the unifios-utilities `on-boot-script` previously, this means `0-setup-system.sh` itself will be started on boot.
 
 ### Part 6. PiHole configuration
 
-1. Spawn a shell into your container.
+1.  Spawn a shell into your container.
 
     ```shell
     machinectl shell pihole
     ```
 
-2. Within our container, we will now install PiHole programmatically, by following the prompts from the PiHole installer.
+2.  Within our container, we will now install PiHole procedurally, by following the prompts from the PiHole installer.
 
     ```shell
     apt -y install curl
     curl -sSL https://install.pi-hole.net | PIHOLE_SKIP_OS_CHECK=true bash
     ```
 
-    You must use `PIHOLE_SKIP_OS_CHECK=true` do PiHole can be installed on Debian `unstable`.
-    We can now run `apt clean` to delete the package cache and shrink the container size.
+    You must use `PIHOLE_SKIP_OS_CHECK=true` so PiHole can be installed on Debian `unstable`.
+    We can now run `apt clean` to delete the package cache and shrink the container's size.
 
-3. Select "Continue" when the install indicates a static IP is needed.
+3.  Select "Continue" when the install indicates a static IP is needed.
 
-4. Select "Cloudflare" as our custom upstream DNS provider.
+4.  Select "Cloudflare" as our custom upstream DNS provider.
 
-5. As we will be using PiHole's teleport functionality to import a previous PiHole configuration, select "No" to including blocklists on install.
+5.  As we will be using PiHole's teleport functionality to import a previous PiHole configuration, select "No" to including blocklists on install.
 
-6. Select "Yes" to install the admin web interface.
+6.  Select "Yes" to install the admin web interface.
 
-7. Select "Yes" to install the default web server that PiHole uses (`lighthttpd`).
+7.  Select "Yes" to install the default web server that PiHole uses (`lighthttpd`).
 
-8. Select "Yes" to enabling query logging, and on the next page to determine how verbose query logging should be, select "Show everything".
+8.  Select "Yes" to enabling query logging, and on the next page to determine how verbose query logging should be, select "Show everything".
 
-9. PiHole's installation will now be complete.
-You should now set a password, or configure PiHole to use your previous password if you're migrating from a previous PiHole installation.
-Run the [following command][6], and then follow the prompts to set a password:
+9.  PiHole's installation will now be complete!
+    You should now set a password, or configure PiHole to use your previous password if you're migrating from a previous PiHole installation.
+    Run the [PiHole password command][9], and then follow the prompts to set a password:
 
-    ```shell
-    # -a flag indicates "admin"
-    # -p flag indicates "password"
-    pihole -a -p
-    ```
+        ```shell
+        # -a flag indicates "admin"
+        # -p flag indicates "password"
+        pihole -a -p
+        ```
 
-10. PiHole's web admin interface should now be accessible at [pi.hole/admin][7]—login using the password you set in the previous step.
+10. PiHole's web admin interface should now be accessible at [pi.hole/admin][10]—login using the password you set in the previous step.
 
 11. If you plan on using a fresh install of PiHole, you can skip this step.
-Otherwise, if you plan to use PiHole's teleporter functionality to import a previous configuration, do that now.
-In the PiHole admin interface, navigate to _Settings_ → _Teleporter_, and restore your backed up `.tar.gz` file, choosing to restore whatever configuration options you'd like.
+    Otherwise, if you plan to use PiHole's teleporter functionality to import a previous configuration, do that now.
+    In the PiHole admin interface, navigate to _Settings_ → _Teleporter_, and restore your backed up `.tar.gz` file, choosing to restore whatever configuration options you'd like.
 
 12. Under _Settings_ → _DNS_, if it isn't already ticked, select "Permit all origins".
-This allows requests originating from more than a single hop away (such as your LAN clients).
+    This allows requests originating from more than a single hop away (such as your LAN clients).
 
 13.
 
@@ -324,24 +326,16 @@ tk tk tk
 [1]: https://gist.github.com/lukeify/96e73218b4de79891a46a89fdc2c2045
 [2]: https://wiki.debian.org/nspawn
 [3]: https://github.com/unifi-utilities/unifios-utilities/tree/main/nspawn-container
-[4]: https://192.168.1.1/network/default/settings/networks/new
-[5]: https://manpages.debian.org/unstable/systemd-container/systemd.nspawn.5.en.html
-[6]: https://docs.pi-hole.net/core/pihole-command/#password
-[7]: http://pi.hole/admin
+[4]: https://github.com/unifi-utilities/unifios-utilities/blob/main/nspawn-container/examples/pihole/README.md
+[5]: https://192.168.1.1/network/default/settings/networks/new
+[6]: https://manpages.debian.org/unstable/systemd-container/systemd.nspawn.5.en.html
+[7]: https://github.com/unifi-utilities/unifios-utilities/blob/main/nspawn-container/scripts/10-setup-network.sh
+[8]: https://github.com/unifi-utilities/unifios-utilities/tree/main/on-boot-script
+[9]: https://docs.pi-hole.net/core/pihole-command/#password
+[10]: http://pi.hole/admin
 
 ---
-
-[How to install Pi-Hole in Container][5]
-
-
 
 https://github.com/unifi-utilities/unifios-utilities/tree/main/nspawn-container
 https://discourse.pi-hole.net/t/why-should-pi-hole-be-my-only-dns-server/3376
 https://superuser.com/questions/258151/how-do-i-check-what-dns-server-im-using-on-mac-os-x
-
-
-
-
-[4]: https://github.com/unifi-utilities/unifios-utilities/tree/main/on-boot-script
-[5]: https://github.com/unifi-utilities/unifios-utilities/blob/main/nspawn-container/examples/pihole/README.md
-
