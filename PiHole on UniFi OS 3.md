@@ -1,4 +1,4 @@
-# PiHole on UnifiOS 3
+# PiHole on UniFi OS 3
 
 I previously have [written a guide][1] for my own benefit on how to configure PiHole running inside a UniFi Dream Machine (UDM) running UniFi OS 1.x.
 This guide amends those instructions for UniFi OS 3.x, which contains many large architectural changes; this requires us to use [`nspawn`][2] instead of `podman`—which we used with UniFi OS 1.x—for containerization of our PiHole installation.
@@ -19,9 +19,9 @@ If you're migrating from a previous PiHole configuration that you're planning to
 
 ### Part 1. UniFi OS configuration
 
-1. Create a new VLAN in your UDM [here][5], with the following settings.
-   I have chosen to use `192.168.2.x` as the address range for this network—with a corresponding VLAN ID of 2—as it is the next integer beyond `192.168.1.x`, which is the VLAN containing all my client devices.
-   We will assign our PiHole instance an IP of `192.168.2.2` within this VLAN, which will be used for configuration later.
+1.  Create a new VLAN in your UDM [here][5], with the following settings.
+    I have chosen to use `192.168.2.x` as the address range for this network—with a corresponding VLAN ID of 2—as it is the next integer beyond `192.168.1.x`, which is the VLAN containing all my client devices.
+    We will assign our PiHole instance an IP of `192.168.2.2` within this VLAN, which will be used for configuration later.
 
     | Setting            | Value          |
     | ------------------ | -------------- |
@@ -36,14 +36,14 @@ If you're migrating from a previous PiHole configuration that you're planning to
 
     ![PiHole VLAN configuration](./images/pihole-vlan.png)
 
-2. Configure your primary WAN such that its primary DNS Server is set to the IP address of your PiHole instance (as mentioned before, `192.168.2.2`).
-PiHole will then forward DNS requests it determines should be allowed to cloudflare.
-   Note that specifying a "secondary" DNS server within the Unifi OS configuration here _will not_ act as a "fallback" server as one might assume, but rather DNS lookups will be distributed _amongst_ these servers.
-   This defeats the blocking nature of PiHole and thus this field should be left blank.
+2.  Configure your primary WAN such that its primary DNS Server is set to the IP address of your PiHole instance (as mentioned before, `192.168.2.2`).
+    PiHole will then forward DNS requests it determines should be allowed to cloudflare.
+    Note that specifying a "secondary" DNS server within the Unifi OS configuration here _will not_ act as a "fallback" server as one might assume, but rather DNS lookups will be distributed _amongst_ these servers.
+    This defeats the blocking nature of PiHole and thus this field should be left blank.
 
-    ![WAN DNS configuration](./images/dns-configuration-in-wan.png)
+        ![WAN DNS configuration](./images/dns-configuration-in-wan.png)
 
-3. Likewise, configure your primary LAN's "DHCP Mode" to "DHCP Server", and set the DNS server to point to `192.168.2.2`—ensuring the "Auto" checkbox is off.
+3.  Likewise, configure your primary LAN's "DHCP Mode" to "DHCP Server", and set the DNS server to point to `192.168.2.2`—ensuring the "Auto" checkbox is off.
 
     ![LAN DNS & DHCP configuration](./images/dns-dhcp-configuration-in-lan.png)
 
@@ -270,7 +270,7 @@ PiHole will then forward DNS requests it determines should be allowed to cloudfl
 12. Under _Settings_ → _DNS_, if it isn't already ticked, select "Permit all origins".
     This allows requests originating from more than a single hop away (such as your LAN clients).
 
-13.
+You should now be complete with a functioning PiHole instance running inside a container of your UDM. Enjoy! Read over the FAQ below if you've had an issue or want to know more about this process.
 
 ## FAQ
 
@@ -278,50 +278,57 @@ PiHole will then forward DNS requests it determines should be allowed to cloudfl
 
 To my understanding this allows you to SSH into other UniFi devices (access points, etc)—potentially from your UniFi OS console; and is unrelated to SSHing into your controller itself.
 
-### The PiHole docker container, FTL, and WebUI version numbers in the footer of the PiHole Admin GUI read "N/A", how do I fix this?
-
-Rebooted pihole (Pihole admin UI -> Settings -> etc etc). This changed the versioning in the bottom from "N/A" to "vDev"
-Ran `pihole updatechecker`. Correct version numbers now showing.
-
-### Why is the number of blocked domains incorrect in the PiHole Web UI?
-
-Updated gravity (Pihole admin UI -> Tools -> Update gravity) and domains on adlists became the correct number again.
-
 ### When running `ip addr show mv-br2`, what is `192.168.2.63` doing in the output?
 
-tk tk tk
+This is the broadcast address of the interface. Because we set our subnet mask to 26, this results in 62 available clients on the network, from `192.168.2.1` to `192.168.2.62`—where the next IP address, `192.168.2.63` becomes the broadcast address.
+[This calculator][11] is handy for showing how these addresses can be arrived at.
 
 ### Downloading `apt` packages for backup resulted in a warning about performing downloads "unsandboxed". Why is this?
 
-tk tk tk
+For example:
 
 ```
 W: Download is performed unsandboxed as root as file '/data/custom/dpkg/arch-test_0.17-1_all.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)
 ```
 
-### When enabling PiHole query logging, why did this error message occur?
+The `apt` package manager will usually try to fetch packages using the `_apt` user as a security measure;
+however, if `apt` is requested to install a package that already exists on the filesystem, and the `_apt` user does not have permission to read that file, then instead the `root` user will be used to do so.
+This leads to the warning message.
+
+### When configuring PiHole for the first time, why did this error appear in the setup process?
 
 ```
 [✗] Unable to fill table adlist in database /etc/pihole/gravity.db
 Error: cannot open "/tmp/tmp.awdNvLc8bI"
 ```
 
-### PiHole won't accept my backup?!
+I'm not sure. This may be a permissions issue, or something else has caused this temporary file to not exist at the time it needed to be accessed.
 
-I then attempted to restore my previous pihole configuration from backup, But teleporter would not accept a .tar file.
-I don't know how I ended up with this.
-I had to unarchive the tar file, and then recompress it as a tar.gz file via `tar czf [file] [folder]`.
-It seems like only some of the settings were restored though?
-Long term query statistics were not restored.
+### The PiHole docker container, FTL, and WebUI version numbers in the footer of the PiHole Admin GUI read "N/A", how do I fix this?
+
+After rebooting the PiHole instance, the versioning changed from "N/A" to "vDev".
+Running `pihole updatechecker` resulted in the correct version numbering being displayed.
+
+### Why is the number of blocked domains incorrect in the PiHole Web UI?
+
+Updating gravity after restoring your PiHole configuration should fix this.
+This can be accomplished via `pihole updategravity`.
+The number of blocked domains displayed as being blocked in the web admin UI should now be correct.
+
+### PiHole won't let me restore from my backup!
+
+When I attempted to restore my previous PiHole configuration from backup, I believe Safari automatically unarchived the `.tar.gz` file to a `.tar` file.
+I resolved this by unarchiving the `.tar` file to a directory, and then archiving it back to a `.tar.gz` file via the command `tar czf [out] [in]`.
 
 ### How do I back-up long term query statistics of my PiHole?
 
-tk tk tk
+This should be possible via backing up both the query and domain databases (`/etc/pihole/pihole-FTL.db` and `/etc/pihole/gravity.db`) respectively.
+More information on the contents and schema of PiHole's SQLite databases can be found [in the documentation][12].
 
 ## Notes
 
 -   Specifying `ssh-rsa` is no longer needed to SSH into the device.
-    This was resolved in UnifiOS 2.4.x.
+    This was resolved in Unifi OS 2.4.x.
 
 [1]: https://gist.github.com/lukeify/96e73218b4de79891a46a89fdc2c2045
 [2]: https://wiki.debian.org/nspawn
@@ -333,9 +340,5 @@ tk tk tk
 [8]: https://github.com/unifi-utilities/unifios-utilities/tree/main/on-boot-script
 [9]: https://docs.pi-hole.net/core/pihole-command/#password
 [10]: http://pi.hole/admin
-
----
-
-https://github.com/unifi-utilities/unifios-utilities/tree/main/nspawn-container
-https://discourse.pi-hole.net/t/why-should-pi-hole-be-my-only-dns-server/3376
-https://superuser.com/questions/258151/how-do-i-check-what-dns-server-im-using-on-mac-os-x
+[11]: https://jodies.de/ipcalc
+[12]: https://docs.pi-hole.net/database/
