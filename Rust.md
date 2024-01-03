@@ -40,10 +40,12 @@ Both `s1` and `s2` are valid at the end of this code example.
 
 ## `Copy` trait
 
-## `String` vs `&str`
+## Strings
 
-`String` is a dynamic vector of bytes (`Vec<u8>`) and is heap-allocated, growable, and not null-terminated.
-It can be owned, and is frankly the easiest to understand data type here. It can be defined at a high level as:
+**`String`** is a dynamic vector of bytes (`Vec<u8>`) and is heap-allocated, growable, UTF-8 encoded, and not [null-terminated](https://en.wikipedia.org/wiki/Null-terminated_string).
+It is an _owned type_ (as it owns the underlying bytes representing the string) and is frankly the easiest to understand data type here.
+It consists of a pointer to the string on the heap, its length, and its capacity.
+It can be [defined](https://doc.rust-lang.org/src/alloc/string.rs.html#365-367) at a high level as:
 
 ```rust
 pub struct String {
@@ -51,33 +53,35 @@ pub struct String {
 }
 ```
 
-When a "string literal" is declared, it
+(With an addition that the bytes of the `vec` are guaranteed to be valid UTF-8).
 
+**`&str`** is a _string slice_, also known as a "view into a string".
+It consists of a pointer to the string, and the string length, offering a view into a string.
+It is called a _borrowed type_, because it doesn't own the underlying data, and are immutable (and is therefore not growable).
 
+```rust
+let my_string: String = String::from("Hello!":);
+let my_string_slice: &str = &my_string;
+```
 
+The pointer can point to _either_ data on the heap, data in the compiled binary (in the case of string literals), or on the stack.
 
+The string slice is made up of two parts:
 
-[Summary comparison](https://stackoverflow.com/a/24159933)
+* The `str` type. This cannot be used directly because its size is not known at compile time.
+* The reference operator (`&`). We use this to get a pointer to the bytes of the string and its length.
 
+A **string literal** is a `&str` that is stored within the compiled binary itself:
 
+```rust
+let my_string_literal = "Hello, world!"; // Type is `&str`, which is syntactic sugar for `&'static str`.
+```
 
-A string literal when declared are of type `str`:
-
-
-
-
-
-
-To access a string literal, a slice is used.
-A slice stores an address where the `str` starts, and how many bytes is being stored.
-This is also called a "fat pointer".
-
-
-
-This is a "string slice" (`&[u8]`), and are immutable.
 When declared like this, they are hardcoded into the final executable as they are known at compile-time.
+String literals have a "static lifetime", which is to say their lifetime persists for the duration of the program execution.
 
-
+* [Summary comparison from StackOverflow](https://stackoverflow.com/a/24159933)
+* [All Rust string types explained (Let's Get Rusty)](https://www.youtube.com/watch?v=CpvzeyzgQdw)
 
 ## Pointers
 
