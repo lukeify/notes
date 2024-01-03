@@ -5,9 +5,9 @@
 [Ownership](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html) involves managing accessing, cleaning up, and tracking data stored in the heap.
 Rules of ownership:
 
-* Each value has an owner.
-* Only one owner allowed simultaneously.
-* Owner goes out of scope = value is dropped.
+-   Each value has an owner.
+-   Only one owner allowed simultaneously.
+-   Owner goes out of scope = value is dropped.
 
 ```rust
 {
@@ -68,8 +68,8 @@ The pointer can point to _either_ data on the heap, data in the compiled binary 
 
 The string slice is made up of two parts:
 
-* The `str` type. This cannot be used directly because its size is not known at compile time.
-* The reference operator (`&`). We use this to get a pointer to the bytes of the string and its length.
+-   The `str` type. This cannot be used directly because its size is not known at compile time.
+-   The reference operator (`&`). We use this to get a pointer to the bytes of the string and its length.
 
 A **string literal** is a `&str` that is stored within the compiled binary itself:
 
@@ -80,14 +80,14 @@ let my_string_literal = "Hello, world!"; // Type is `&str`, which is syntactic s
 When declared like this, they are hardcoded into the final executable as they are known at compile-time.
 String literals have a "static lifetime", which is to say their lifetime persists for the duration of the program execution.
 
-* [Summary comparison from StackOverflow](https://stackoverflow.com/a/24159933)
-* [All Rust string types explained (Let's Get Rusty)](https://www.youtube.com/watch?v=CpvzeyzgQdw)
+-   [Summary comparison from StackOverflow](https://stackoverflow.com/a/24159933)
+-   [All Rust string types explained (Let's Get Rusty)](https://www.youtube.com/watch?v=CpvzeyzgQdw)
 
 ## Pointers
 
 Types:
 
-* "Reference"
+-   "Reference"
 
 ## `Box`
 
