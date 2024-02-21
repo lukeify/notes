@@ -26,6 +26,19 @@ Not implemented in Safari ([WebKit ticket](https://bugs.webkit.org/show_bug.cgi?
 
 A workaround is instead of updating rules, just have one rule per ruleset and use the actually functional (in Chrome) at least `updateEnabledRulesets`.
 
+#### Regular expression limitations
+
+DNR matches conform to one of three types. One of these is `regexFilter`, but there is no syntax described in the WebExtensions specification for what functionality is available to regexes, as outlined in this [GitHub issue](https://github.com/w3c/webextensions/issues/344):
+Some notes on this with respect to Chrome's support.
+
+> In Chrome, regexpFilter is basically the syntax of the underlying RE2 library plus the additional implementation-dependent constraint that the memory usage of an individual regex may not exceed 2kb
+
+However, Safari `regexFilter` syntax is much more limited, and [described here](https://developer.apple.com/documentation/safariservices/creating_a_content_blocker#3030754).
+One important missing piece of functionality is OR expressions, i.e. `(gallery|poll)` to match the strings `gallery` or `poll` respectively.
+Practically, this means this rule must be split into two separate rules.
+
+`regexFilter` is not supported in Firefox yet.
+
 ### `storage`
 
 Defines an API where data can be persisted for a web extension.
@@ -33,4 +46,4 @@ There are a few `StorageArea`'s for manifest v3 web extensions, one of which is 
 One of the methods of each `StorageArea` is `get`, which accepts a `keys` argument (either a single string, or an array of strings) defining the keys to retrieve persisted data for.
 Providing `null` is defined in the spec as returning the entire storage contents.
 
-Unfortunately, Safari (both macOS and iOS) [do not support this functionality](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/StorageArea/get#browser_compatibility), so you must manually store all keys and provide that as an array to retrieve all contents.
+Unfortunately, Safari (both macOS and iOS) [does not support this functionality](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/StorageArea/get#browser_compatibility), so you must manually store all keys and provide that as an array to retrieve all contents.
