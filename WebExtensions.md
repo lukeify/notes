@@ -9,10 +9,10 @@ Caveats and idiosyncrasies of WebExtension APIs and their varying levels of brow
 Instead of procedurally blocking or modifying requests and responses, requires developers to implement a "rules" DSL on how requests should be blocked by the browser.
 Consists of four properties, one of which is optional:
 
-* `id`
-* `priority` (optional). If not provided, `priority` will equal `1`.
-* `condition`, an object containing predicate(s) the browser will evaluate.
-* `action`, the response to take if the condition yields true, an object where the `type` property is either `block` or `modifyHeaders`.
+-   `id`
+-   `priority` (optional). If not provided, `priority` will equal `1`.
+-   `condition`, an object containing predicate(s) the browser will evaluate.
+-   `action`, the response to take if the condition yields true, an object where the `type` property is either `block` or `modifyHeaders`.
 
 #### [`declarativeNetRequest.updateStaticRules`](https://developer.chrome.com/docs/extensions/reference/api/declarativeNetRequest#method-updateStaticRules)
 
