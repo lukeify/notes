@@ -23,7 +23,7 @@ let s1 = String::from("hello.");
 let s2 = s1;
 ```
 
-In this scenario s1 and s2 both are values that contain a pointer to the _same address in memory_ for the heap-stored data.
+In this scenario `s1` and `s2` both are values that contain a pointer to the _same address in memory_ for the heap-stored data.
 
 When `s2` is assigned, `s1` becomes invalid because if both were to go out of scope simultaneously, they will both be freed from memory simultaneously—despite pointing to only one location in memory.
 This is known as a _double free error_ and rust prevents this.
@@ -37,8 +37,6 @@ let s2 = s1.clone();
 ```
 
 Both `s1` and `s2` are valid at the end of this code example.
-
-## `Copy` trait
 
 ## Strings
 
@@ -57,7 +55,7 @@ pub struct String {
 
 **`&str`** is a _string slice_, also known as a "view into a string".
 It consists of a pointer to the string, and the string length, offering a view into a string.
-It is called a _borrowed type_, because it doesn't own the underlying data, and are immutable (and is therefore not growable).
+It is called a _borrowed type_, because it doesn't own the underlying data, and is immutable (and is therefore not growable).
 
 ```rust
 let my_string: String = String::from("Hello!":);
@@ -110,6 +108,8 @@ fn get_random_traitable() -> Box<dyn MyTrait> {
 
 [Rust by example](https://doc.rust-lang.org/rust-by-example/trait/dyn.html) reference.
 
+## `Copy` trait
+
 ## `pub(crate)` for struct members
 
 ## Attributes
@@ -121,3 +121,7 @@ fn get_random_traitable() -> Box<dyn MyTrait> {
 ## Apostrophes (related to types)
 
 ## Lifetimes
+
+## Self vs self
+
+https://stackoverflow.com/questions/32304595/whats-the-difference-between-self-and-self
