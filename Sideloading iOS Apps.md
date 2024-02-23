@@ -84,8 +84,8 @@ Doing this though will result in the certificate _not being deleted_ from the ce
 
 ## Questions
 
--   Can _Xcode_ automatically retrieve the created provisioning profile from developer.apple.com so we don't have to download it?
--   What is the definition of "automatic signing"?
+- Can _Xcode_ automatically retrieve the created provisioning profile from developer.apple.com so we don't have to download it?
+- What is the definition of "automatic signing"?
 
 ## Interesting info
 

@@ -9,17 +9,17 @@ Caveats and idiosyncrasies of WebExtension APIs and their varying levels of brow
 Instead of procedurally blocking or modifying requests and responses, requires developers to implement a "rules" DSL on how requests should be blocked by the browser.
 Each rule consists of four properties, one of which is optional:
 
--   `id`
--   `priority` (optional). If not provided, `priority` will equal `1`.
--   `condition`, an object containing predicate(s) the browser will evaluate.
--   `action`, the response to take if the condition yields true, an object where the `type` property is either `block` or `modifyHeaders`.
+- `id`
+- `priority` (optional). If not provided, `priority` will equal `1`.
+- `condition`, an object containing predicate(s) the browser will evaluate.
+- `action`, the response to take if the condition yields true, an object where the `type` property is either `block` or `modifyHeaders`.
 
 These rules are packaged into "rulesets".
 These rulesets can be either:
 
--   **static**, i.e. packaged with the web extension.
--   **dynamic**, provided by the user, or packaged with the web extension and updatable via `updateDynamicRules`.
--   **session** rulesets, that do not persist across browser sessions.
+- **static**, i.e. packaged with the web extension.
+- **dynamic**, provided by the user, or packaged with the web extension and updatable via `updateDynamicRules`.
+- **session** rulesets, that do not persist across browser sessions.
 
 #### [`declarativeNetRequest.updateStaticRules`][1]
 

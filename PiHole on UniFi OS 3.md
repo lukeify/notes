@@ -19,17 +19,17 @@ If you're migrating from a previous PiHole configuration that you're planning to
 
 ### Part 1. UniFi OS configuration
 
-1.  Create a new VLAN in your UDM [here][5], with the settings from the following table.
+1. Create a new VLAN in your UDM [here][5], with the settings from the following table.
     I have chosen to use `192.168.2.x` as the address range for this network—with a corresponding VLAN ID of 2—as it is the next integer beyond `192.168.1.x`, which is the VLAN containing all my client devices.
     A netmask of 26 will provide more than enough IPs for client devices (and in fact could be significantly reduced further—a netmask of 28 would still allow for 14 devices).
     We will assign our PiHole instance an IP of `192.168.2.2` within this VLAN, which will be used for configuration later.
 
     | Setting            | Value          |
-    | ------------------ | -------------- |
+    |--------------------|----------------|
     | Network Name       | PiHole         |
     | Auto-scale Network | false          |
     | Gateway IP/Subnet  | 192.168.2.1/26 |
-    | VLAN ID            | 2              |
+    | VLAN ID            | 2.             |
     | Network Type       | Standard       |
     | Content Filtering  | None           |
     | Multicast DNS      | true           |
@@ -37,14 +37,14 @@ If you're migrating from a previous PiHole configuration that you're planning to
 
     ![PiHole VLAN configuration](./images/pihole-vlan.png)
 
-2.  Configure your primary WAN such that its primary DNS Server is set to the IP address of your PiHole instance (as mentioned before, `192.168.2.2`).
+2. Configure your primary WAN such that its primary DNS Server is set to the IP address of your PiHole instance (as mentioned before, `192.168.2.2`).
     PiHole will then forward DNS requests it determines should be allowed to cloudflare.
     Note that specifying a "secondary" DNS server within the Unifi OS configuration here _will not_ act as a "fallback" server as one might assume, but rather DNS lookups will be distributed _amongst_ these servers.
     This defeats the blocking nature of PiHole and thus this field should be left blank.
 
     ![WAN DNS configuration](./images/dns-configuration-in-wan.png)
 
-3.  Likewise, configure your primary LAN's "DHCP Mode" to "DHCP Server", and set the DNS server to point to `192.168.2.2`—ensuring the "Auto" checkbox is off.
+3. Likewise, configure your primary LAN's "DHCP Mode" to "DHCP Server", and set the DNS server to point to `192.168.2.2`—ensuring the "Auto" checkbox is off.
 
     ![LAN DNS & DHCP configuration](./images/dns-dhcp-configuration-in-lan.png)
 
@@ -73,14 +73,14 @@ If you're migrating from a previous PiHole configuration that you're planning to
 
 ### Part 3. Container creation and configuration
 
-1.  Install `systemd-container` and `debootstrap` to create a directory with a base debian system.
+1. Install `systemd-container` and `debootstrap` to create a directory with a base debian system.
     We will then use `systemd-nspawn` to boot the container.
 
     ```shell
     apt -y install systemd-container debootstrap
     ```
 
-2.  Create a `pihole` directory containing a base debian system in `/data/custom/machines`.
+2. Create a `pihole` directory containing a base debian system in `/data/custom/machines`.
 
     ```shell
     mkdir -p /data/custom/machines
@@ -88,7 +88,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
     debootstrap --include=systemd,dbus unstable pihole
     ```
 
-3.  Once ready, we can create a shell to this container and perform some initial configuration by setting a password, enabling networking, and setting our DNS resolver to cloudflare.
+3. Once ready, we can create a shell to this container and perform some initial configuration by setting a password, enabling networking, and setting our DNS resolver to cloudflare.
 
     ```shell
     systemd-nspawn -M pihole -D /data/custom/machines/pihole
@@ -99,14 +99,14 @@ If you're migrating from a previous PiHole configuration that you're planning to
     exit
     ```
 
-4.  Now back on the host OS of the UDM device, symlink the container directory to `/var/lib/machines` so we can control it with `machinectl`.
+4. Now back on the host OS of the UDM device, symlink the container directory to `/var/lib/machines` so we can control it with `machinectl`.
 
     ```shell
     mkdir -p /var/lib/machines
     ln -s /data/custom/machines/pihole /var/lib/machines
     ```
 
-5.  Create a `pihole.nspawn` file (using `vim`, etc) to configure parameters of the container (such as bind mounts and networking).
+5. Create a `pihole.nspawn` file (using `vim`, etc) to configure parameters of the container (such as bind mounts and networking).
     The file should be named after the container that is being configured, and will be used by `systemd-nspawn`.
     There is some useful documentation on the configuration options of this file at [debian.org][6].
     Here is the configuration we will use going forward, take note of the `MACVLAN` parameter being set to `br2`—this relates to the VLAN network we will isolate our container on.
@@ -120,13 +120,13 @@ If you're migrating from a previous PiHole configuration that you're planning to
     MACVLAN=br2
     ```
 
-6.  Grab a copy of the `10-setup-network.sh` [script][7] from the `unifios-utilities` repository, place it in `/data/on_boot.d` and edit it with the VLAN and IP configuration for your container and gateway from the VLAN configuration table in part 1 of this guide.
+6. Grab a copy of the `10-setup-network.sh` [script][7] from the `unifios-utilities` repository, place it in `/data/on_boot.d` and edit it with the VLAN and IP configuration for your container and gateway from the VLAN configuration table in part 1 of this guide.
     Amend the arguments like so:
 
-    -   Modify `VLAN` to match the identifier of your PiHole's VLAN (for me, `2`).
-    -   Modify `IPV4_IP` to match the IP address of your container (`192.168.2.2`).
-    -   Modify `IPV4_GW` to match the CIDR-notated IP address of the gateway interface/network (`192.168.2.1/26`).
-    -   Leave `IPV6_GW` and `IPV6_IP` as empty strings.
+    - Modify `VLAN` to match the identifier of your PiHole's VLAN (for me, `2`).
+    - Modify `IPV4_IP` to match the IP address of your container (`192.168.2.2`).
+    - Modify `IPV4_GW` to match the CIDR-notated IP address of the gateway interface/network (`192.168.2.1/26`).
+    - Leave `IPV6_GW` and `IPV6_IP` as empty strings.
 
     Executing this script will create a `brX.mac` interface as a gateway bridge.
     We have already ensured our `pihole.nspawn` file properly references this VLAN bridge in the previous step.
@@ -136,7 +136,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
     curl -LO https://raw.githubusercontent.com/peacey/unifios-utilities/nspawn/nspawn-container/scripts/10-setup-network.sh
     ```
 
-7.  Create a `mv-br2.network` file within the `etc/systemd/network` directory _inside your container_.
+7. Create a `mv-br2.network` file within the `etc/systemd/network` directory _inside your container_.
     I have chosen the name of this network (`mv-br2`) to use the same integer as my VLAN for consistency.
 
     ```shell
@@ -152,15 +152,14 @@ If you're migrating from a previous PiHole configuration that you're planning to
 
     [Network]
     IPForward=yes
-    Address=192.168.2.2/26
-    Gateway=192.168.2.1
+    Address=192.168.2.2/2. Gateway=192.168.2.1
     ```
 
-    -   The `Name` should match the name of the network file, and also the identifier of the VLAN you are using.
-    -   The `Address` should be the ID address of the container, this time in CIDR-notated format.
-    -   The `Gateway` should be the IP address of the gateway, this time _without_ CIDR notation.
+    - The `Name` should match the name of the network file, and also the identifier of the VLAN you are using.
+    - The `Address` should be the ID address of the container, this time in CIDR-notated format.
+    - The `Gateway` should be the IP address of the gateway, this time _without_ CIDR notation.
 
-8.  Now, we will run the customised `10-setup-network.sh` script, and check everything is functioning as expected.
+8. Now, we will run the customised `10-setup-network.sh` script, and check everything is functioning as expected.
 
     ```shell
     chmod +x /data/on_boot.d/10-setup-network.sh
@@ -173,8 +172,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
     You should see the IP address present here.
 
     ```ip output
-    8: mv-br2@if47: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
-    link/ether 1e:10:92:a5:d5:45 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    8: mv-br2@if47: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 100. link/ether 1e:10:92:a5:d5:45 brd ff:ff:ff:ff:ff:ff link-netnsid 0
     inet 192.168.2.2/26 brd 192.168.2.63 scope global mv-br2
         valid_lft forever preferred_lft forever
     inet6 fe80::1c10:92ff:fea5:d545/64 scope link
@@ -183,7 +181,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
 
     Run `ping -c4 1.1.1.1` to confirm connections to the outside world are working.
 
-9.  This network configuration script needs to be run on boot—this can be accomplished with the [UDM boot script][8] from `unifios-utilities`, that will execute any script placed into `/data/on_boot.d`.
+9. This network configuration script needs to be run on boot—this can be accomplished with the [UDM boot script][8] from `unifios-utilities`, that will execute any script placed into `/data/on_boot.d`.
 
     ```shell
     curl -fsL "https://raw.githubusercontent.com/unifi-utilities/unifios-utilities/HEAD/on-boot-script/remote_install.sh" | /bin/sh
@@ -223,13 +221,13 @@ If you're migrating from a previous PiHole configuration that you're planning to
 
 ### Part 6. PiHole configuration
 
-1.  Spawn a shell into your container.
+1. Spawn a shell into your container.
 
     ```shell
     machinectl shell pihole
     ```
 
-2.  Within our container, we will now install PiHole procedurally, by following the prompts from the PiHole installer.
+2. Within our container, we will now install PiHole procedurally, by following the prompts from the PiHole installer.
 
     ```shell
     apt -y install curl
@@ -239,19 +237,19 @@ If you're migrating from a previous PiHole configuration that you're planning to
     You must use `PIHOLE_SKIP_OS_CHECK=true` so PiHole can be installed on Debian `unstable`.
     We can now run `apt clean` to delete the package cache and shrink the container's size.
 
-3.  Select "Continue" when the install indicates a static IP is needed.
+3. Select "Continue" when the install indicates a static IP is needed.
 
-4.  Select "Cloudflare" as our custom upstream DNS provider.
+4. Select "Cloudflare" as our custom upstream DNS provider.
 
-5.  As we will be using PiHole's teleport functionality to import a previous PiHole configuration, select "No" to including blocklists on install.
+5. As we will be using PiHole's teleport functionality to import a previous PiHole configuration, select "No" to including blocklists on install.
 
-6.  Select "Yes" to install the admin web interface.
+6. Select "Yes" to install the admin web interface.
 
-7.  Select "Yes" to install the default web server that PiHole uses (`lighthttpd`).
+7. Select "Yes" to install the default web server that PiHole uses (`lighthttpd`).
 
-8.  Select "Yes" to enabling query logging, and on the next page to determine how verbose query logging should be, select "Show everything".
+8. Select "Yes" to enabling query logging, and on the next page to determine how verbose query logging should be, select "Show everything".
 
-9.  PiHole's installation will now be complete!
+9. PiHole's installation will now be complete!
     You should now set a password, or configure PiHole to use your previous password if you're migrating from a previous PiHole installation.
     Run the [PiHole password command][9], and then follow the prompts to set a password:
 
@@ -287,7 +285,7 @@ This is the broadcast address of the interface. Because we set our subnet mask t
 
 For example:
 
-```
+```shell
 W: Download is performed unsandboxed as root as file '/data/custom/dpkg/arch-test_0.17-1_all.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)
 ```
 
@@ -297,7 +295,7 @@ This leads to the warning message.
 
 ### When configuring PiHole for the first time, why did this error appear in the setup process?
 
-```
+```shell
 [✗] Unable to fill table adlist in database /etc/pihole/gravity.db
 Error: cannot open "/tmp/tmp.awdNvLc8bI"
 ```
@@ -315,19 +313,19 @@ Updating gravity after restoring your PiHole configuration should fix this.
 This can be accomplished via `pihole updategravity`.
 The number of blocked domains displayed as being blocked in the web admin UI should now be correct.
 
-### PiHole won't let me restore from my backup!
+### PiHole won't let me restore from my backup
 
 When I attempted to restore my previous PiHole configuration from backup, I believe Safari automatically unarchived the `.tar.gz` file to a `.tar` file.
 I resolved this by unarchiving the `.tar` file to a directory, and then archiving it back to a `.tar.gz` file via the command `tar czf [out] [in]`.
 
-### How do I back-up long term query statistics of my PiHole?
+### How do I backup long term query statistics of my PiHole?
 
 This should be possible via backing up both the query and domain databases (`/etc/pihole/pihole-FTL.db` and `/etc/pihole/gravity.db`) respectively.
 More information on the contents and schema of PiHole's SQLite databases can be found [in the documentation][12].
 
 ## Notes
 
--   Specifying `ssh-rsa` is no longer needed to SSH into the device.
+- Specifying `ssh-rsa` is no longer needed to SSH into the device.
     This was resolved in Unifi OS 2.4.x.
 
 [1]: https://gist.github.com/lukeify/96e73218b4de79891a46a89fdc2c2045
