@@ -7,37 +7,46 @@ Caveats and idiosyncrasies of WebExtension APIs and their varying levels of brow
 ### `declarativeNetRequest`
 
 Instead of procedurally blocking or modifying requests and responses, requires developers to implement a "rules" DSL on how requests should be blocked by the browser.
-Consists of four properties, one of which is optional:
+Each rule consists of four properties, one of which is optional:
 
 -   `id`
 -   `priority` (optional). If not provided, `priority` will equal `1`.
 -   `condition`, an object containing predicate(s) the browser will evaluate.
 -   `action`, the response to take if the condition yields true, an object where the `type` property is either `block` or `modifyHeaders`.
 
+These rules are packaged into "rulesets".
+These rulesets can be either:
+
+* **static**, i.e. packaged with the web extension.
+* **dynamic**, provided by the user, or packaged with the web extension and updatable via `updateDynamicRules`.
+* **session** rulesets, that do not persist across browser sessions.
+
 #### [`declarativeNetRequest.updateStaticRules`][1]
 
+Allows a web extension to enable or disable individual static rules, which could be useful to allow a user to toggle pre-provided rules according to their preferences.
 Supposedly implemented in Chrome 111 (associated GitHub ticket), with [chromium tests here][2].
-However, doesn't actually appear to work in the real-world—static rules that are disabled via this method call continue to be registered with the `declarativeNetRequest` API and continue work.
+However, doesn't actually appear to work in the real-world—static rules that are disabled via this method call continue to be registered with the `declarativeNetRequest` API and continue to work.
 Programmatically though, the API seems to function correctly to the point where the unit tests implemented in Chromium obviously pass.
 
 Not implemented in Safari ([WebKit ticket][3]) or Firefox.
 
 #### `declarativeNetRequest.updateEnabledRulesets`
 
-A workaround is instead of updating rules, just have one rule per ruleset and use the actually functional (in Chrome) at least `updateEnabledRulesets`.
+A workaround is instead of updating rules, just have one rule per ruleset and use the actually functional (in Chrome) at least `updateEnabledRulesets` instead of static rules.
 
 #### Regular expression limitations
 
-DNR matches conform to one of three types. One of these is `regexFilter`, but there is no syntax described in the WebExtensions specification for what functionality is available to regexes, as outlined in this [GitHub issue][4]:
-Some notes on this with respect to Chrome's support.
+DNR matches conform to one of three types. One of these is `regexFilter`, but there is no syntax described in the specification for what functionality is available to regexes, as outlined in this [GitHub issue][4]:
+Some notes on this with respect to Chrome's support:
 
 > In Chrome, regexpFilter is basically the syntax of the underlying RE2 library plus the additional implementation-dependent constraint that the memory usage of an individual regex may not exceed 2kb
 
-However, Safari `regexFilter` syntax is much more limited, and [described here][5].
+However, Safari `regexFilter` syntax is much more limited, as [described here][5].
 One important missing piece of functionality is OR expressions, i.e. `(gallery|poll)` to match the strings `gallery` or `poll` respectively.
 Practically, this means this rule must be split into two separate rules.
 
 `regexFilter` is not supported in Firefox yet.
+The next most fully-featured alternative is `urlFilter` syntax.
 
 ### `storage`
 
