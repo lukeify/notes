@@ -17,9 +17,9 @@ Each rule consists of four properties, one of which is optional:
 These rules are packaged into "rulesets".
 These rulesets can be either:
 
-* **static**, i.e. packaged with the web extension.
-* **dynamic**, provided by the user, or packaged with the web extension and updatable via `updateDynamicRules`.
-* **session** rulesets, that do not persist across browser sessions.
+-   **static**, i.e. packaged with the web extension.
+-   **dynamic**, provided by the user, or packaged with the web extension and updatable via `updateDynamicRules`.
+-   **session** rulesets, that do not persist across browser sessions.
 
 #### [`declarativeNetRequest.updateStaticRules`][1]
 
