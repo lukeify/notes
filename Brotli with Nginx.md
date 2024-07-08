@@ -1,7 +1,7 @@
 # Configuring Brotli with Nginx
 
-Nginx Open Source does not ship releases with the `ngx-brotli` module present or enabled.
-Thus, users must compile [google/ngx_brotli][1] against their `nginx` version when they would like to enable it, or whenever `nginx` is updated.
+The free and open variant of Nginx does not ship releases with the `ngx-brotli` module present or enabled.
+Thus, users seeking to use the brotli compression algorithm to respond to `Accept-Encoding` headers of `br` must compile [google/ngx_brotli][1] against their `nginx` version when they would like to enable it, and whenever `nginx` is updated thereafter.
 
 The instructions present in the installation guide on [google/ngx_brotli][2] are fairly sufficient.
 
