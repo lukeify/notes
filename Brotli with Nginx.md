@@ -39,7 +39,7 @@ The instructions present in the installation guide on [google/ngx_brotli][2] are
     ```
 
 5. Add `load_module` directives to `nginx.conf`.
-This will already have been completed if you updating `nginx` via a package manager.
+    This will already have been completed if you updating `nginx` via a package manager.
 
     ```nginx
     load_module modules/ngx_http_brotli_filter_module.so;
