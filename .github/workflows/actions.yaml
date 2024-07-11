@@ -16,3 +16,13 @@ jobs:
         run: gem install mdl
       - name: Test (mdl)
         run: mdl *.md -s .mdl_style.rb
+  # Check for grammar and spelling inconsistencies within the repository.
+  spellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Spellcheck
+        uses: rojopolis/spellcheck-github-actions@0.38.0
+        with:
+          source_files: "**/*.md"
