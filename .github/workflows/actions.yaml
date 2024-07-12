@@ -3,6 +3,7 @@ on: pull_request
 permissions:
   contents: read
 jobs:
+  # Lint markdown.
   lint:
     runs-on: ubuntu-latest
     steps:
