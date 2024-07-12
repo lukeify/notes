@@ -80,7 +80,7 @@ The implications and steps to deleting a certificate depends on which "team" you
 If you must, you can open _Keychain Access_, and clear out the _App Development_ certificate and private key records that match your personal team.
 Doing this though will result in the certificate _not being deleted_ from the certificates modal, but rather being greyed out with a status of _Not in Keychain_.
 
-**For an Organization**, head to [developer.apple.com][4], click through to [_Certificates, Identifiers & Profiles_][5], select the certificate, and click _Revoke_ in the top-right corner.
+**For an Organisation**, head to [developer.apple.com][4], click through to [_Certificates, Identifiers & Profiles_][5], select the certificate, and click _Revoke_ in the top-right corner.
 
 ## Questions
 

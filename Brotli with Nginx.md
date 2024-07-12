@@ -50,7 +50,7 @@ This process must be repeated whenever `nginx` is updated via package manager as
 
 ## Addendums
 
-If you are dealing with PGP key issues with nginx's package repositories:
+If you are dealing with PGP key issues with Nginx's package repositories:
 
 * [Updating the PGP Key for NGINX Software][3]
 * [Ubuntu installation guide][4]
