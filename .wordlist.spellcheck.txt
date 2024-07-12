@@ -2,7 +2,6 @@ Addendums
 AltStore
 APIs
 autosigning
-ax
 blocklists
 brotli
 Brotli
@@ -16,7 +15,6 @@ DNR
 DNS
 dropdown
 DSL
-Fi
 FTL
 GbE
 GPG
@@ -24,7 +22,6 @@ ipa
 iPadOS
 iPhones
 IPs
-kb
 keychain
 lookups
 macOS
@@ -35,16 +32,13 @@ Multicast
 netmask
 Nginx
 Nginx's
-ngx
 PiHole
 PiHole's
 PoE
-pre
 Programmatically
 procedurally
 regexes
 regexpFilter
-RJ
 ruleset
 rulesets
 sideload
@@ -75,6 +69,4 @@ watchOS
 WebExtension
 WebExtensions
 WebKit
-Wi
 Xcode
-xxGB

@@ -108,7 +108,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
 
 5. Create a `pihole.nspawn` file (using `vim`, etc) to configure parameters of the container (such as bind mounts and networking).
     The file should be named after the container that is being configured, and will be used by `systemd-nspawn`.
-    There is some useful documentation on the configuration options of this file at [debian.org][6].
+    There is some useful documentation on the configuration options of this file at [<span data-nospell>debian.org</span>][6].
     Here is the configuration we will use going forward, take note of the `MACVLAN` parameter being set to `br2`—this relates to the VLAN network we will isolate our container on.
 
     ```nspawn
@@ -217,7 +217,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
     apt download systemd-container libnss-mymachines debootstrap arch-test
     ```
 
-    Because we've installed the unifios-utilities `on-boot-script` previously, this means `0-setup-system.sh` itself will be started on boot.
+    Because we've installed the `unifios-utilities` `on-boot-script` previously, this means `0-setup-system.sh` itself will be started on boot.
 
 ### Part 6. PiHole configuration
 

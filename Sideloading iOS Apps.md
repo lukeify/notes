@@ -36,7 +36,7 @@ This means you don't need to use services like [AltStore][1] or [SideStore][2] t
    Set the _Platform_ to _iOS, iPadOS, tvOS, watchOS, visionOS_, the _Device Name_ to anything (although preferably it's the same device name as within the device).
 
     - The _Device ID_ or _UDID_ (Unique Device Identifier) can be found in both _Finder_ and _Apple Configurator_ when the device is connected.
-      For _Finder_, when the device is connected, navigate to the iPhone's pane, and click the device details under the name (for example _iPhone 15 Pro — 511.87GB (xxx.xxGB available)_) once.
+      For _Finder_, when the device is connected, navigate to the iPhone's pane, and click the device details under the name (for example _iPhone 15 Pro — 511.87GB (<span data-nospell>xxx.xxGB</span> available)_) once.
       The _UDID_ will be shown alongside the _Serial Number_ and _Device Model_.
 
         ![](images/iphone-udid-in-finder.png)

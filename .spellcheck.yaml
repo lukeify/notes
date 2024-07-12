@@ -11,6 +11,7 @@ matrix:
           ignores:
             - code
             - pre
+            - span[data-nospell]
     sources:
       - '**/*.md'
     dictionary:
