@@ -32,7 +32,7 @@ This means you don't need to use services like [AltStore][1] or [SideStore][2] t
    No capabilities or app services seem to be needed.
 
 3. Ensure the device you'd like to load the application on is present in the [_Devices_ section][7] of developer.apple.com.
-   You can have up to 100 iPhones listed within a one-year period (you have a once-a-year opportunity to unregister previous devices that becomes available on the anniversary of your developer membership).
+   You can have up to 100 iPhones listed within a one-year period (you have a once-a-year opportunity to deregister previous devices that becomes available on the anniversary of your developer membership).
    Set the _Platform_ to _iOS, iPadOS, tvOS, watchOS, visionOS_, the _Device Name_ to anything (although preferably it's the same device name as within the device).
 
     - The _Device ID_ or _UDID_ (Unique Device Identifier) can be found in both _Finder_ and _Apple Configurator_ when the device is connected.
@@ -60,7 +60,7 @@ This means you don't need to use services like [AltStore][1] or [SideStore][2] t
     1. Select the downloaded `ipa` file from step 5 as the input file in _iOS App Signer_.
     2. For _Signing Certificate_, select your paid team's Apple Development signing certificate.
     3. For _Provisioning Profile_, I'm not sure what you need to select.
-       What is the distinction between _Re-Sign Only_ and providing a custom provisioning profile? Can _XCode_'s fetching of your profile automatically fill this out?
+       What is the distinction between _Re-Sign Only_ and providing a custom provisioning profile? Can _Xcode_'s fetching of your profile automatically fill this out?
     4. Ignore the _New Application ID_, _App Display Name_, _App Version_, and _App Short Version_ fields, they can be left blank (the application name for _uYouEnhanced_ will appear as _YouTube_ anyway).
     5. Click _Start_. A signed `ipa` file will be outputted to the location you selected.
 7. The _iOS App Signer_ documentation states to install the signed application using _Xcode_'s _Devices and Simulators_ functionality.

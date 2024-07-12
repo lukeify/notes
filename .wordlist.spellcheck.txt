@@ -10,7 +10,10 @@ DNR
 DSL
 GbE
 GPG
+ipa
+iPadOS
 IPs
+kb
 keychain
 lookups
 macOS
@@ -26,10 +29,14 @@ regexes
 regexpFilter
 ruleset
 rulesets
+sideload
 SSHing
+StackOverflow
 symlink
 Teleporter
+tvOS
 Ubiquiti
+UDID
 UDM
 UDR
 UI
@@ -37,8 +44,10 @@ UniFi
 UniFiOS
 updatable
 uYouEnhanced
+visionOS
 VLAN
+watchOS
 WebExtension
 WebExtensions
 WebKit
-XCode
+Xcode
