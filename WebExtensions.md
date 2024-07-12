@@ -23,7 +23,7 @@ These rulesets can be either:
 
 #### [`declarativeNetRequest.updateStaticRules`][1]
 
-Allows a web extension to enable or disable individual static rules, which could be useful to allow a user to toggle pre-provided rules according to their preferences.
+Allows a web extension to enable or disable individual static rules, which could be useful to allow a user to toggle <span data-nospell>pre-provided</span> rules according to their preferences.
 Supposedly implemented in Chrome 111 (associated GitHub ticket), with [chromium tests here][2].
 However, doesn't actually appear to work in the real-world—static rules that are disabled via this method call continue to be registered with the `declarativeNetRequest` API and continue to work.
 Programmatically though, the API seems to function correctly to the point where the unit tests implemented in Chromium obviously pass.
@@ -39,7 +39,7 @@ A workaround is instead of updating rules, just have one rule per ruleset and us
 DNR matches conform to one of three types. One of these is `regexFilter`, but there is no syntax described in the specification for what functionality is available to regexes, as outlined in this [GitHub issue][4]:
 Some notes on this with respect to Chrome's support:
 
-> In Chrome, regexpFilter is basically the syntax of the underlying RE2 library plus the additional implementation-dependent constraint that the memory usage of an individual regex may not exceed 2kb
+> In Chrome, regexpFilter is basically the syntax of the underlying RE2 library plus the additional implementation-dependent constraint that the memory usage of an individual regex may not exceed <span data-nospell>2kb</span>
 
 However, Safari `regexFilter` syntax is much more limited, as [described here][5].
 One important missing piece of functionality is OR expressions, i.e. `(gallery|poll)` to match the strings `gallery` or `poll` respectively.

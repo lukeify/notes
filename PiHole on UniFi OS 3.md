@@ -1,9 +1,9 @@
 # PiHole on UniFi OS 3
 
 I have previously [written a guide][1] for my own benefit on how to configure PiHole running inside a UniFi Dream Machine (UDM) running UniFi OS 1.x.
-This guide amends those instructions for UniFi OS 3.x, which contains many large architectural changes; this requires us to use [`nspawn`][2] instead of `podman`—which we used with UniFi OS 1.x—for containerization of our PiHole installation.
+This guide amends those instructions for UniFi OS 3.x, which contains many large architectural changes; this requires us to use [`nspawn`][2] instead of `podman`—which we used with UniFi OS 1.x—for containerisation of our PiHole installation.
 
-We will be following the stellar [containerization][3] and [pihole configuration][4] guides from the `unifi-utilities` repo, adapted here with some personal preference adjustments to configuration
+We will be following the stellar [containerisation][3] and [PiHole configuration][4] guides from the `unifi-utilities` repository, adapted here with some personal preference adjustments to configuration
 (but many thanks to the contributors of that guide for the prior art).
 This involves using `systemd-nspawn` to create a container—that can be controlled via `machinectl`—that will run our `pihole` instance.
 
@@ -38,8 +38,8 @@ If you're migrating from a previous PiHole configuration that you're planning to
     ![PiHole VLAN configuration](./images/pihole-vlan.png)
 
 2. Configure your primary WAN such that its primary DNS Server is set to the IP address of your PiHole instance (as mentioned before, `192.168.2.2`).
-    PiHole will then forward DNS requests it determines should be allowed to cloudflare.
-    Note that specifying a "secondary" DNS server within the Unifi OS configuration here _will not_ act as a "fallback" server as one might assume, but rather DNS lookups will be distributed _amongst_ these servers.
+    PiHole will then forward DNS requests it determines should be allowed to CloudFlare.
+    Note that specifying a "secondary" DNS server within the UniFi OS configuration here _will not_ act as a "fallback" server as one might assume, but rather DNS lookups will be distributed _amongst_ these servers.
     This defeats the blocking nature of PiHole and thus this field should be left blank.
 
     ![WAN DNS configuration](./images/dns-configuration-in-wan.png)
@@ -73,14 +73,14 @@ If you're migrating from a previous PiHole configuration that you're planning to
 
 ### Part 3. Container creation and configuration
 
-1. Install `systemd-container` and `debootstrap` to create a directory with a base debian system.
+1. Install `systemd-container` and `debootstrap` to create a directory with a base Debian system.
     We will then use `systemd-nspawn` to boot the container.
 
     ```shell
     apt -y install systemd-container debootstrap
     ```
 
-2. Create a `pihole` directory containing a base debian system in `/data/custom/machines`.
+2. Create a `pihole` directory containing a base Debian system in `/data/custom/machines`.
 
     ```shell
     mkdir -p /data/custom/machines
@@ -88,7 +88,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
     debootstrap --include=systemd,dbus unstable pihole
     ```
 
-3. Once ready, we can create a shell to this container and perform some initial configuration by setting a password, enabling networking, and setting our DNS resolver to cloudflare.
+3. Once ready, we can create a shell to this container and perform some initial configuration by setting a password, enabling networking, and setting our DNS resolver to CloudFlare.
 
     ```shell
     systemd-nspawn -M pihole -D /data/custom/machines/pihole
@@ -108,7 +108,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
 
 5. Create a `pihole.nspawn` file (using `vim`, etc) to configure parameters of the container (such as bind mounts and networking).
     The file should be named after the container that is being configured, and will be used by `systemd-nspawn`.
-    There is some useful documentation on the configuration options of this file at [debian.org][6].
+    There is some useful documentation on the configuration options of this file at [<span data-nospell>debian.org</span>][6].
     Here is the configuration we will use going forward, take note of the `MACVLAN` parameter being set to `br2`—this relates to the VLAN network we will isolate our container on.
 
     ```nspawn
@@ -193,7 +193,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
 
     - Typing `machinectl status pihole` should show us the details of our running container.
     - We can enter into a shell in this container via `machinectl shell pihole` (typing `exit` from within this shell will place us back in UniFi OS).
-    - Typing `machinectl login pihole` will present us a login prompt as expected from a linux system.
+    - Typing `machinectl login pihole` will present us a login prompt as expected from a Linux system.
 
 2. To start our container on system boot, run `machinectl enable pihole`.
 
@@ -201,7 +201,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
 
 1. When the firmware on your UDM is updated, `/data` and `/etc/systemd` will be preserved. These contain our container storage and boot scripts, respectively. But—`/var` and `/usr` will be deleted!
    This is where we symlink our container to (via `machinectl`).
-   Furthermore, any additional debian packages that are installed on the host OS (like `systemd-container`) will also be deleted.
+   Furthermore, any additional Debian packages that are installed on the host OS (like `systemd-container`) will also be deleted.
    To mitigate this, we can run a script on boot to reinstall our packages and re-symlink our container so `machinectl` can control it, which is again provided by `unifios-utilities`:
 
     ```shell
@@ -217,7 +217,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
     apt download systemd-container libnss-mymachines debootstrap arch-test
     ```
 
-    Because we've installed the unifios-utilities `on-boot-script` previously, this means `0-setup-system.sh` itself will be started on boot.
+    Because we've installed the `unifios-utilities` `on-boot-script` previously, this means `0-setup-system.sh` itself will be started on boot.
 
 ### Part 6. PiHole configuration
 
@@ -239,7 +239,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
 
 3. Select "Continue" when the install indicates a static IP is needed.
 
-4. Select "Cloudflare" as our custom upstream DNS provider.
+4. Select "CloudFlare" as our custom upstream DNS provider.
 
 5. As we will be using PiHole's teleport functionality to import a previous PiHole configuration, select "No" to including blocklists on install.
 
@@ -262,7 +262,7 @@ If you're migrating from a previous PiHole configuration that you're planning to
 10. PiHole's web admin interface should now be accessible at [pi.hole/admin][10]—login using the password you set in the previous step.
 
 11. If you plan on using a fresh install of PiHole, you can skip this step.
-    Otherwise, if you plan to use PiHole's teleporter functionality to import a previous configuration, do that now.
+    Otherwise, if you plan to use PiHole's _Teleporter_ functionality to import a previous configuration, do that now.
     In the PiHole admin interface, navigate to _Settings_ → _Teleporter_, and restore your backed up `.tar.gz` file, choosing to restore whatever configuration options you'd like.
 
 12. Under _Settings_ → _DNS_, if it isn't already ticked, select "Permit all origins".
@@ -290,7 +290,7 @@ W: Download is performed unsandboxed as root as file '/data/custom/dpkg/arch-tes
 ```
 
 The `apt` package manager will usually try to fetch packages using the `_apt` user as a security measure;
-however, if `apt` is requested to install a package that already exists on the filesystem, and the `_apt` user does not have permission to read that file, then instead the `root` user will be used to do so.
+however, if `apt` is requested to install a package that already exists on the file system, and the `_apt` user does not have permission to read that file, then instead the `root` user will be used to do so.
 This leads to the warning message.
 
 ### When configuring PiHole for the first time, why did this error appear in the setup process?
@@ -302,7 +302,7 @@ Error: cannot open "/tmp/tmp.awdNvLc8bI"
 
 I'm not sure. This may be a permissions issue, or something else has caused this temporary file to not exist at the time it needed to be accessed.
 
-### The PiHole docker container, FTL, and WebUI version numbers in the footer of the PiHole Admin GUI read "N/A", how do I fix this?
+### The PiHole docker container, FTL, and web GUI version numbers in the footer of the PiHole Admin GUI read "N/A", how do I fix this?
 
 After rebooting the PiHole instance, the versioning changed from "N/A" to "vDev".
 Running `pihole updatechecker` resulted in the correct version numbering being displayed.
@@ -326,7 +326,7 @@ More information on the contents and schema of PiHole's SQLite databases can be 
 ## Notes
 
 - Specifying `ssh-rsa` is no longer needed to SSH into the device.
-    This was resolved in Unifi OS 2.4.x.
+    This was resolved in UniFi OS 2.4.x.
 
 [1]: https://gist.github.com/lukeify/96e73218b4de79891a46a89fdc2c2045
 [2]: https://wiki.debian.org/nspawn

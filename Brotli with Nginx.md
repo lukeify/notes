@@ -1,9 +1,9 @@
 # Configuring Brotli with Nginx
 
 The free and open variant of Nginx does not ship releases with the `ngx-brotli` module present or enabled.
-Thus, users seeking to use the brotli compression algorithm to respond to `Accept-Encoding` headers of `br` must compile [google/ngx_brotli][1] against their `nginx` version when they would like to enable it, and whenever `nginx` is updated thereafter.
+Thus, users seeking to use the brotli compression algorithm to respond to `Accept-Encoding` headers of `br` must compile [<span data-nospell>google/ngx_brotli</span>][1] against their `nginx` version when they would like to enable it, and whenever `nginx` is updated thereafter.
 
-The instructions present in the installation guide on [google/ngx_brotli][2] are fairly sufficient.
+The instructions present in the installation guide on [<span data-nospell>google/ngx_brotli</span>][2] are fairly sufficient.
 
 1. Clone the latest version of `nginx` that is installed on your system.
 
@@ -50,7 +50,7 @@ This process must be repeated whenever `nginx` is updated via package manager as
 
 ## Addendums
 
-If you are dealing with PGP key issues with nginx's package repositories:
+If you are dealing with PGP key issues with Nginx's package repositories:
 
 * [Updating the PGP Key for NGINX Software][3]
 * [Ubuntu installation guide][4]

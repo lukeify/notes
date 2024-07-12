@@ -1,0 +1,19 @@
+matrix:
+  - name: Markdown
+    aspell:
+      lang: en
+      d: en_AU
+    pipeline:
+      - pyspelling.filters.markdown:
+          markdown_extensions:
+            - pymdownx.superfences
+      - pyspelling.filters.html:
+          ignores:
+            - code
+            - pre
+            - span[data-nospell]
+    sources:
+      - '**/*.md'
+    dictionary:
+      wordlists:
+        - .wordlist.spellcheck.txt
