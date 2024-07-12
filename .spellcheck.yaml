@@ -1,5 +1,7 @@
 matrix:
   - name: Markdown
+    aspell:
+      lang: en_AU
     pipeline:
       - pyspelling.filters.markdown:
           markdown_extensions:
