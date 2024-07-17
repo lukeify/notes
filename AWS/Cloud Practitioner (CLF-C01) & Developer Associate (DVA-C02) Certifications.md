@@ -1,4 +1,4 @@
-# Cloud Practitioner (CLF-C01) & Developer Associate (DVA-C02) Certifications
+# Cloud Practitioner (<span data-no-spell>CLF</span>-C01) & Developer Associate (<span data-no-spell>DVA</span>-C02) Certifications
 
 Notes taken during studies for these AWS certifications, and has been organised into sections that map to the Udemy course I was following.
 Much of this information was common knowledge to me, but has been written down for the purposes of keeping notes on topics that may be questions within the exams.
@@ -14,7 +14,7 @@ Much of this information was common knowledge to me, but has been written down f
 
 ### Cloud computing types
 
-* **IaaS** (Infrastructure as a Service), no need to manage networking, storage, servers, and virtualization.
+* **IaaS** (Infrastructure as a Service), no need to manage networking, storage, servers, and virtualisation.
     An example of this is EC2.
 * **PaaS** (Platform as a Service), additionally no need to manage runtime, middleware, or the operating system.
     An example of this is Elastic Beanstalk.
