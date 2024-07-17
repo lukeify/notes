@@ -1,86 +1,102 @@
-# Cloud Practitioner (CLF-C01)
+# Cloud Practitioner (CLF-C01) & Developer Associate (DVA-C02) Certifications
 
-# Section 3: What is cloud computing?
+Notes taken during studies for these AWS certifications, and has been organised into sections that map to the Udemy course I was following.
+Much of this information was common knowledge to me, but has been written down for the purposes of keeping notes on topics that may be questions within the exams.
 
-## Deployment models
+## Section 3: What is cloud computing?
 
-- **Private cloud** contains cloud services used by a single organisation, and not exposed to the public.
-- **Public cloud** refers to cloud resources owned and operated by a third party service provider—and delivered over the internet (GCP, Azure, AWS).
-- **Hybrid cloud** mixes both of the above, and supports some on-premise services, with extension and more capabilities via the public cloud. This is good for data governance and sensitive documents.
+### Deployment models
 
-## Cloud computing types
+* **Private cloud** contains cloud services used by a single organisation, and not exposed to the public.
+* **Public cloud** refers to cloud resources owned and operated by a third party service provider—and delivered over the internet (GCP, Azure, AWS).
+* **Hybrid cloud** mixes both of the above, and supports some on-premise services, with extension and more capabilities via the public cloud.
+    This is good for data governance and sensitive documents.
 
-- **IaaS** (Infrastructure as a Service), no need to manage networking, storage, servers, and virtualization. An example of this is EC2.
-- **PaaS** (Platform as a Service), additionally no need to manage runtime, middleware, or the operating system. An example of this is Elastic Beanstalk.
-    - **FaaS** (Functions as a Service) which lets us run arbitrary code without worrying about the underlying infrastructure.
-- **SaaS** (Software as a Service), additionally no need to manage applications or data. For example, Rekognition for Machine Learning.
+### Cloud computing types
 
-## AWS Pricing fundamentals
+* **IaaS** (Infrastructure as a Service), no need to manage networking, storage, servers, and virtualization.
+    An example of this is EC2.
+* **PaaS** (Platform as a Service), additionally no need to manage runtime, middleware, or the operating system.
+    An example of this is Elastic Beanstalk.
+    * **FaaS** (Functions as a Service) which lets us run arbitrary code without worrying about the underlying infrastructure.
+* **SaaS** (Software as a Service), additionally no need to manage applications or data.
+    For example, Rekognition for Machine Learning.
+
+### AWS Pricing fundamentals
 
 1. Pay for the exact compute time.
 2. Pay for the exact amount of data stored in the cloud.
 3. Pay for data transfer out of the cloud.
 
-## AWS Cloud History
+### AWS Cloud History
 
-| Year | Event |
-| --- | --- |
-| 2002 | Internally launched |
+| Year | Event                                                    |
+|------|----------------------------------------------------------|
+| 2002 | Internally launched                                      |
 | 2003 | Amazon identified infrastructure as their core strength. |
-| 2004 | Publicly launched with SQS. |
-| 2006 | Relaunched with SQS, EC2, & S3. |
-| 2007 | Launched in Europe. |
+| 2004 | Publicly launched with SQS.                              |
+| 2006 | Relaunched with SQS, EC2, & S3.                          |
+| 2007 | Launched in Europe.                                      |
 
-## AWS Global Infrastructure
+### AWS Global Infrastructure
 
-| Type |  |
-| --- | --- |
-| Regions | AWS has regions all around the world. Names are usually region-number format—and is a cluster of data centres near to each other. Most services are “region-scoped”. |
-| Availability Zones | Each region has many availability zones, usually three (min is 3, max is 6). These are named with a letter suffix after the region, for example ap-southeast-2a .
+| Type               |                                                                                                                                                                      |
+|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Regions            | AWS has regions all around the world. Names are usually region-number format—and is a cluster of data centres near to each other. Most services are “region-scoped”. |
+| Availability Zones | Each region has many availability zones, usually three (min is 3, max is 6). These are named with a letter suffix after the region, for example ap-southeast-2a .    |
 
-Each AZ is one or more discrete data centres with redundant power, networking, and connectivity. This allows for separation, so that they’re isolated from issues. |
-| Data Zones |  |
-| Edge Locations/Points of presence | Amazon has 400+ points of presence/edge location that provide a CDN service.  |
+Each AZ is one or more discrete data centres with redundant power, networking, and connectivity.
+This allows for separation, so that they’re isolated from issues.
 
-## How do you choose an AWS region?
+| Infrastructure Type               |                                                                              |
+|-----------------------------------|------------------------------------------------------------------------------|
+| Data Zones                        |                                                                              |
+| Edge Locations/Points of presence | Amazon has 400+ points of presence/edge location that provide a CDN service. |
+
+### How do you choose an AWS region?
 
 > *“If you need to launch a new application, where should you do it?”*
->
 
 Factors that matter:
 
-- **Compliance** with data governance and legal requirements. Data never leaves a region without permission.
-- **Proximity** to customers reduces latency**.**
-- **Availability of services**—not all services are available in every region.
-- **Pricing** varies from region to region, consult the service pricing page.
+* **Compliance** with data governance and legal requirements.
+    Data never leaves a region without permission.
+* **Proximity** to customers reduces latency.
+* **Availability of services**—not all services are available in every region.
+* **Pricing** varies from region to region, consult the service pricing page.
 
-## Shared Responsibility Model
+### Shared Responsibility Model
 
-![https://d1.awsstatic.com/security-center/Shared_Responsibility_Model_V2.59d1eccec334b366627e9295b304202faf7b899b.jpg](https://d1.awsstatic.com/security-center/Shared_Responsibility_Model_V2.59d1eccec334b366627e9295b304202faf7b899b.jpg)
+![](https://d1.awsstatic.com/security-center/Shared_Responsibility_Model_V2.59d1eccec334b366627e9295b304202faf7b899b.jpg)
 
-Users are responsible for all security i**n the cloud**, while AWS is responsible for security **of the cloud**.
+Users are responsible for all security **in the cloud**, while AWS is responsible for security **of the cloud**.
 
-# Section 4: IAM (Users & Groups)
+## Section 4: IAM (Users & Groups)
 
-IAM (Identity and Access Management) is a global service—and is used when you create an AWS Root Account on signup. Key entities:
+IAM (Identity and Access Management) is a global service—and is used when you create an AWS Root Account on signup.
+Key entities:
 
-- **Users**, these are people within your organisation and can be grouped. Users do not have to belong to a group, or can belong to many groups.
-- **Groups** can ****group users together. These cannot contain other groups.
-- **Roles** let services (like EC2) perform actions on our behalf.
+* **Users**, these are people within your organisation and can be grouped.
+    Users do not have to belong to a group, or can belong to many groups.
+* **Groups** can group users together.
+    These cannot contain other groups.
+* **Roles** let services (like EC2) perform actions on our behalf.
 
-## Policies
+### Policies
 
-Users, groups, and roles can be assigned a **policies**, which is a JSON document that describe the permissions of the users and groups. A policy consists of:
+Users, groups, and roles can be assigned a **policy**, which is a JSON document that describe the permissions of the users and groups.
+A policy consists of:
 
-- A **Version**, which defines the schema and structure of the policy (always `2012-10-17`, which was the last time the policy schema was updated).
-- An **Id**, which is an optional name for the policy that you can provide.
-- One or more **Statement**s, defining what permissions are granted or not granted. Within a statement, the following properties can be found:
-    - A **Sid**, which is an optional name or identifier for the statement that you can provide.
-    - An **Effect**, indicating if the statement is to allow or deny access (The strings either `Allow` or `Deny`).
-    - The **Principal** which defines the user/account/role that the statement applies to.
-    - The **Action**, which is an array of actions this statement allows or denies.
-    - The **Resource** is an array of resources for which the actions apply to.
-    - Optionally, a **Condition** for when this policy is in effect.
+* A **Version**, which defines the schema and structure of the policy (always `2012-10-17`, which was the last time the policy schema was updated).
+* An **Id**, which is an optional name for the policy that you can provide.
+* One or more **Statement**s, defining what permissions are granted or not granted.
+    Within a statement, the following properties can be found:
+    * A **Sid**, which is an optional name or identifier for the statement that you can provide.
+    * An **Effect**, indicating if the statement is to allow or deny access (The strings either `Allow` or `Deny`).
+    * The **Principal** which defines the user/account/role that the statement applies to.
+    * The **Action**, which is an array of actions this statement allows or denies.
+    * The **Resource** is an array of resources for which the actions apply to.
+    * Optionally, a **Condition** for when this policy is in effect.
 
 An example policy looks like:
 
@@ -105,63 +121,72 @@ An example policy looks like:
 }
 ```
 
-When configuring a policy, apply the **least privilege principle**—don’t give more permissions than a user needs. Policies can be applied to groups, and will *inherit* to the users within that group. An **inline policy** is a policy that is attached specifically to a user.
+When configuring a policy, apply the **least privilege principle**—don’t give more permissions than a user needs.
+Policies can be applied to groups, and will *inherit* to the users within that group.
+An **inline policy** is a policy that is attached specifically to a user.
 
-## Roles
+### Roles
 
-Some AWS services will need to perform actions on your behalf—we can assign permissions to AWS services with IAM roles. Some common roles:
+Some AWS services will need to perform actions on your behalf—we can assign permissions to AWS services with IAM roles.
+Some common roles:
 
-- EC2 instance roles
-- Lambda function roles
-- CloudFormation roles
+* EC2 instance roles
+* Lambda function roles
+* CloudFormation roles
 
-Roles can be created in the IAM service in the AWS console. Each role can have multiple policies. An example role looks like:
+Roles can be created in the IAM service in the AWS console.
+Each role can have multiple policies.
+An example role looks like:
 
-```json
+```hujson
 {
-	"": ""
+	"": "" # TODO
 }
 ```
 
-## Security Tools
+### Security Tools
 
-- **Credentials report**, which is a report that lists all of your account’s users, and the status of their various credentials. This is performed at the account level.
+* **Credentials report**, which is a report that lists all of your account’s users, and the status of their various credentials.
+    This is performed at the account level.
 
-  ![Screenshot 2023-08-06 at 8.43.06 PM.png](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/Screenshot_2023-08-06_at_8.43.06_PM.png)
+  ![IAM Credentials Report](../images/aws-certifications/iam-credentials-report.png)
 
-- **Access advisor** shows the service permissions granted to a user and when those services were last accessed. This is done at the user level.
+* **Access advisor** shows the service permissions granted to a user and when those services were last accessed.
+    This is done at the user level.
 
-  ![Screenshot 2023-08-06 at 8.46.32 PM.png](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/Screenshot_2023-08-06_at_8.46.32_PM.png)
+  ![Access Advisor](../images/aws-certifications/access-advisor.png)
 
+#### Password Policies
 
-### Password Policies
+In AWS, you can configure password policies to ensure security for IAM users.
+These policies can:
 
-In AWS, you can configure password policies to ensure security for IAM users. These policies can:
+* Set minimum password lengths.
+* Require specific character types (uppercase, lowercase, numeric, etc).
+* Allow IAM users to change their own passwords after account creation.
+* Require users to change their passwords after some time.
+* Prevent password re-use when users change their passwords.
 
-- Set minimum password lengths.
-- Require specific character types (uppercase, lowercase, numeric, etc).
-- Allow IAM users to change their own passwords after account creation.
-- Require users to change their passwords after some time.
-- Prevent password re-use when users change their passwords.
+#### Guidelines & Best Practices
 
-### Guidelines & Best Practices
+* Don’t use the root account except for AWS account setup.
+* Create strong password policies, and enforce the use of MFA.
+* Create and use Roles for giving permissions to AWS services.
+* Use access keys for programmatic access.
+* Audit permissions using the IAM Credentials Report & IAM Access Advisor.
 
-- Don’t use the root account except for AWS account setup.
-- Create strong password policies, and enforce the use of MFA.
-- Create and use Roles for giving permissions to AWS services.
-- Use access keys for programmatic access.
-- Audit permissions using the IAM Credentials Report & IAM Access Advisor.
+#### MFA
 
-### MFA
+Multi-factor authentication should always be required for the root account and IAM users.
+For MFA, there are several device options:
 
-Multi-factor authentication should always be required for the root account and IAM users. For MFA, there are several device options:
+* **Virtual MFA device** (such as Google Authenticator, Step Two, BitWarden TOTP, etc)
+* **Universal 2nd Factor (U2F) Security Key**, which is a physical security device that allows support for multiple root and IAM users.
+* **Hardware Key For MFA device.**
+* **Hardware Key For MFA device for AWS GovCloud (US).**
+    This is provided by SurePassID for use within GovCloud applications.
 
-- **Virtual MFA device** (such as Google Authenticator, Step Two, BitWarden TOTP, etc)
-- **Universal 2nd Factor (U2F) Security Key**, which is a physical security device that allows support for multiple root and IAM users.
-- **Hardware Key For MFA device.**
-- **Hardware Key For MFA device for AWS GovCloud (US).** This is provided by SurePassID for use within GovCloud applications.
-
-## Accessing AWS
+### Accessing AWS
 
 There are three options to access AWS:
 
@@ -169,51 +194,57 @@ There are three options to access AWS:
 2. **AWS Command Line Interface (CLI)**, protected by access keys.
 3. **AWS Software Developer Kit (SDK)**, also protected by access keys.
 
-Access keys can be generated through the AWS console. users manage their own access keys, and are secret.
+Access keys can be generated through the AWS console.
+Users manage their own access keys, and are secret.
 
-## CloudShell
+### CloudShell
 
 An alternative to issuing commands with the AWS CLI is to use CloudShell within the AWS Management Console.
 
-## Shared Responsibility Model for IAM
+### Shared Responsibility Model for IAM
 
 AWS is responsible for:
 
-- Infrastructure (global network security)
-- Configuration and vulnerability analysis.
-- Compliance valiation.
+* Infrastructure (global network security)
+* Configuration and vulnerability analysis.
+* Compliance validation.
 
 We are responsible for:
 
-- Users, groups, roles, policies, management, and monitoring.
-- Enabling MFA on all accounts.
-- Rotating all keys often.
-- Using IAM tools to apply appropriate permissions.
-- Analysing access patterns & reviewing permissions.
+* Users, groups, roles, policies, management, and monitoring.
+* Enabling MFA on all accounts.
+* Rotating all keys often.
+* Using IAM tools to apply appropriate permissions.
+* Analysing access patterns & reviewing permissions.
 
-# Section 5: EC2
+## Section 5: EC2
 
 EC2 (Elastic Compute Cloud) provides Infrastructure as a Service, and consists of many capabilities:
 
-- Renting virtual machines, called instances (EC2)
-- Storing data on virtual drives (EBS)
-- Distributing load across machines (ELB)
-- Scaling the services using an auto-scaling group (ASG)
+* Renting virtual machines, called instances (EC2)
+* Storing data on virtual drives (EBS)
+* Distributing load across machines (ELB)
+* Scaling the services using an auto-scaling group (ASG)
 
-## EC2 User Data
+### EC2 User Data
 
-When an EC2 instance starts, we can bootstrap our machines using an [EC2 User Data](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) script that is one once on instance first start; and can be used to automate tasks such as updates, software, download repositories, packages, or utilities—this runs as root user.
+When an EC2 instance starts, we can bootstrap our machines using an [EC2 User Data][1] script that is one once on instance first start; and can be used to automate tasks such as updates, software, download repositories, packages, or utilities—this runs as root user.
 
-## EC2 Instance Types
+### EC2 Instance Types
 
-There are six classes of EC2 instance types, [these can be found here](https://aws.amazon.com/ec2/instance-types/).
+There are six classes of EC2 instance types, [these can be found here][2].
 
-- **General Purpose**, which are great for a diversity of workloads such as web servers, and offer a balance between compute, memory, and networking. The class prefix is `t` or `m`.
-- **Compute Optimised**, optimised for compute-intensive tasks, such as batch process workloads, media transcoding, scientific modelling, dedicated gaming servers, etc. The class prefix for this group is `c`.
-- **Memory Optimised** instances support processing large data sets in memory, such as databases, web cache stores, data modelling, etc. This group is prefixed as `r` (as well as `x` and `z`).
-- **Accelerated Computing** provides access to accelerators and coprocessors to perform specific operations in hardware using CUDA, etc.
-- **Storage Optimised** instances support storage-intensive tasks that require high read and write access, this could be file storage systems, web caches, etc. This group is prefixed with `i`, `d`, or `h`.
-- **HPC Optimised** support the highest end performance computing tasks, such as deep learning, weather forecasting, and other scientific applications. The group prefix is `hpc`.
+* **General Purpose**, which are great for a diversity of workloads such as web servers, and offer a balance between compute, memory, and networking.
+    The class prefix is `t` or `m`.
+* **Compute Optimised**, optimised for compute-intensive tasks, such as batch process workloads, media transcoding, scientific modelling, dedicated gaming servers, etc.
+    The class prefix for this group is `c`.
+* **Memory Optimised** instances support processing large data sets in memory, such as databases, web cache stores, data modelling, etc.
+    This group is prefixed as `r` (as well as `x` and `z`).
+* **Accelerated Computing** provides access to accelerators and coprocessors to perform specific operations in hardware using CUDA, etc.
+* **Storage Optimised** instances support storage-intensive tasks that require high read and write access, this could be file storage systems, web caches, etc.
+    This group is prefixed with `i`, `d`, or `h`.
+* **HPC Optimised** support the highest end performance computing tasks, such as deep learning, weather forecasting, and other scientific applications.
+    The group prefix is `hpc`.
 
 The instance type naming convention is as follows, for `m5.2xlarge`  for example, `m` is the instance class, `5` is the generation of hardware that the instance class runs, and `2xlarge` represents the size within the instance class.
 
@@ -221,88 +252,95 @@ The instance type naming convention is as follows, for `m5.2xlarge`  for example
 
 A useful comparison between EC2 instances
 
-## Security Groups
+### Security Groups
 
-[Control traffic to your AWS resources using security groups - Amazon Virtual Private Cloud](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html)
+[Control traffic to your AWS resources using security groups - Amazon Virtual Private Cloud][3]
 
-**Security Groups** are the fundamental entity of network security on AWS, and controls how traffic is allowed into or out of our EC2 instances. Containing a series of **allow rules**, each rule can reference and IP, or another security group. They act like a firewall around our instances, and regulate:
+**Security Groups** are the fundamental entity of network security on AWS, and controls how traffic is allowed into or out of our EC2 instances.
+Containing a series of **allow rules**, each rule can reference and IP, or another security group.
+They act like a firewall around our instances, and regulate:
 
-- Access to ports
-- Authorised IP ranges (both IPv4 and IPv6)
-- Control of the inbound network (to the instance)
-- Control of the outbound network (from the instance)
+* Access to ports
+* Authorised IP ranges (both IPv4 and IPv6)
+* Control of the inbound network (to the instance)
+* Control of the outbound network (from the instance)
 
 Other things to know:
 
-- Security Groups can be attached to multiple instances, and each instance can have multiple security groups.
-- Security groups are specific to a Region or VPC.
-- It’s good to maintain one separate security group for SSH access.
-- All inbound traffic is blocked by default, and all outbound traffic is allowed by default.
-- Security groups can allow for a layer of indirection, by allowing a security group to refer to another security group (which may be attached to another instance), the former security group does not need any knowledge of the EC2 instance that is directing traffic to it.
+* Security Groups can be attached to multiple instances, and each instance can have multiple security groups.
+* Security groups are specific to a Region or VPC.
+* It’s good to maintain one separate security group for SSH access.
+* All inbound traffic is blocked by default, and all outbound traffic is allowed by default.
+* Security groups can allow for a layer of indirection, by allowing a security group to refer to another security group (which may be attached to another instance), the former security group does not need any knowledge of the EC2 instance that is directing traffic to it.
 
 Important ports to know:
 
-| Port | Usage |
-| --- | --- |
-| 21 | FTP |
-| 22 | SSH, SFTP |
-| 80 | HTTP, for access to websites. |
-| 443 | HTTPS, for access to secure websites over TLS. |
+| Port | Usage                                                               |
+|------|---------------------------------------------------------------------|
+| 21   | FTP                                                                 |
+| 22   | SSH, SFTP                                                           |
+| 80   | HTTP, for access to websites.                                       |
+| 443  | HTTPS, for access to secure websites over TLS.                      |
 | 3389 | RDP (Remote Desktop Protocol), used to log into a Windows instance. |
 
-## SSH
+### SSH
 
-The default user in the [Amazon Linux 2 AMI](https://aws.amazon.com/amazon-linux-2/?amazon-linux-whats-new.sort-by=item.additionalFields.postDateTime&amazon-linux-whats-new.sort-order=desc) is `ec2-user`.
+The default user in the [Amazon Linux 2 AMI][4] is `ec2-user`.
 
-## EC2 Instance Connect
+### EC2 Instance Connect
 
-An alternative to SSHing into an EC2 instance via the terminal is to use a variant of [EC2 Instance Connect](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-connect-methods.html) called within the AWS Management Console (note that there is an EC2 Instance Connect API via the AWS CLI that supports terminal access that is not covered here).
+An alternative to SSHing into an EC2 instance via the terminal is to use a variant of [EC2 Instance Connect][5] called within the AWS Management Console (note that there is an EC2 Instance Connect API via the AWS CLI that supports terminal access that is not covered here).
 
 Note that if SSH access is disallowed via a Security Group, then EC2 Instance Connect will not work, as it uses SSH internally to upload a temporary SSH key.
 
-![Screenshot 2023-08-07 at 9.08.52 PM.png](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/Screenshot_2023-08-07_at_9.08.52_PM.png)
+![EC2 Instance Connect](../images/aws-certifications/ec2-instance-connect.png)
 
-## EC2 Instance IAM Roles
+### EC2 Instance IAM Roles
 
-IAM Roles can be attached to EC2 instances in the “Actions” dropdown of the EC2 console, under > “Security” > “Modify IAM Role”. This is the preferred way to grant permissions to an EC2 instance—never attach a personal set of AWS credentials to an EC2 instance.
+IAM Roles can be attached to EC2 instances in the “Actions” dropdown of the EC2 console, under > “Security” > “Modify IAM Role”.
+This is the preferred way to grant permissions to an EC2 instance—never attach a personal set of AWS credentials to an EC2 instance.
 
-## Purchasing Options
+### Purchasing Options
 
-- **On-demand instances**, short workloads, with predictable pricing, and you pay by the second; after the first minute for both Windows & Linux, [and after 24 hours for Mac](https://aws.amazon.com/ec2/instance-types/mac/). These have the highest ongoing cost, but has no upfront payment and no long-term commitment.
-- **Reserved (1 or 3 years)**, useful for long workloads or where there is knowledge that the instance will be needed for a long duration, with up to a 72% discount compared to On-demand.
-  You reserve specific instance attributes (instance type, region, tenancy, OS); and can pay with no upfront cost, partially upfront, or fully upfront.
-  The reserved instance can be scoped to a region, or a zone; and can be bought or sold in the Reserved Instance Marketplace.
-    - C**onvertible Reserved Instances** can be additionally used to change the instance type parameters (instance type, instance family, OS, scope, and tenancy) over time—this provides less discount (66%).
-- **Saving plans (1 or 3 years)**, commit to a specific amount of usage, for long workloads; which also offer a 72% discount, but requires a commitment to a certain amount of usage (for example $10/hour for 1 to 3 years). Any usage beyond this is billed at the on-demand price.
-  Savings plans lock you to a specific instance class & AWS region (for example `m5` in `us-east-1`), bit is flexible across instance size, OS, and tenancy.
-- **Spot Instances**, use short workloads very cheaply (up to 90% discount), but instances can be taken back over by AWS on short notice, making them unreliable; as if your bid price is less than the current spot price, you will lose that instance. This makes them good for short jobs that are resilient to failure, workloads with a flexible start or end time; but are not suitable for critical jobs or databases.
-- **Dedicated Hosts** allows you to book an entire physical server and control instance placement, addressing regulatory and compliance requirements, or use your existing server-bound software licences (per-socket, per-core, per-VM software licences).
-  Dedicated hosts can be purchased on-demand, or reserved (for 1 or 3 years); this makes them the most expensive option on AWS.
-- **Dedicated Instances** means that no other customers will share your hardware, but you have no control over instance placement (although hardware can be moved after Stop/Start). Here is a comparison between dedicated instances and dedicated hosts:
+* **On-demand instances**, short workloads, with predictable pricing, and you pay by the second; after the first minute for both Windows & Linux, [and after 24 hours for Mac][6].
+    These have the highest ongoing cost, but has no upfront payment and no long-term commitment.
+* **Reserved (1 or 3 years)**, useful for long workloads or where there is knowledge that the instance will be needed for a long duration, with up to a 72% discount compared to On-demand.
+    You reserve specific instance attributes (instance type, region, tenancy, OS); and can pay with no upfront cost, partially upfront, or fully upfront.
+    The reserved instance can be scoped to a region, or a zone; and can be bought or sold in the Reserved Instance Marketplace.
+  * **Convertible Reserved Instances** can be additionally used to change the instance type parameters (instance type, instance family, OS, scope, and tenancy) over time—this provides less discount (66%).
+* **Saving plans (1 or 3 years)**, commit to a specific amount of usage, for long workloads; which also offer a 72% discount, but requires a commitment to a certain amount of usage (for example $10/hour for 1 to 3 years).
+    Any usage beyond this is billed at the on-demand price.
+    Savings plans lock you to a specific instance class & AWS region (for example `m5` in `us-east-1`), bit is flexible across instance size, OS, and tenancy.
+* **Spot Instances**, use short workloads very cheaply (up to 90% discount), but instances can be taken back over by AWS on short notice, making them unreliable; as if your bid price is less than the current spot price, you will lose that instance.
+    This makes them good for short jobs that are resilient to failure, workloads with a flexible start or end time; but are not suitable for critical jobs or databases.
+* **Dedicated Hosts** allows you to book an entire physical server and control instance placement, addressing regulatory and compliance requirements, or use your existing server-bound software licences (per-socket, per-core, per-VM software licences).
+    Dedicated hosts can be purchased on-demand, or reserved (for 1 or 3 years); this makes them the most expensive option on AWS.
+* **Dedicated Instances** means that no other customers will share your hardware, but you have no control over instance placement (although hardware can be moved after Stop/Start).
+    Here is a comparison between dedicated instances and dedicated hosts:
 
-  ![Screenshot 2023-08-07 at 9.53.28 PM.png](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/Screenshot_2023-08-07_at_9.53.28_PM.png)
+    ![Dedicated host to dedicated instance comparison](../images/aws-certifications/dedicated-host-dedicated-instance-comparison.png)
 
-- [**Capacity Reservations**](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-capacity-reservations.html) allow you to reserve capacity in a specific AZ for any duration, enabling access to EC2 capacity when you need it. There is no time commitment, so you can cancel or create a reservation at any time. There is also no billing discounts, and you’re charged at On-Demand rate whether you run instances or not.
+- [**Capacity Reservations**][7] allow you to reserve capacity in a specific AZ for any duration, enabling access to EC2 capacity when you need it. There is no time commitment, so you can cancel or create a reservation at any time. There is also no billing discounts, and you’re charged at On-Demand rate whether you run instances or not.
   These are useful for specific short-term workloads that must run in a particular AZ.
 
 The exam will ask you to know to which purchasing option is right for a particular workload.
 
-## Shared Responsibility Model for EC2
+### Shared Responsibility Model for EC2
 
 AWS is responsible for:
 
-- Infrastructure (global network security).
-- Isolation on physical hosts.
-- Replacing faulty hardware.
-- Compliance validation.
+* Infrastructure (global network security).
+* Isolation on physical hosts.
+* Replacing faulty hardware.
+* Compliance validation.
 
 We are responsible for:
 
-- Security Group rules.
-- Operating system patches and updates.
-- Software and utilities installed on the EC2 instance.
-- IAM Roles assigned to EC2 & IAM user access management.
-- Data security on your instance.
+* Security Group rules.
+* Operating system patches and updates.
+* Software and utilities installed on the EC2 instance.
+* IAM Roles assigned to EC2 & IAM user access management.
+* Data security on your instance.
 
 # Section 6: EC2 Instance Storage
 
@@ -1108,3 +1146,11 @@ The EC2 instance has an SSM Agent installed on it, and that agent is connected t
 Session log data can also be sent to S3 or CloudWatch.
 
 ![SessionManager.svg](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/SessionManager.svg)
+
+[1]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html
+[2]: https://aws.amazon.com/ec2/instance-types/
+[3]: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html
+[4]: https://aws.amazon.com/amazon-linux-2/?amazon-linux-whats-new.sort-by=item.additionalFields.postDateTime&amazon-linux-whats-new.sort-order=desc
+[5]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-connect-methods.html
+[6]: https://aws.amazon.com/ec2/instance-types/mac/
+[7]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-capacity-reservations.html
