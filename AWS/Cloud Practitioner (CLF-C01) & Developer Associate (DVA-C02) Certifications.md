@@ -342,39 +342,46 @@ We are responsible for:
 * IAM Roles assigned to EC2 & IAM user access management.
 * Data security on your instance.
 
-# Section 6: EC2 Instance Storage
+## Section 6: EC2 Instance Storage
 
-## EBS Volumes
+### EBS Volumes
 
-[An EBS (Elastic Block Store) volume](https://aws.amazon.com/ebs/) is a network drive you can attach to your instances while they run, allowing you to persist data, even after the corresponding EC2 instances’ termination—for the purposes of the Cloud Practitioner exam, they can only be mounted to one instance at a time (there is however a “multi-attach” feature for some EBS types), or zero instances, as an EBS volume *does not need* to be attached to an EC2 instance necessarily.
+[An EBS (Elastic Block Store) volume][8] is a network drive you can attach to your instances while they run, allowing you to persist data, even after the corresponding EC2 instances’ termination—for the purposes of the Cloud Practitioner exam, they can only be mounted to one instance at a time (there is however a “multi-attach” feature for some EBS types), or zero instances, as an EBS volume *does not need* to be attached to an EC2 instance necessarily.
 
-Each volume can be detached and re-attached from one EC2 instance to another very quickly, but each volume is bound to a specific availability zone, for example a volume in `us-east-1a` cannot be attached to an instance in `us-east-1b`. However, a user can perform a snapshot to move a volume across AZs.
+Each volume can be detached and re-attached from one EC2 instance to another very quickly, but each volume is bound to a specific availability zone, for example a volume in `us-east-1a` cannot be attached to an instance in `us-east-1b`.
+However, a user can perform a snapshot to move a volume across AZs.
 
-Each volume has a provisioned capacity of size in GBs, and performance in IOPS—this relates to your billing. On the free tier, you receive 30GB of EBS storage of either General Purpose (SSD) or magnetic (HDD) per month.
+Each volume has a provisioned capacity of size in GBs, and performance in IOPS—this relates to your billing.
+On the free tier, you receive 30GB of EBS storage of either General Purpose (SSD) or magnetic (HDD) per month.
 
 There is an important attribute named **Delete on Termination**, that controls the behaviour of the EBS volume when the corresponding EC2 instance is terminated.
 
-- By default, the root EBS volume is deleted (attribute enabled)
-- By default, any other attached EBS volume is not deleted (attribute disabled).
+* By default, the root EBS volume is deleted (attribute enabled)
+* By default, any other attached EBS volume is not deleted (attribute disabled).
 
-[Make an Amazon EBS volume available for use on Linux - Amazon Elastic Compute Cloud](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html)
+[Make an Amazon EBS volume available for use on Linux - Amazon Elastic Compute Cloud][9]
 
 Once an EBS volume is created, this link provides a guide on how to attach a volume.
 
-## Snapshots
+### Snapshots
 
-Snapshots allow you to take a backup of a volume at a point in time. You don’t need to detach a volume to make a snapshot, *but it is recommended*. Snapshots can be copied across between AZ’s and regions, making them useful as a mechanism of effectively moving around volumes.
+Snapshots allow you to take a backup of a volume at a point in time.
+You don’t need to detach a volume to make a snapshot, *but it is recommended*.
+Snapshots can be copied across between AZ’s and regions, making them useful as a mechanism of effectively moving around volumes.
 
-- **EBS Snapshot Archive** allows you to move a snapshot to a slower, but cheaper location of storage, giving up a 75% cheaper, but requires 24 to 72 hours to restore from the archive.
-- **Recycle Bin for ECS Snapshots** provides a mechanism to retrain deleted snapshots so you can recover them after accidental deletion, with a user-specified retention time (from 1 day to 1 year).
+* **EBS Snapshot Archive** allows you to move a snapshot to a slower, but cheaper location of storage, giving up a 75% cheaper, but requires 24 to 72 hours to restore from the archive.
+* **Recycle Bin for ECS Snapshots** provides a mechanism to retain deleted snapshots so you can recover them after accidental deletion, with a user-specified retention time (from 1 day to 1 year).
 
-## Amazon Machine Images
+### Amazon Machine Images
 
-AMIs represent a customisation of an EC2 image, and define what the EC2 instance runs. AMIs are built for a specific region, and can be copied across regions. They can come from three flavours:
+AMIs represent a customisation of an EC2 image, and define what the EC2 instance runs.
+AMIs are built for a specific region, and can be copied across regions.
+They can come from three flavours:
 
-- **Public AMI**s. We can select from a list of default AMIs (such as Amazon Linux 2, Ubuntu, Windows Server, etc).
-- **Custom AMI**s are ones we create, allowing you to add your own software, configuration, and monitoring. This can allow for a faster boot/configuration time because the software needed is pre-packaged within the image.
-- Or select an **AWS Marketplace AMI**, made (and potentially sold) by someone else.
+* **Public AMI**s. We can select from a list of default AMIs (such as Amazon Linux 2, Ubuntu, Windows Server, etc).
+* **Custom AMI**s are ones we create, allowing you to add your own software, configuration, and monitoring.
+    This can allow for a faster boot/configuration time because the software needed is pre-packaged within the image.
+* Or select an **AWS Marketplace AMI**, made (and potentially sold) by someone else.
 
 The process of creating an AMI is relatively simple, and can be accomplished by right clicking on an instance, selecting “Image and templates”, then “Create an Image”.
 
@@ -383,65 +390,81 @@ The process of creating an AMI is relatively simple, and can be accomplished by 
 3. Build an AMI from the stopped instance, creating an EBS snapshot.
 4. Launch an instance from our generated AMI.
 
-![Screenshot 2023-08-08 at 8.48.51 PM.png](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/Screenshot_2023-08-08_at_8.48.51_PM.png)
+![Create an AMI from a running EC2 instance](../images/aws-certifications/create-image-from-instance.png)
 
-## EC2 Image Builder
+### EC2 Image Builder
 
-**EC2 Image Builder** can be used to automate the creation of Virtual Machines or container images. For the exam, this means it is a good tool to use for the creation, maintenance, validation, and testing of EC2 AMIs. To do this, a user can define “image pipelines” that define the following flow:
+**EC2 Image Builder** can be used to automate the creation of Virtual Machines or container images.
+For the exam, this means it is a good tool to use for the creation, maintenance, validation, and testing of EC2 AMIs.
+To do this, a user can define “image pipelines” that define the following flow:
 
-![Untitled Diagram.drawio.svg](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/Untitled_Diagram.drawio.svg)
+![Image pipelines with EC2 Image Builder](../images/aws-certifications/ec2-image-builder.drawio.svg)
 
-This image pipeline can be defined to run on a schedule, for example, on a frequency basis, or whenever packages are updated, etc. This is a free service, paying only for the base services, such as the builder & test EC2 instances, along with storing the AMI after its creation.
+This image pipeline can be defined to run on a schedule, for example, on a frequency basis, or whenever packages are updated, etc.
+This is a free service, paying only for the base services, such as the builder & test EC2 instances, along with storing the AMI after its creation.
 
-## EC2 Instance Store
+### EC2 Instance Store
 
-EBS volumes are network drives with good but limited performance. For higher performance, EC2 Instance Store can be used which utilises a physical connection on the server to a hardware disk. This provides better I/O performance. However, if you stop or terminate the associated EC2 instance, the data stored in the instance store will be lost, as the data is ephemeral.
+EBS volumes are network drives with good but limited performance.
+For higher performance, EC2 Instance Store can be used which utilises a physical connection on the server to a hardware disk.
+This provides better I/O performance.
+However, if you stop or terminate the associated EC2 instance, the data stored in the instance store will be lost, as the data is ephemeral.
 
 This makes them good for buffers, caches, or temporary content—this makes backup and replication of your content your responsibility.
 
-## Elastic File System (EFS)
+### Elastic File System (EFS)
 
-**EFS** is a Managed NFS (Network File System) that can be mounted to multiple (or hundreds!) of EC2 instances. This contrasts with EBS volumes that can only be attached to one EC2 instance at a time. EFS only works Linux image types, and can work across Availability Zones.
+**EFS** is a Managed NFS (Network File System) that can be mounted to multiple (or hundreds!) of EC2 instances.
+This contrasts with EBS volumes that can only be attached to one EC2 instance at a time.
+EFS only works Linux image types, and can work across Availability Zones.
 
-It is, highly available, scalable, expensive (3× `gp2`), and paid per usage. Use only 20GB? Pay for only 20GB.
+It is, highly available, scalable, expensive (3× `gp2`), and paid per usage.
+Use only 20GB? Pay for only 20GB.
 
-![ElasticFileSystem.drawio.svg](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/ElasticFileSystem.drawio.svg)
+![Elastic Filesystem Diagram](../images/aws-certifications/elastic-file-system.drawio.svg)
 
-The default storage class is called “EFS Standard”. An *additional storage class* for EFS is **Infrequent Access (EFS-IA)**. This is a cost-optimised storage class for files that are accessed infrequently, with up to 92% lower cost. IF EFS-IA is enabled, the EFS service will automatically move your files over to it based on the last time they were accessed, based on a lifecycle policy you define. This implementation detail is transparent to applications accessing EFS.
+The default storage class is called “EFS Standard”.
+An *additional storage class* for EFS is **Infrequent Access (EFS-IA)**.
+This is a cost-optimised storage class for files that are accessed infrequently, with up to 92% lower cost.
+IF EFS-IA is enabled, the EFS service will automatically move your files over to it based on the last time they were accessed, based on a lifecycle policy you define.
+This implementation detail is transparent to applications accessing EFS.
 
 // TODO: Insert diagram here
 
-## Shared Responsibility Model for EC2 Storage
+### Shared Responsibility Model for EC2 Storage
 
 AWS is responsible for:
 
-- Infrastructure.
-- Replication of data for EBS volumes & EFS drives.
-- Replacing faulty hardware.
-- Ensuring their employees cannot access your data.
+* Infrastructure.
+* Replication of data for EBS volumes & EFS drives.
+* Replacing faulty hardware.
+* Ensuring their employees cannot access your data.
 
 We are responsible for:
 
-- Setting up backup & snapshot procedures.
-- Setting up data encryption.
-- Responsibility of any data on the drives.
-- Understanding the risk of using EC2 Instance Store.
+* Setting up backup & snapshot procedures.
+* Setting up data encryption.
+* Responsibility of any data on the drives.
+* Understanding the risk of using EC2 Instance Store.
 
-## FSx
+### FSx
 
-FSx allows you to launch 3rd party high performance file systems on AWS as an alternative to EFS or S3. This is a fully managed service with three options:
+FSx allows you to launch 3rd party high performance file systems on AWS as an alternative to EFS or S3.
+This is a fully managed service with three options:
 
-### [FSx for Lustre](https://aws.amazon.com/fsx/lustre/)
+#### [FSx for Lustre][10]
 
-**FSx for Lustre** (*Linux + Cluster*) provides a fully managed, high-performance, scalable file storage for **High Performance Computing (HPC)**. This is useful for machine learning, video processing, etc.
+**FSx for Lustre** (*Linux + Cluster*) provides a fully managed, high-performance, scalable file storage for **High Performance Computing (HPC)**.
+This is useful for machine learning, video processing, etc.
 
 Scales up to 100s of GB/s throughput, millions of IOPS, sub-millisecond latencies.
 
 // TODO: insert diagram here
 
-### [FSx for Windows File Server](https://aws.amazon.com/fsx/windows/)
+#### [FSx for Windows File Server][11]
 
-This is a fully managed, highly reliable, and scalable **Windows native** shared file system; built on **Windows File Server**. To implement this, you can deploy this flavour of FSx (usually across two AZ’s), giving you support for the Windows-native SMB protocol and Windows NTFS, allowing you to mount the filesystem on Windows machines.
+This is a fully managed, highly reliable, and scalable **Windows native** shared file system; built on **Windows File Server**.
+To implement this, you can deploy this flavour of FSx (usually across two AZ’s), giving you support for the Windows-native SMB protocol and Windows NTFS, allowing you to mount the filesystem on Windows machines.
 
 This allows the file server in the AWS cloud to be accessed directly from Windows Server EC2 instances in AWS, or from the on-premises infrastructure of a corporate data centre with a Windows client (over SMB).
 
@@ -449,7 +472,7 @@ It is also integrated with Microsoft Active Directory for user security.
 
 // TODO: insert diagram here
 
-### FSx for NetApp ONTAP
+#### FSx for NetApp ONTAP
 
 Not covered as part of this course.
 
@@ -1154,3 +1177,7 @@ Session log data can also be sent to S3 or CloudWatch.
 [5]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-connect-methods.html
 [6]: https://aws.amazon.com/ec2/instance-types/mac/
 [7]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-capacity-reservations.html
+[8]: https://aws.amazon.com/ebs/
+[9]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html
+[10]: https://aws.amazon.com/fsx/lustre/
+[11]: https://aws.amazon.com/fsx/windows/
