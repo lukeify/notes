@@ -1,4 +1,4 @@
-# Cloud Practitioner (<span data-no-spell>CLF</span>-C01) & Developer Associate (<span data-no-spell>DVA</span>-C02) Certifications
+# Cloud Practitioner (<span data-nospell>CLF</span>-C01) & Developer Associate (<span data-nospell>DVA</span>-C02) Certifications
 
 Notes taken during studies for these AWS certifications, and has been organised into sections that map to the Udemy course I was following.
 Much of this information was common knowledge to me, but has been written down for the purposes of keeping notes on topics that may be questions within the exams.
@@ -180,7 +180,7 @@ These policies can:
 Multi-factor authentication should always be required for the root account and IAM users.
 For MFA, there are several device options:
 
-* **Virtual MFA device** (such as Google Authenticator, Step Two, BitWarden TOTP, etc)
+* **Virtual MFA device** (such as Google Authenticator, Step Two, Bitwarden TOTP, etc)
 * **Universal 2nd Factor (U2F) Security Key**, which is a physical security device that allows support for multiple root and IAM users.
 * **Hardware Key For MFA device.**
 * **Hardware Key For MFA device for AWS GovCloud (US).**
