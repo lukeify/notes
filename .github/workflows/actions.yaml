@@ -16,7 +16,7 @@ jobs:
       - name: Install gem dependencies
         run: gem install mdl
       - name: Test (mdl)
-        run: mdl *.md -s .mdl_style.rb
+        run: mdl **/*.md -s .mdl_style.rb
   # Check for grammar and spelling inconsistencies within the repository.
   spellcheck:
     runs-on: ubuntu-latest
