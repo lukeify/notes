@@ -476,119 +476,120 @@ It is also integrated with Microsoft Active Directory for user security.
 
 Not covered as part of this course.
 
-# Section 7: ELB & ASG
+## Section 7: ELB & ASG
 
-## Terminology
+### Terminology
 
-- **Scalability** means that your application/system can handle greater or lesser loads by adapting. There are two kinds of scalability:
-    - An example of **vertical scalability** in AWS would be resizing an EC2 instance from `t2.micro` to `t2.large`. This is useful for non-distributed systems like databases, but there is usually a limit based on the hardware available.
-    - An example of **horizontal scalability** in AWS would be increasing the number of instances for your application. This implies a problem that can be solved via a distributed system, which is common for web applications.
+* **Scalability** means that your application/system can handle greater or lesser loads by adapting.
+    There are two kinds of scalability:
+    * An example of **vertical scalability** in AWS would be resizing an EC2 instance from `t2.micro` to `t2.large`.
+        This is useful for non-distributed systems like databases, but there is usually a limit based on the hardware available.
+    * An example of **horizontal scalability** in AWS would be increasing the number of instances for your application.
+        This implies a problem that can be solved via a distributed system, which is common for web applications.
 
-  > *The ability to accomodate a larger load by making the hardware stronger (scale up), or by adding nodes (scale out).*
->
-- **High availability** is related to horizontal scalability, and means you are running your application in at least 2 availability zones, and is usually intended to survive a data centre loss.
-- **Elasticity** can be defined as:
+    > *The ability to accommodate a larger load by making the hardware stronger (scale up), or by adding nodes (scale out).*
 
-  > *Once a system is scalable, elasticity means there will be some auto-scaling so that the system can scale based on load. This is cloud-friendly, allowing you to pay-per-use, match demand, and optimise costs.*
->
-- **Agility**. This is a distractor term and can be defined as:
+* **High availability** is related to horizontal scalability, and means you are running your application in at least 2 availability zones, and is usually intended to survive a data centre loss.
+* **Elasticity** can be defined as:
 
-  > *New IT resources are only a click away, which means that you reduce the time to make those resources available to your developers from weeks to just minutes.*
->
+    > *Once a system is scalable, elasticity means there will be some auto-scaling so that the system can scale based on load. This is cloud-friendly, allowing you to pay-per-use, match demand, and optimise costs.*
 
-## Elastic Load Balancing
+* **Agility**.
+    This is a distractor term and can be defined as:
+
+    > *New IT resources are only a click away, which means that you reduce the time to make those resources available to your developers from weeks to just minutes.*
+
+### Elastic Load Balancing
 
 **Load balancers** are servers that forward internet traffic to multiple servers downstream. Behind each load balancer, there can be multiple EC2 instances, with the load balancer directing the traffic to an appropriate EC2 instance. Some advantages:
 
-- Spread load across multiple downstream instances.
-- Expose a single point of access (DNS) to your application.
-- Seamlessly handle failures of downstream instances.
-- Do regular health checks on your instances.
-- Provide SSL Termination to your websites.
-- High availability across zones.
+* Spread load across multiple downstream instances.
+* Expose a single point of access (DNS) to your application.
+* Seamlessly handle failures of downstream instances.
+* Do regular health checks on your instances.
+* Provide SSL Termination to your websites.
+* High availability across zones.
 
-AWS’s implementation of load balancing are called **Elastic Load Balancers**, and is a managed load balancer: AWS guarantees it will be working, takes responsibility for upgrades, maintenance, and high availability; while providing only a few configuration settings. While it does cost less to setup your own load balancer with an EC2 instance, it will be a lot more effort.
+AWS’s implementation of load balancing are called **Elastic Load Balancers**, and is a managed load balancer: AWS guarantees it will be working, takes responsibility for upgrades, maintenance, and high availability; while providing only a few configuration settings.
+While it does cost less to setup your own load balancer with an EC2 instance, it will be a lot more effort.
 
 There are four flavours of load balancers offered by AWS:
 
+| Title                           | Layer        | Notes                                                                                                                                                 |
+|---------------------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Application Load Balancer (ALB) | Layer 7      | HTTP, HTTPS, & gRPC traffic only. Provides HTTP routing. Useful for a static DNS.                                                                     |
+| Network Load Balancer (NLB)     | Layer 4      | Ultra-high performance (millions of req/sec). Allows for both TCP & UDP. Provides a Static IP via Elastic IP.                                         |
+| Gateway Load Balancer (GWLB)    | Layer 3      | GENEVE Protocol on IP Packets. Routes traffic to firewalls that you manage on EC2 instances. Useful for intrusion detection & deep packet inspection. |
+| Classic Load Balancer           | Layers 4 & 7 | Retired in 2023, replaced by both ALB & NLB.                                                                                                          |
 
-
-| Title | Layer | Notes |
-| --- | --- | --- |
-| Application Load Balancer (ALB) | Layer 7 | HTTP, HTTPS, & gRPC traffic only.
-Provides HTTP routing.
-Useful for a static DNS. |
-| Network Load Balancer (NLB) | Layer 4 | Ultra-high performance (millions of req/sec).
-Allows for both TCP & UDP.
-Provides a Static IP via Elastic IP. |
-| Gateway Load Balancer (GWLB) | Layer 3 | GENEVE Protocol on IP Packets.
-Routes traffic to firewalls that you manage on EC2 instances.
-Useful for intrusion detection & deep packet inspection. |
-| Classic Load Balancer | Layers 4 & 7 | Retired in 2023, replaced by both ALB & NLB. |
-
-**Application Load Balancer**
+#### Application Load Balancer
 
 // TODO: Create image
 
-**Network Load Balancer**
+#### Network Load Balancer
 
 // TODO: Create image
 
-**Gateway Load Balancer**
+#### Gateway Load Balancer
 
-![GatewayLoadBalancer.drawio.svg](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/GatewayLoadBalancer.drawio.svg)
+![Gateway Load Balancer Diagram](../images/aws-certifications/gateway-load-balancer-diagram.drawio.svg)
 
-## Auto Scaling Groups
+### Auto Scaling Groups
 
-In real-life, the load on your websites and applications can change. By utilising an **Auto-Scaling Group** (ASG), we can:
+In real-life, the load on your websites and applications can change.
+By utilising an **Auto-Scaling Group** (ASG), we can:
 
-- Scale out (add EC2 instances) to match an increased load.
-- Scale in (remove EC2 instances) to match a decreased load.
-- Ensure we have a minimum and maximum number of machines running at any point in time.
-- Automatically register new instances to a load balancer.
-- Replace & deregister unhealthy instances.
+* Scale out (add EC2 instances) to match an increased load.
+* Scale in (remove EC2 instances) to match a decreased load.
+* Ensure we have a minimum and maximum number of machines running at any point in time.
+* Automatically register new instances to a load balancer.
+* Replace & deregister unhealthy instances.
 
 This provides cost savings as we are always running at an optimal capacity. ASG’s can have the following scaling strategies:
 
-- **Manual scaling**, by updating the size of an ASG manually, in the AWS Management Console.
-- **Dynamic scaling**, by responding to changing demand, with the following implementations:
-    - **Simple/step scaling**, for example, when a “CPU > 70%” CloudWatch alarm is triggered then add 2 units, or when a “CPU < 30%” CloudWatch alarm is triggered, then remove one unit.
-    - **Target Tracking scaling**, by defining the average CPU usage across the ASG to stay around a particular value (such as 40%).
-    - **Scheduled scaling**, by anticipating increases and decreases in usage at particular times and dates (i.e. increase units at 5PM on a Friday).
-- **Predictive scaling**, by using machine learning to predict future traffic ahead of time; by looking at past usage patterns. It will automatically provision the right number of EC2 instances in advance. Helpful when your load has predictable time-based patterns.
+* **Manual scaling**, by updating the size of an ASG manually, in the AWS Management Console.
+* **Dynamic scaling**, by responding to changing demand, with the following implementations:
+    * **Simple/step scaling**, for example, when a “CPU > 70%” CloudWatch alarm is triggered then add 2 units, or when a “CPU < 30%” CloudWatch alarm is triggered, then remove one unit.
+    * **Target Tracking scaling**, by defining the average CPU usage across the ASG to stay around a particular value (such as 40%).
+    * **Scheduled scaling**, by anticipating increases and decreases in usage at particular times and dates (i.e. increase units at 5PM on a Friday).
+* **Predictive scaling**, by using machine learning to predict future traffic ahead of time; by looking at past usage patterns.
+    It will automatically provision the right number of EC2 instances in advance. Helpful when your load has predictable time-based patterns.
 
-# Section 8: S3
+## Section 8: S3
 
 Amazon S3 is one of the main products on AWS. It can be used for many purposes:
 
-- Backup, storage, archiving, and disaster recovery
-- Extensible to hybrid cloud storage (a mix of on-premises, while scaling into the cloud)
-- Application & media hosting
-- Data “lakes” & big data analytics
-- Software delivery
-- Static website hosting
+* Backup, storage, archiving, and disaster recovery
+* Extensible to hybrid cloud storage (a mix of on-premises, while scaling into the cloud)
+* Application & media hosting
+* Data “lakes” & big data analytics
+* Software delivery
+* Static website hosting
 
-## Terminology
+### Terminology
 
-**Objects** (files) are stored in **buckets** (top-level directories), which must have a globally unique name (across all regions in a “[partition](https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/partitions.html)”, across all accounts); but each bucket is defined at a region level. S3 looks like a global service, but buckets *are indeed* created in a region. The following naming conventions for buckets exist (these are just some, for full details, [see the linked AWS documentation](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)):
+**Objects** (files) are stored in **buckets** (top-level directories), which must have a globally unique name (across all regions in a “[partition][12]”, across all accounts); but each bucket is defined at a region level.
+S3 looks like a global service, but buckets *are indeed* created in a region.
+The following naming conventions for buckets exist (these are just some, for full details, [see the linked AWS documentation][13]):
 
-- Can only consist of lowercase letters, numbers, periods, and hyphens.
-- Must be between 3–63 characters long, and must begin and end with a letter or number.
-- Cannot be an IP address.
-- Cannot start with the prefix `xn--` or `sthree-` or `sthree-configurator`.
-- Cannot end with the suffix `-s3alias` (this suffix is reserved for “access point alias names”).
-- Cannot end with the suffix `--ol-s3` (this suffix is reserved for “Object Lambda Access Point alias names”).
+* Can only consist of lowercase letters, numbers, periods, and hyphens.
+* Must be between 3–63 characters long, and must begin and end with a letter or number.
+* Cannot be an IP address.
+* Cannot start with the prefix `xn--` or `sthree-` or `sthree-configurator`.
+* Cannot end with the suffix `-s3alias` (this suffix is reserved for “access point alias names”).
+* Cannot end with the suffix `--ol-s3` (this suffix is reserved for “Object Lambda Access Point alias names”).
 
 **Objects** (files) have a key, which is the “full path” to the file, for example:
 
-- `s3://my-bucket/my_file.txt`
-- `s3://my-bucket/my_folder/another_folder/my_file.txt`
+* `s3://my-bucket/my_file.txt`
+* `s3://my-bucket/my_folder/another_folder/my_file.txt`
 
-The key is composed of the `prefix` and the object’s “name”. So for example, given the file above:
+The key is composed of the `prefix` and the object’s “name”.
+So for example, given the file above:
 
-| prefix | object name |
-| --- | --- |
-| my_folder/another_folder/ | my_file.txt |
+| prefix                      | object name   |
+|-----------------------------|---------------|
+| `my_folder/another_folder/` | `my_file.txt` |
 
 There are no concept of directories with S3 (although the Management Console will convince you otherwise), and are just keys with components separated by slashes.
 
@@ -596,221 +597,243 @@ The maximum object size is **5TB**, and if the file is more than **5GB**, you mu
 
 Objects can contain additional information:
 
-- **Metadata**, which is a list of text-based key-value pairs
-- **Tags** which are also Unicode-based key-value pairs, and are useful for storing security & lifecycle policy information
-- a **Version ID**, if versioning is enabled
+* **Metadata**, which is a list of text-based key-value pairs
+* **Tags** which are also Unicode-based key-value pairs, and are useful for storing security & lifecycle policy information
+* a **Version ID**, if versioning is enabled
 
-## S3 Security
+### S3 Security
 
 Security for S3 can be implemented in many ways. Overall, note that an IAM principal can access an S3 object *if*:
 
 > *The user’s IAM permissions allow it, OR the resource policy allows it; AND there’s no explicit `deny` set.*
->
 
-### User-based security
+#### User-based security
 
 **IAM Policies** can define which API calls should be allowed for a specific user from IAM.
 
-### Resource-based security
+#### Resource-based security
 
-- **Bucket Policies** are bucket wide JSON-based policies that are similar to IAM policies that can be configured within the S3 console, allowing other accounts to access—this is the most common method. For example:
+* **Bucket Policies** are bucket wide JSON-based policies that are similar to IAM policies that can be configured within the S3 console, allowing other accounts to access—this is the most common method.
+For example:
 
-    ```json
-    {
-    	"Version": "2012-10-17",
-    	"Statement": [
-    		{
-    			"Sid": "PublicRead",
-    			"Effect": "Allow",
-    			"Principal": "*",
-    			"Action": [
-    				"s3:GetObject"
-    			],
-    			"Resource": [
-    				"arn:aws:s3:::examplebucket/*"
-    			]
-    		}
-    	]
-    }
-    ```
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicRead",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": [
+                "s3:GetObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::examplebucket/*"
+            ]
+        }
+    ]
+}
+```
 
-  These can be used to:
+These can be used to:
 
-    - Grant public access to the bucket.
-    - Force objects to be encrypted at upload.
-    - Grant access to another account (cross-account).
+* Grant public access to the bucket.
+* Force objects to be encrypted at upload.
+* Grant access to another account (cross-account).
 
-### Access Control Lists
+#### Access Control Lists
 
 **Object Access Control Lists (ACL)** provides finer-grain security at the object-level (can be disabled), alternatively **Bucket Access Control Lists (ACL)** can be used, but are less common (can be disabled).
 
-### Encryption
+#### Encryption
 
 **Encryption** can be used to encrypt objects in S3 using encryption keys.
 
-### Blocking Public Access
+#### Blocking Public Access
 
-An additional setting in the S3 bucket creation screen is the “Block Public Access settings”—these are “on” by default as an extra layer of security to prevent data leaks. Even if there is an S3 bucket policy to make a bucket public, if these are enabled, these settings override that.
+An additional setting in the S3 bucket creation screen is the “Block Public Access settings”—these are “on” by default as an extra layer of security to prevent data leaks.
+Even if there is an S3 bucket policy to make a bucket public, if these are enabled, these settings override that.
 
-![Screenshot 2023-08-14 at 7.59.05 PM.png](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/Screenshot_2023-08-14_at_7.59.05_PM.png)
+![Block all public access screen](../images/aws-certifications/s3-block-all-public-access.png)
 
 If you know none of the S3 buckets for an account should be public, these settings can be set at the account level.
 
-## Static Website Hosting
+### Static Website Hosting
 
-S3 can host static websites and have them accessible on the Internet. The website URL will be either (depending on region):
+S3 can host static websites and have them accessible on the Internet.
+The website URL will be either (depending on region):
 
-- `http://bucket-name.s3-website-aws-region.amazonaws.com`
-- `http://bucket-name.s3-website.aws-region.amazon.com`
+* `http://bucket-name.s3-website-aws-region.amazonaws.com`
+* `http://bucket-name.s3-website.aws-region.amazon.com`
 
-Note the difference between the `.` and `-` before `aws-region`. If the bucket policy lacks public reads, the user will receive a `403 Forbidden`.
+Note the difference between the `.` and `-` before `aws-region`.
+If the bucket policy lacks public reads, the user will receive a `403 Forbidden`.
 
-## Versioning
+### Versioning
 
-[Using versioning in S3 buckets - Amazon Simple Storage Service](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html)
+[Using versioning in S3 buckets - Amazon Simple Storage Service][14]
 
-Amazon S3 objects can be versioned at the bucket level—so if a new object is added with the same key as an existing object, the object will be overridden and the version of the object incremented. This prevents unintentional deletes by allowing previous versions to be rolled back at a later date. Additional information:
+Amazon S3 objects can be versioned at the bucket level—so if a new object is added with the same key as an existing object, the object will be overridden and the version of the object incremented.
+This prevents unintentional deletes by allowing previous versions to be rolled back at a later date.
+Additional information:
 
-- Any file that is not versioned prior to enabling versioning will have a version `null`.
-- Suspending versioning does not delete previous versions of files.
+* Any file that is not versioned prior to enabling versioning will have a version `null`.
+* Suspending versioning does not delete previous versions of files.
 
-![S3Versioning.drawio.svg](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/S3Versioning.drawio.svg)
+![S3 Versioning Diagram](../images/aws-certifications/s3-versioning-diagram.drawio.svg)
 
-## Replication
+### Replication
 
-**Cross Region Replication (CRR)** & **Same Region Replication (SRR)** allow us to implement asynchronous replication between buckets—even between different AWS accounts. Both the source and destination buckets must have versioning enabled for this functionality to work, and the S3 service must be given the proper IAM permissions. The former replication strategy requires the buckets to be in different regions, while the latter requires them to be in the same region.
+**Cross Region Replication (CRR)** & **Same Region Replication (SRR)** allow us to implement asynchronous replication between buckets—even between different AWS accounts.
+Both the source and destination buckets must have versioning enabled for this functionality to work, and the S3 service must be given the proper IAM permissions.
+The former replication strategy requires the buckets to be in different regions, while the latter requires them to be in the same region.
 
 Use cases:
 
-- **CRR** can be useful for compliance, lower latency access, replication across accounts.
-- **SRR** can be used for log aggregation, or live replication between production and test accounts.
+* **CRR** can be useful for compliance, lower latency access, replication across accounts.
+* **SRR** can be used for log aggregation, or live replication between production and test accounts.
 
-## Storage Classes
+### Storage Classes
 
 Objects can be stored in a “class” in S3, and can be moved automatically between storage classes using S3 Lifecycle Policies. There are a few groups of classes:
 
-- **Standard**, consisting of:
-    - **General Purpose**
-        - 99.99% availability, used for frequently accessed data that need low latency and high throughput. It can sustain 2 concurrent facility failures and remain accessible.
-    - **Infrequent Access (IA)**
-        - This has a lower cost than S3 Standard, but has a per-access cost for retrieval; making it useful for data that is less frequently accessed, but still requires rapid access when needed.
-        - It is also slightly less available, at 99.9%. It makes a good use case for disaster recovery and backups.
-    - **One Zone-Infrequent Access**
-        - This is similar to Standard IA, but is only available in a single AZ with no replication. For example, the data will be lost if the AZ is destroyed.
-        - It is even less available, at 99.5%. Useful for storing secondary backups, and recreatable data.
-- **Glacier**, which provides low-cost object storage meant for archival or backups. You pay both for the storage, and for retrieval costs. Consisting of:
-    - **Instant Retrieval**
-        - Millisecond retrieval, for example accessing data needed once per quarter, but has a minimum storage duration of 90 days.
-    - **Flexible Retrieval** (formerly Amazon S3 Glacier)
-        - Within this class, there’s three levels of flexibility, that provides differing amounts of time you must wait for your data to be retrieved:
-            - Expedited (1–5 minutes)
-            - Standard (3–5 hours)
-            - Bulk (5–12 hours)
-    - **Deep Archive**
-        - This requires a minimum storage duration of 180 days.
-        - Within this class, there’s two levels of flexibility:
-            - Standard (12 hours)
-            - Bulk (48 hours)
-- **Amazon S3 Intelligent Tiering** is an additional approach that can move objects between tiers based on usage patterns to access those objects. There is a small monthly monitoring and auto-tiering fee. There are no retrieval charges in S3 Intelligent-Tiering. Within this class, there are 5 tiers:
-    - **Frequent Access Tier**, which is the default tier items are placed into.
-    - **Infrequent Access Tier**, for objects not accessed for 30 days.
-    - **Archive Instant Access tier**, for objects not accessed for 90 days.
-    - **Archive Access Tier**, is an opt-in tier for objects not accessed between 90 days and 700+ days.
-    - **Deep Archive Access Tier**, is an opt-in tier for objects not accessed between 180 days and 700+ days.
+* **Standard**, consisting of:
+    * **General Purpose**
+        * 99.99% availability, used for frequently accessed data that need low latency and high throughput.
+            It can sustain 2 concurrent facility failures and remain accessible.
+    * **Infrequent Access (IA)**
+        * This has a lower cost than S3 Standard, but has a per-access cost for retrieval; making it useful for data that is less frequently accessed, but still requires rapid access when needed.
+        * It is also slightly less available, at 99.9%.
+            It makes a good use case for disaster recovery and backups.
+    * **One Zone-Infrequent Access**
+        * This is similar to Standard IA, but is only available in a single AZ with no replication.
+            For example, the data will be lost if the AZ is destroyed.
+        * It is even less available, at 99.5%.
+            Useful for storing secondary backups, and recreatable data.
+* **Glacier**, which provides low-cost object storage meant for archival or backups.
+    You pay both for the storage, and for retrieval costs.
+    Consisting of:
+    * **Instant Retrieval**
+        * Millisecond retrieval, for example accessing data needed once per quarter, but has a minimum storage duration of 90 days.
+    * **Flexible Retrieval** (formerly Amazon S3 Glacier)
+        * Within this class, there’s three levels of flexibility, that provides differing amounts of time you must wait for your data to be retrieved:
+            * Expedited (1–5 minutes)
+            * Standard (3–5 hours)
+            * Bulk (5–12 hours)
+    * **Deep Archive**
+        * This requires a minimum storage duration of 180 days.
+        * Within this class, there’s two levels of flexibility:
+            * Standard (12 hours)
+            * Bulk (48 hours)
+* **Amazon S3 Intelligent Tiering** is an additional approach that can move objects between tiers based on usage patterns to access those objects.
+    There is a small monthly monitoring and auto-tiering fee.
+    There are no retrieval charges in S3 Intelligent-Tiering. Within this class, there are 5 tiers:
+    * **Frequent Access Tier**, which is the default tier items are placed into.
+    * **Infrequent Access Tier**, for objects not accessed for 30 days.
+    * **Archive Instant Access tier**, for objects not accessed for 90 days.
+    * **Archive Access Tier**, is an opt-in tier for objects not accessed between 90 days and 700+ days.
+    * **Deep Archive Access Tier**, is an opt-in tier for objects not accessed between 180 days and 700+ days.
 
 Classes can be measured in both **durability** and **availability**. For durability:
 
-- AWS guarantees eleven 9’s (99.999999999%) of durability over a single year. For example, if you store 10 million objects, you can expect on average to lose a single object once every 10,000 years.
-  This is the same for all storage classes.
+* AWS guarantees eleven 9’s (99.999999999%) of durability over a single year.
+    For example, if you store 10 million objects, you can expect on average to lose a single object once every 10,000 years.
+    This is the same for all storage classes.
 
 For availability:
 
-- Measures how often the service is accessible. This varies depends on the storage class, for example S3 Standard has 99.99% availability over a given year, meaning an average we can expect the service to be unavailable for 53 minutes a year.
+* Measures how often the service is accessible.
+    This varies depends on the storage class, for example S3 Standard has 99.99% availability over a given year, meaning an average we can expect the service to be unavailable for 53 minutes a year.
 
-## Encryption
+### Encryption
 
-**Serverside Encryption** is default on AWS S3, this enables encryption at rest. The user can also encrypt a file before uploading it (**Clientside Encryption**), which effectively enables encryption during transit.
+**Serverside Encryption** is default on AWS S3, this enables encryption at rest.
+    The user can also encrypt a file before uploading it (**Clientside Encryption**), which effectively enables encryption during transit.
 
-## Shared Responsibility Model for S3
+### Shared Responsibility Model for S3
 
 AWS is responsible for:
 
-- The infrastructure of S3 (global security, durability, availability, the ability to sustain concurrent loss of data in two facilities, etc)
-- Configuration and vulnerability analysis
-- Compliance validation
+* The infrastructure of S3 (global security, durability, availability, the ability to sustain concurrent loss of data in two facilities, etc)
+* Configuration and vulnerability analysis
+* Compliance validation
 
 We are responsible for:
 
-- Versioning
-- Bucket Policies
-- Replication Setup
-- Logging & Monitoring
-- Using the most optimal Storage class
-- Data encryption at rest and in transit.
+* Versioning
+* Bucket Policies
+* Replication Setup
+* Logging & Monitoring
+* Using the most optimal Storage class
+* Data encryption at rest and in transit
 
-## Snow Family
+### Snow Family
 
 These are highly secure, portable, physical services used to collect and process data at the edge, and migrate data into and out of AWS, recommended for migrations where it would take more than week to transfer over a network.
 
-Data migration can be very slow for large transfers, along with having to deal with limited connectivity, limited bandwidth, and have a high network cost, and Snow Family devices solve this. These services are:
+Data migration can be very slow for large transfers, along with having to deal with limited connectivity, limited bandwidth, and have a high network cost, and Snow Family devices solve this.
+These services are:
 
-- **Snowcone** is a very small portable computing device that is rugged and secure, weighing in at 2.1kg; and designed for small data transfers, edge computing and storage.
-    - Useful for where Snowball does not fit (such as a space-constrained environment), but you must provide your own battery and cables.
-    - Can be sent back to AWS offline, or connect it to internet via **AWS DataSync.**
-    - It comes in two flavours:
-        - **Snowcone**, providing 8TB of HDD storage.
-        - **Snowcone SSD**, providing 14TB of SSD storage.
-- **Snowball Edge** is useful for large data cloud migrations, data-centre decommissioning, and disaster recovery. When used for data transfers:
-    - It is used to move TBs or PB’s in or out of AWS, providing an alternative to moving data over the network.
-    - There is a fee per data transfer job.
-    - It provides block storage and AWS S3-compatible object storage.
-    - It comes in two flavours:
-        - **Snowball Edge Storage Optimized**, providing 80TB HDD capacity.
-        - **Snowball Edge Compute Optimized**, providing 42TB HDD or 28TB NVMe capacity.
-- **Snowmobile** is a gigantic fucking truck, allowing you to transfer exabytes of capacity, with each snowmobile providing 100PB of capacity (if more transfer storage is needed, these can be combined in parallel).
-    - Each snowmobile is temperature controlled, has GPS tracking, and 24/7 video surveillance.
-    - More useful than Snowball if the data transferred is more than 10PB.
+* **Snowcone** is a very small portable computing device that is rugged and secure, weighing in at 2.1kg; and designed for small data transfers, edge computing and storage.
+    * Useful for where Snowball does not fit (such as a space-constrained environment), but you must provide your own battery and cables.
+    * Can be sent back to AWS offline, or connect it to internet via **AWS DataSync.**
+    * It comes in two flavours:
+        * **Snowcone**, providing 8TB of HDD storage.
+        * **Snowcone SSD**, providing 14TB of SSD storage.
+* **Snowball Edge** is useful for large data cloud migrations, data-centre decommissioning, and disaster recovery.
+    When used for data transfers:
+    * It is used to move TBs or PB’s in or out of AWS, providing an alternative to moving data over the network.
+    * There is a fee per data transfer job.
+    * It provides block storage and AWS S3-compatible object storage.
+    * It comes in two flavours:
+        * **Snowball Edge Storage Optimized**, providing 80TB HDD capacity.
+        * **Snowball Edge Compute Optimized**, providing 42TB HDD or 28TB NVMe capacity.
+* **Snowmobile** is a gigantic fucking truck, allowing you to transfer exabytes of capacity, with each snowmobile providing 100PB of capacity (if more transfer storage is needed, these can be combined in parallel).
+    * Each snowmobile is temperature controlled, has GPS tracking, and 24/7 video surveillance.
+    * More useful than Snowball if the data transferred is more than 10PB.
 
-|  | Snowcone & Snowcone SSD | Snowball Edge (Storage Optimized) | Snowmobile |
-| --- | --- | --- | --- |
-| Storage Capacity | 8TB HDD, 14TB SSD | 80TB Usable | 100 PB |
-| Migration Size | Up to 24TB, online and offline | Up to petabytes, offline | Up to exabytes, offline |
-| DataSync agent? | Pre-installed | N/A | N/A |
+|                  | Snowcone & Snowcone SSD        | Snowball Edge (Storage Optimized) | Snowmobile              |
+|------------------|--------------------------------|-----------------------------------|-------------------------|
+| Storage Capacity | 8TB HDD, 14TB SSD              | 80TB Usable                       | 100 PB                  |
+| Migration Size   | Up to 24TB, online and offline | Up to petabytes, offline          | Up to exabytes, offline |
+| DataSync agent?  | Pre-installed                  | N/A                               | N/A                     |
 
-### Usage Process
+#### Usage Process
 
 1. Request Snowball devices from the AWS Console for delivery
 2. Install the snowball client / AWS OpsHub on your servers
-3. Connect the snowball device to your servers and copy files using the client.
+3. Connect the snowball device to your servers and copy files using the client
 4. Ship back the device to the AWS facility on data transfer completion
-5. Data will appear in an S3 bucket.
-6. Snowball is wiped according to NIST specifications.
+5. Data will appear in an S3 bucket
+6. Snowball is wiped according to NIST specifications
 
-### Edge Computing with Snow Family devices
+#### Edge Computing with Snow Family devices
 
-Snow family devices can also be used to process data in an *edge location*—even a location that does not have internet access. The use cases include:
+Snow family devices can also be used to process data in an *edge location*—even a location that does not have internet access.
+The use cases include:
 
-- Data preprocessing
-- Machine learning at the edge
-- Transcoding media streams
+* Data preprocessing
+* Machine learning at the edge
+* Transcoding media streams
 
-Eventually, the data can be shipped back to an AWS facility for cloud integration. The snow family devices providing edge computing are:
+Eventually, the data can be shipped back to an AWS facility for cloud integration.
+The snow family devices providing edge computing are:
 
-- **Snowcone** & **Snowcone SSD** (smaller)
-    - 2 CPUs, 4GB of memory, wired or wireless access
-    - USB-C power using a cord or an optional battery
-- **Snowball Edge** devices can be run EC2 instances and execute AWS Lambda functions (using [AWS IoT Greengrass](https://aws.amazon.com/greengrass/)), are available for long term deployment with 1 and 3 year discounted pricing available, and come in two flavours:
-    - **Compute Optimized**
-        - Up to 104 vCPUs, 416GiB of RAM, with an optional GPU.
-        - 28TB NVMe or 42TB HDD
-        - Clustering can be enabled with up to 16 additional nodes for more storage.
-    - **Storage Optimized**
-        - Up to 40 vCPUs, 80 GiB of RAM
-        - 80TB of HDD storage
+* **Snowcone** & **Snowcone SSD** (smaller)
+    * 2 CPUs, 4GB of memory, wired or wireless access
+    * USB-C power using a cord or an optional battery
+* **Snowball Edge** devices can be run EC2 instances and execute AWS Lambda functions (using [AWS IoT Greengrass][15]), are available for long term deployment with 1 and 3 year discounted pricing available, and come in two flavours:
+    * **Compute Optimized**
+        * Up to 104 vCPUs, 416GiB of RAM, with an optional GPU
+        * 28TB NVMe or 42TB HDD
+        * Clustering can be enabled with up to 16 additional nodes for more storage
+    * **Storage Optimized**
+        * Up to 40 vCPUs, 80 GiB of RAM
+        * 80TB of HDD storage
 
-### OpsHub
+#### OpsHub
 
-Historically, to use Snow Family devices, a CLI tool was needed to interface with them, which was difficult, so AWS OpsHub can be installed on your on-premise computer/laptop that provides a [AWS Dashboard-like experience](https://www.youtube.com/watch?v=0Q7s7JiBCf0) to manage your Snow Family device, and can be used to:
+Historically, to use Snow Family devices, a CLI tool was needed to interface with them, which was difficult, so AWS OpsHub can be installed on your on-premise computer/laptop that provides a [AWS Dashboard-like experience][16] to manage your Snow Family device, and can be used to:
 
 - Unlock and configure single or clustered devices,
 - Transfer files,
@@ -818,11 +841,11 @@ Historically, to use Snow Family devices, a CLI tool was needed to interface wit
 - Monitor device metrics (such as storage capacity, active instances, etc),
 - Launch compatible AWS services locally (EC2, DataSync, Network File System)
 
-## Storage Gateway
+### Storage Gateway
 
 AWS is pushing for “hybrid cloud” (where part of your infrastructure is both on-premises and in-cloud)—and S3 supports this, despite being a proprietary storage technology, via **AWS Storage Gateway**. A quick review of AWS cloud native storage options:
 
-![CloudNativeStorageOptions.drawio.svg](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/CloudNativeStorageOptions.drawio.svg)
+![Cloud Native Storage Options Diagram](../images/aws-certifications/cloud-native-storage-options-diagram.drawio.svg)
 
 Storage Gateway bridges your on-premise and cloud data.
 
@@ -1181,3 +1204,8 @@ Session log data can also be sent to S3 or CloudWatch.
 [9]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html
 [10]: https://aws.amazon.com/fsx/lustre/
 [11]: https://aws.amazon.com/fsx/windows/
+[12]: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/partitions.html
+[13]: https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
+[14]: https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html
+[15]: https://aws.amazon.com/greengrass/
+[16]: https://www.youtube.com/watch?v=0Q7s7JiBCf0
