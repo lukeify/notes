@@ -1104,128 +1104,123 @@ It is a simpler alternative to using “complex” AWS services like EC2, RDS, E
 This is great for individuals with minimal cloud experience, hosting simple web applications, and websites.
 It is highly available, but there is no auto-scaling, and it has limited AWS integrations.
 
-# Section 11: Deployments & Managing Infrastructure at Scale
+## Section 11: Deployments & Managing Infrastructure at Scale
 
-## CloudFormation
+### CloudFormation
 
-**CloudFormation** is a declarative way of outlining your AWS infrastructure, for any resources—like Terraform, providing Infrastructure as Code.
+**CloudFormation** is a declarative way of outlining your AWS infrastructure, for any resources—like Terraform, providing _Infrastructure as Code_.
 
-- No resources are manually created, which is excellent for version control.
-- Changes to infrastructure can be reviewed through code.
-- Each resource within a CloudFormation stack is tagged with an identifier, allowing you to see how much a stack costs.
-- Ability to destroy and recreate infrastructure on the fly.
-- The ability to automate the generation of diagrams for your templates using **CloudFormation Stack Designer**.
+* No resources are manually created, which is excellent for version control.
+* Changes to infrastructure can be reviewed through code.
+* Each resource within a CloudFormation stack is tagged with an identifier, allowing you to see how much a stack costs.
+* Ability to destroy and recreate infrastructure on the fly.
+* The ability to automate the generation of diagrams for your templates using **CloudFormation Stack Designer**.
 
-## Cloud Development Kit (CDK)
+### Cloud Development Kit (CDK)
 
-An alternative to CloudFormation’s declarative approach is to define cloud infrastructure imperatively in your preferred programming language of choice, and have [CDK](https://aws.amazon.com/cdk/) compile it down to a CloudFormation template, making it possible to have your infrastructure and application runtime code not only packaged together, but written in the same language.
+An alternative to CloudFormation’s declarative approach is to define cloud infrastructure imperatively in your preferred programming language of choice, and have [CDK][24] compile it down to a CloudFormation template, making it possible to have your infrastructure and application runtime code not only packaged together, but written in the same language.
 
 A CDK application that you write is converted into a CloudFormation template using the CDK CLI.
 
-## Elastic Beanstalk
+### Elastic Beanstalk
 
-[**Elastic Beanstalk**](https://aws.amazon.com/elasticbeanstalk/) is a free, managed Platform-as-a-Service that provides developer-centric view into deploying an application on AWS—while still giving full control over the configuration of the underlying infrastructure. Beanstalk handles:
+[**Elastic Beanstalk**][25] is a free, managed Platform-as-a-Service that provides developer-centric view into deploying an application on AWS—while still giving full control over the configuration of the underlying infrastructure.
+Beanstalk handles:
 
-- Instance configuration and the underlying OS.
-- The deployment strategy (although it is developer-configuration).
-- Capacity provisioning, load balancing, and auto-scaling.
-- Application health monitoring and responsiveness.
+* Instance configuration and the underlying OS.
+* The deployment strategy (although it is developer-configuration).
+* Capacity provisioning, load balancing, and auto-scaling.
+* Application health monitoring and responsiveness.
 
-This reduces the responsibility for the developer down to just the application code. Beanstalk provides three architectural models:
+This reduces the responsibility for the developer down to just the application code.
+Beanstalk provides three architectural models:
 
-- **Single instance deployment**, which is useful for development and testing.
-- **ASG-only**, which is useful for non-user-facing applications such as workers and background processing.
-- **LB & ASG**, which is best suited for production applications.
+* **Single instance deployment**, which is useful for development and testing.
+* **ASG-only**, which is useful for non-user-facing applications such as workers and background processing.
+* **LB & ASG**, which is best suited for production applications.
 
 Beanstalk supports all common web application platforms (Go, Java, .NET with IIS, Node.js, PHP, Python, Ruby, both single & multi-container docker), but if there is a solution that is no supported, you can write your own custom platform.
 
 Behind the scenes, ElasticBeanstalk manages all the services and tools using CloudFormation.
 
-### Health Monitoring
+#### Health Monitoring
 
 Beanstalk provides a health agent which pushes metrics to CloudWatch, and also checks for app health and publishes health events.
 
-## Code-family
+### Code-family
 
 The code family of AWS developer tools provides an end-to-end software deployment service for our applications.
+It is worth noting that many of these are deemed as “second-class” services by AWS users that mainly exist to offer a competing product to existing services.
 
-<aside>
-💭 A lot of these are deemed as “second-class” services by AWS users that mainly exist to offer a competing product to existing services.
-
-</aside>
-
-| Step | AWS Tool |
-| --- | --- |
-| Source & version control | CodeCommit |
+| Step                           | AWS Tool     |
+|--------------------------------|--------------|
+| Source & version control       | CodeCommit   |
 | Artifacts & package management | CodeArtifact |
-| Build & CI/CD | CodeBuild |
-| Deployment & CI/CD | CodeDeploy |
-| Pipeline & Orchestration | CodePipeline |
-| UI & Management | CodeStar |
+| Build & CI/CD                  | CodeBuild    |
+| Deployment & CI/CD             | CodeDeploy   |
+| Pipeline & Orchestration       | CodePipeline |
+| UI & Management                | CodeStar     |
 
-### CodeCommit
+#### CodeCommit
 
 **CodeCommit** is a source & version control tool that is a competing product to GitHub, that hosts git-based repositories.
+It is considered to be very bare bones by many, and is functionally used for allowing internal build tools and resources to access Git repositories through a VPC.
 
-<aside>
-💭 It is considered to be very bare bones by many, and is functionally used for allowing internal build tools and resources to access Git repositories through a VPC.
+#### CodeArtifact
 
-</aside>
+CodeArtifact is a package and software management repository ("artifact management system") that can be used by common package manager tools (such as `npm`, `yarn`, `nuget`, `maven`, etc) for the secure and private storage, publication, and retrieval of code dependencies and packages.
 
-### CodeArtifact
-
-CodeArtifact is a package and software management repository (”artifact management system”) that can be used by common package manager tools (such as `npm`, `yarn`, `nuget`, `maven`, etc) for the secure and private storage, publication, and retrieval of code dependencies and packages.
-
-### CodeBuild
+#### CodeBuild
 
 **CodeBuild** is a serverless Continuous Integration (CI) tool that can build source code, run tests, and product packages ready to be deployed. Pricing is pay-as-you-go for only the resources you use, and includes 100 build minutes per month as a free tier.
 
-### CodeDeploy
+#### CodeDeploy
 
-**CodeDeploy** lets us deploy our application automatically independent of CloudFormation or ElasticBeanstalk, and works with EC2 instances as well as On-premise Servers. It is therefore a hybrid service.
+**CodeDeploy** lets us deploy our application automatically independent of CloudFormation or ElasticBeanstalk, and works with EC2 instances as well as On-premise Servers.
+It is therefore a hybrid service.
 
-These servers or instances must be be provisioned and configured ahead of time using the **CodeDeploy Agent**.
+These servers or instances must be provisioned and configured ahead of time using the **CodeDeploy Agent**.
 
-### CodePipeline
+#### CodePipeline
 
-**CodePipeline** lets us orchestrate the different steps to have the code automatically pushed to production, which is a serverless CI/CD tool and can be used to link the other code-family tools together. For example:
+**CodePipeline** lets us orchestrate the different steps to have the code automatically pushed to production, which is a serverless CI/CD tool and can be used to link the other code-family tools together.
+For example:
 
-![CodePipeline.svg](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/CodePipeline.svg)
+![CodePipeline Diagram](../images/aws-certifications/codepipeline-diagram.drawio.svg)
 
-It is also compatible with many third-party services (GitHub, etc).
+It is also compatible with many third-party services (GitHub, etc.).
 
-### CodeStar
+#### CodeStar
 
 **CodeStar** presents a unified UI to easily manage software development activities in one place, and is a quick way to get started with other Code-family tools.
 
-## Cloud9
+### Cloud9
 
 **Cloud9** is a cloud IDE for writing, running, and debugging code—accessible via your web browser; and also allows for code collaboration in real time (like most IDEs).
 
-## Systems Manager (SSM)
+### Systems Manager (SSM)
 
-This tool helps you manage your EC2 and On-premise systems at scale (this makes it another Hybrid AWS service), allowing you to receive operational insights about the state of your infrastructure. Consisting of 13 products, the most important features are:
+This tool helps you manage your EC2 and On-premise systems at scale (this makes it another Hybrid AWS service), allowing you to receive operational insights about the state of your infrastructure.
+Consisting of 13 products, the most important features are:
 
-- Patching automation for enhanced compliance
-- Run commands across an entire fleet of servers
-- Store parameter configuration with the SSM Parameter Store
+* Patching automation for enhanced compliance
+* Run commands across an entire fleet of servers
+* Store parameter configuration with the SSM Parameter Store
 
 SSM requires the SSM agent to be present onto the systems we control, and it is installed by default on the Amazon Linux AMI and some Ubuntu AMI’s.
+It was previously called “Simple Systems Manager” which led to its abbreviation of SSM, which is still retained to this day.
 
-<aside>
-💭 It was previously called “Simple Systems Manager” which led to its abbreviation of SSM, which is still retained to this day.
+#### SSM Session Manager
 
-</aside>
+Session Manager is a feature of SSM that lets you start a secure show on your EC2 and on-premise servers without needing SSH access, bastion hosts, or SSH keys needed.
+This lets you close port 22 (normally used for SSH).
 
-### SSM Session Manager
-
-Session Manager is a feature of SSM that lets you start a secure show on your EC2 and on-premise servers without needing SSH access, bastion hosts, or SSH keys needed. This lets you close port 22 (normally used for SSH).
-
-The EC2 instance has an SSM Agent installed on it, and that agent is connected to the Session Manager service. Users can connect to the Session Manager service via IAM permissions.
+The EC2 instance has an SSM Agent installed on it, and that agent is connected to the Session Manager service.
+Users can connect to the Session Manager service via IAM permissions.
 
 Session log data can also be sent to S3 or CloudWatch.
 
-![SessionManager.svg](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/SessionManager.svg)
+![Session Manager Diagram](../images/aws-certifications/session-manager-diagram.drawio.svg)
 
 [1]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html
 [2]: https://aws.amazon.com/ec2/instance-types/
@@ -1250,3 +1245,5 @@ Session log data can also be sent to S3 or CloudWatch.
 [21]: https://docs.aws.amazon.com/lambda/latest/operatorguide/computing-power.html
 [22]: https://docs.aws.amazon.com/lambda/latest/dg/runtimes-custom.html
 [23]: https://docs.aws.amazon.com/lambda/latest/dg/runtimes-api.html
+[24]: https://aws.amazon.com/cdk/
+[25]: https://aws.amazon.com/elasticbeanstalk/
