@@ -849,62 +849,75 @@ AWS is pushing for “hybrid cloud” (where part of your infrastructure is both
 
 Storage Gateway bridges your on-premise and cloud data.
 
-# Section 9: Databases
+## Section 9: Databases
 
 A summary of the different offerings of AWS’s database tools.
 
-|  | RDS | Aurora | ElastiCache | DynamoDB | RedShift | DocumentDB | Neptune |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Type | Relational | Relational | In-memory | NoSQL | Relational (Columnar) | NoSQL | Graph |
-| OLAP vs. OLTP | OLTP | OLTP | N/A | N/A | OLAP | N/A |  |
-| Underlying Technology | MySQL, PostgreSQL, SQL Server, etc | MySQL or PostgreSQL | Redis, Memcached | N/A | PostgreSQL | MongoDB |  |
-| Serverless? | No |  |  | Yes |  |  |  |
+|                       | RDS                                | Aurora              | ElastiCache      | DynamoDB | RedShift              | DocumentDB | Neptune |
+|-----------------------|------------------------------------|---------------------|------------------|----------|-----------------------|------------|---------|
+| Type                  | Relational                         | Relational          | In-memory        | NoSQL    | Relational (Columnar) | NoSQL      | Graph   |
+| OLAP vs. OLTP         | OLTP                               | OLTP                | N/A              | N/A      | OLAP                  | N/A        |         |
+| Underlying Technology | MySQL, PostgreSQL, SQL Server, etc | MySQL or PostgreSQL | Redis, Memcached | N/A      | PostgreSQL            | MongoDB    |         |
+| Serverless?           | No                                 |                     |                  | Yes      |                       |            |         |
 
-## Shared Responsibility Model for Databases
+### Shared Responsibility Model for Databases
 
-AWS offers to manage different databases, which provides quick provisioning, high availability, as well as both vertical and horizontal scaling; along with automated backups, restores, operations, and upgrades. OS patching for the database itself is handled by AWS, and monitoring and alerting is available. You could also run databases on EC2 instances, but this non-managed approach requires you to handle all of the above tasks.
+AWS offers to manage different databases, which provides quick provisioning, high availability, as well as both vertical and horizontal scaling; along with automated backups, restores, operations, and upgrades.
+OS patching for the database itself is handled by AWS, and monitoring and alerting is available.
+You could also run databases on EC2 instances, but this non-managed approach requires you to handle all of the above tasks.
 
-## RDS
+### RDS
 
-**Relational Database Service** is a *managed database service* for database types that use SQL as a query language, for example Postgres, MySQL, MariaDB, Oracle, SQL Server, as well as Aurora (an AWS proprietary solution). This gives us:
+**Relational Database Service** is a *managed database service* for database types that use SQL as a query language, for example Postgres, MySQL, MariaDB, Oracle, SQL Server, as well as Aurora (an AWS proprietary solution).
+This gives us:
 
-- Automated provisioning, OS patching
-- Continuous backups and restore to a specific timestamp (via point-in-time restore).
-- Monitoring dashboards
-- Read replicas for improved performance
-- Multi-AZ setup for disaster recovery
-- Maintenance windows for upgrades
-- Scaling capability (both horizontal and vertical)
-- Storage is backed by EBS (`gp2` or `io1`)
+* Automated provisioning, OS patching
+* Continuous backups and restore to a specific timestamp (via point-in-time restore).
+* Monitoring dashboards
+* Read replicas for improved performance
+* Multi-AZ setup for disaster recovery
+* Maintenance windows for upgrades
+* Scaling capability (both horizontal and vertical)
+* Storage is backed by EBS (`gp2` or `io1`)
 
-![RdsSolutionArchitecture.drawio.svg](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/RdsSolutionArchitecture.drawio.svg)
+![RDS Solution Architecture Diagram](../images/aws-certifications/rds-solution-architecture-diagram.drawio.svg)
 
-### Deployments on RDS
+#### Deployments on RDS
 
-Multiple architectural choices can be made to improve RDS deployments. For example:
+Multiple architectural choices can be made to improve RDS deployments.
+For example:
 
-- **Read replicas**. You can create duplicate copies (up to 15) of the database that function as read-only databases, allowing a single primary database to handle the writes.
-- **Multi-AZ** allows you to failover in case of an AZ outage, providing high availability. This can be configured by creating a failover database via replication. Once setup, RDS will failover if the main database becomes unhealthy—otherwise the failover database will not be used. Only one other AZ can be used.
-- **Multi-region read replicas**. This is similar to standard read replicas, except that a read replica is created in another region. This is useful for disaster recovery (as it allows an entire region to go out and still function) and provides improved local performance, there is however a replication cost to transferring the data between regions.
-  // TODO: insert multi-region deployment diagram
+* **Read replicas**.
+    You can create duplicate copies (up to 15) of the database that function as read-only databases, allowing a single primary database to handle the writes.
+* **Multi-AZ** allows you to failover in case of an AZ outage, providing high availability.
+    This can be configured by creating a failover database via replication.
+    Once setup, RDS will failover if the main database becomes unhealthy—otherwise the failover database will not be used.
+    Only one other AZ can be used.
+* **Multi-region read replicas**.
+    This is similar to standard read replicas, except that a read replica is created in another region.
+    This is useful for disaster recovery (as it allows an entire region to go out and still function) and provides improved local performance, there is however a replication cost to transferring the data between regions.
+    // TODO: insert multi-region deployment diagram
 
-// TODO: Add in Flashcards about RDs deployments
+// TODO: Add in Flashcards about RDS deployments
 
-## Aurora
+### Aurora
 
-This is a proprietary *Database as a Service* technology (not open sourced), that supports both **PostgreSQL** and **MySQL**, the benefit claimed is that Aurora is “AWS cloud optimized” and claims 5× performance improvement over MySQL on RDS, and 3× the performance improvement over PostgreSQL on RDS. Aurora storage automatically grows in increments of 10GB up to 128TB.
+This is a proprietary *Database as a Service* technology (not open sourced), that supports both **PostgreSQL** and **MySQL**, the benefit claimed is that Aurora is “AWS cloud optimized” and claims 5× performance improvement over MySQL on RDS, and 3× the performance improvement over PostgreSQL on RDS.
+Aurora storage automatically grows in increments of 10GB up to 128TB.
 
 Aurora also costs more than RDS (20% increase, but is more efficient), and is not in the free tier.
 
-## ElastiCache
+### ElastiCache
 
-ElastiCache provides managed Redis or Memcached—which are in-memory databases for high performance and low latency. These tools help reduce load away from databases for read intensive workloads.
+ElastiCache provides managed Redis or Memcached—which are in-memory databases for high performance and low latency.
+These tools help reduce load away from databases for read intensive workloads.
 
-![Elasticache.drawio.svg](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/Elasticache.drawio.svg)
+![ElastiCache Diagram](../images/aws-certifications/elasticache-diagram.drawio.svg)
 
-## DynamoDB
+### DynamoDB
 
-This is a fully-managed, highly-available proprietary NoSQL key-value *Database as a Service* with replication across 3 AZ’s. Features:
+This is a fully-managed, highly-available proprietary NoSQL key-value *Database as a Service* with replication across 3 AZ's.
+Features:
 
 - Scales to millions/req/s, trillions of rows, 100s of TBs of storage
 - Fast and consistent performance
@@ -914,89 +927,102 @@ This is a fully-managed, highly-available proprietary NoSQL key-value *Database 
 
 // TODO: Structure of DynamoDB data
 
-A primary key is composed of a partition key and a sort key
+A primary key is composed of a partition key and a sort key.
 
-### Global Tables
+#### Global Tables
 
-You can make a DynamoDB table accessible with low latency in multiple regions using **global tables** via two-way replication. Because read-or-writes can be performed in any regions, and the data will be replicated appropriately to create a consistent data store, this can be considered **active-active replication**.
+You can make a DynamoDB table accessible with low latency in multiple regions using **global tables** via two-way replication.
+Because read-or-writes can be performed in any regions, and the data will be replicated appropriately to create a consistent data store, this can be considered **active-active replication**.
 
 //TODO: Global Tables diagram
 
-### DynamoDB Accelerator (DAX)
+#### DynamoDB Accelerator (DAX)
 
 This is a fully managed in-memory cache explicitly for DynamoDB, and provides a 10× performance improvement for DynamoDB reads, providing three-digit microsecond latency when accessing DynamoDB tables.
 
 It can only be used with DynamoDB.
 
-## Redshift
+### Redshift
 
-**Redshift** is a PostgreSQL database solution that is used for **Online Analytical Processing (OLAP)** instead of Online Transaction Processing (OLTP), which can be used for analytics and data warehousing. Instead of loading data continuously, data should be loaded infrequently at intervals.
+**Redshift** is a PostgreSQL database solution that is used for **Online Analytical Processing (OLAP)** instead of Online Transaction Processing (OLTP), which can be used for analytics and data warehousing.
+Instead of loading data continuously, data should be loaded infrequently at intervals.
 
-Other differentiating factors include that it provides columnar-based storage (as opposed to row-based storage), and provides a [Massively Parallel Query Execution (MPP)](https://docs.aws.amazon.com/redshift/latest/dg/c_challenges_achieving_high_performance_queries.html#massively-parallel-processing) environment.
+Other differentiating factors include that it provides columnar-based storage (as opposed to row-based storage), and provides a [Massively Parallel Query Execution (MPP)][17] environment.
 
 Pricing is pay as you go, based on provisioned instances; and has an SQL interface for performing queries, while allowing BI integrations such as AWS Quicksight or Tableau.
 
-## DocumentDB
+### DocumentDB
 
-**DocumentDB** is a AWS implementation of the NoSQL database MongoDB, and is used to store, query, and index JSON data. It is analagous to **Aurora**, and provides similar deployment concepts; while also being fully managed, and highly available with replication across multiple AZ’s.
+**DocumentDB** is a AWS implementation of the NoSQL database MongoDB, and is used to store, query, and index JSON data.
+It is analogous to **Aurora**, and provides similar deployment concepts; while also being fully managed, and highly available with replication across multiple AZ’s.
 
-DocumentDB storage automatically grows in increments of 10GB up to [128TiB](https://aws.amazon.com/documentdb/features/).
+DocumentDB storage automatically grows in increments of 10GB up to [128TiB][18].
 
-## Neptune
+### Neptune
 
-Neptune is a fully-managed graph database that is highly available across 3 AZ’s, with up to 15 read replicas; and is useful for building and running applications with highly connected datasets, such as knowledge graphs, fraud detection, recommendation engines, and social networking.
+Neptune is a fully-managed graph database that is highly available across 3 AZ's, with up to 15 read replicas; and is useful for building and running applications with highly connected datasets, such as knowledge graphs, fraud detection, recommendation engines, and social networking.
 
-## QLDB
+### QLDB
 
 Quantum Ledge Database is a fully managed, serverless, highly available (3 AZ replication) ledger database useful for reviewing and capturing history made to application data over time.
 
-- QLDB provides immutability that can be cryptographically verified. Behind the scenes, a *journal* captures sequences of modifications to your data, and then recomputes a cryptographic hash that can provide the data prior has not been modified or deleted.
+* QLDB provides immutability that can be cryptographically verified.
+    Behind the scenes, a *journal* captures sequences of modifications to your data, and then recomputes a cryptographic hash that can provide the data prior has not been modified or deleted.
 
-This makes it useful for financial transactions and other applications requiring immutability. It is 2–3× more performant than common ledger blockchain frameworks, and data can be manipulated via SQL.
+This makes it useful for financial transactions and other applications requiring immutability.
+It is 2–3× more performant than common ledger blockchain frameworks, and data can be manipulated via SQL.
 
 Note that this is a **centralised solution**, unlike Managed Blockchain which provides a decentralisation component.
 
-## Managed Blockchain
+### Managed Blockchain
 
-Blockchains make it possible to build applications where multiple parties can execute transactions without the need for a trusted, central authority. Unlike QLDB, Amazon Managed Blockchain can be used to:
+Blockchains make it possible to build applications where multiple parties can execute transactions without the need for a trusted, central authority.
+Unlike QLDB, Amazon Managed Blockchain can be used to:
 
-- Join public blockchain networks
-- Create scalable private networks
+* Join public blockchain networks
+* Create scalable private networks
 
 It is compatible with the *Hyperledger Fabric*, *Ethereum*, & *Bitcoin* blockchain frameworks.
 
-## Data Tools
+### Data Tools
 
-### EMR
+#### EMR
 
-[**Elastic MapReduce (EMR)**](https://aws.amazon.com/emr/) is a tool for creating [Hadoop](https://hadoop.apache.org/) clusters to analyze and process large amounts of data, by creating clusters of hundreds of EC2 instances to process this data. EMR takes care of provisioning and configuring these instances for these tools.
+[**Elastic MapReduce (EMR)**][19] is a tool for creating [Hadoop][20] clusters to analyze and process large amounts of data, by creating clusters of hundreds of EC2 instances to process this data.
+EMR takes care of provisioning and configuring these instances for these tools.
 
 Some use cases of this include data processing, machine learning, web indexing, and general big data utilities.
 
-### Athena
+#### Athena
 
-**Amazon Athena** is a serverless query service to perform analytics against S3 objects, using standard SQL language for queries. It supports many file types including CSV, JSON, ORC, Avro, and Parquet.
+**Amazon Athena** is a serverless query service to perform analytics against S3 objects, using standard SQL language for queries.
+It supports many file types including CSV, JSON, ORC, Avro, and Parquet.
 
-Athena is built on Presto, and is priced at a rate of $5/TB of data scanned. Use cases include business intelligence, analytics, reporting, querying CloudTrail logs, and more.
+Athena is built on Presto, and is priced at a rate of $5/TB of data scanned.
+Use cases include business intelligence, analytics, reporting, querying CloudTrail logs, and more.
 
-### QuickSight
+#### QuickSight
 
-You can create interactive dashboards using the serverless machine learning-powered BI service called **QuickSight**. Uses cases include business analytics, building visualizations, performing ad-hoc analysis, and extracting business insights.
+You can create interactive dashboards using the serverless machine learning-powered BI service called **QuickSight**.
+Uses cases include business analytics, building visualizations, performing ad-hoc analysis, and extracting business insights.
 
-### Glue
+#### Glue
 
-**Glue** is a managed **extract, transform, and load (ETL)** service that can be used to prepare and transform your data for analytics. Instead of using services for this, it is a fully serverless service that can be placed in your data pipeline before it is then loaded into another service or database.
+**Glue** is a managed **extract, transform, and load (ETL)** service that can be used to prepare and transform your data for analytics.
+Instead of using services for this, it is a fully serverless service that can be placed in your data pipeline before it is then loaded into another service or database.
 
 ![GlueETL.svg](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/GlueETL.svg)
 
 There is also **Glue Data Catalog** (part of the Glue family), is a catalog of your datasets within your AWS infrastructure, which can be used by other AWS services such as Athena, Redshift, EMR, to build schemas for those datasets.
 
-### Database Migration Service
+#### Database Migration Service
 
-**DMS** allows us to extract data from a *Source DB* onto an EC2 instance running the DMS software, before loading it onto a *Target DB*; letting you quickly and securely migrate databases to AWS. Additionally, the source database remains available during the migration. It supports both:
+**DMS** allows us to extract data from a *Source DB* onto an EC2 instance running the DMS software, before loading it onto a *Target DB*; letting you quickly and securely migrate databases to AWS.
+Additionally, the source database remains available during the migration.
+It supports both:
 
-- **Homogeneous migrations**, i.e. an Oracle database to an AWS Oracle database
-- **Heterogeneous migrations**, i.e. Microsoft SQL Server to Aurora
+* **Homogeneous migrations**, i.e. an Oracle database to an AWS Oracle database
+* **Heterogeneous migrations**, i.e. Microsoft SQL Server to Aurora
 
 # Section 10: Other Compute Services
 
@@ -1209,3 +1235,7 @@ Session log data can also be sent to S3 or CloudWatch.
 [14]: https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html
 [15]: https://aws.amazon.com/greengrass/
 [16]: https://www.youtube.com/watch?v=0Q7s7JiBCf0
+[17]: https://docs.aws.amazon.com/redshift/latest/dg/c_challenges_achieving_high_performance_queries.html#massively-parallel-processing
+[18]: https://aws.amazon.com/documentdb/features/
+[19]: https://aws.amazon.com/emr/
+[20]: https://hadoop.apache.org/
