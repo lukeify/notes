@@ -1024,77 +1024,85 @@ It supports both:
 * **Homogeneous migrations**, i.e. an Oracle database to an AWS Oracle database
 * **Heterogeneous migrations**, i.e. Microsoft SQL Server to Aurora
 
-# Section 10: Other Compute Services
+## Section 10: Other Compute Services
 
-## Elastic Container Service (ECS)
+### Elastic Container Service (ECS)
 
-Elastic Container Service (ECS) lets us launch docker containers on AWS. You must provision and maintain the underlying infrastructure (such as the EC2 instances that the containers will run on), but AWS will take care of starting & stopping those containers.
+Elastic Container Service (ECS) lets us launch docker containers on AWS.
+You must provision and maintain the underlying infrastructure (such as the EC2 instances that the containers will run on), but AWS will take care of starting & stopping those containers.
 
-## Fargate
+### Fargate
 
-Fargate takes ECS on step further: you do no need to provision EC2 instances to run your docker containers on, AWS will run the containers using the RAM & CPU you need. This makes it a *serverless* offering.
+Fargate takes ECS on step further: you do no need to provision EC2 instances to run your docker containers on, AWS will run the containers using the RAM & CPU you need.
+This makes it a *serverless* offering.
 
 // TODO: Fargate diagram
 
-## Elastic Container Registry (ECR)
+### Elastic Container Registry (ECR)
 
 Elastic Container Registry (ECR) is a private docker registry on AWS used to host and store Docker images that can then be run via ECS or Fargate.
 
-## Lambda
+### Lambda
 
 Lambda is a serverless Functions-as-a-Service tool that runs specified compute tasks on demand in short executions, without having to manage servers, or deal with scaling.
 
-Lambda is *event-driven*, and functions are invoked by AWS when needed. Each function can be allocated [up to 10,240MB of RAM for that function’s execution](https://docs.aws.amazon.com/lambda/latest/operatorguide/computing-power.html), and RAM allocation is the primary mechanism through which Lambdas can be made more performant.
+Lambda is *event-driven*, and functions are invoked by AWS when needed.
+Each function can be allocated [up to 10,240MB of RAM for that function’s execution][21], and RAM allocation is the primary mechanism through which Lambdas can be made more performant.
 
-Lambdas support most popular languages natively (such as Node.js, Python, Java, C#, Go, and Ruby)—and any language that is not supported by AWS can use the [Custom Runtime](https://docs.aws.amazon.com/lambda/latest/dg/runtimes-custom.html) for execution. Finally, docker containers can be executed via Lambda Container Images (provided these container images implement the [Lambda Runtime API](https://docs.aws.amazon.com/lambda/latest/dg/runtimes-api.html)).
+Lambdas support most popular languages natively (such as Node.js, Python, Java, C#, Go, and Ruby)—and any language that is not supported by AWS can use the [Custom Runtime][22] for execution.
+Finally, docker containers can be executed via Lambda Container Images (provided these container images implement the [Lambda Runtime API][23]).
 
 Lambda Pricing is per request/call, and per compute time/duration:
 
-- Pay per request/call:
-    - First 1,000,000 requests per month is free
-    - 20¢ per 1,000,000 requests thereafter.
-- Pay per duration (in 1ms increments):
-    - 400,000 GB-seconds of compute time is free (this is equivalent to 400,000 seconds if the function is invoked with 1GB of RAM, or 3.2 million seconds if the function is invoked with 128MB of RAM)
-    - $1.00 per 600,000 GB-seconds thereafter.
+* Pay per request/call:
+    * First 1,000,000 requests per month is free.
+    * 20¢ per 1,000,000 requests thereafter.
+* Pay per duration (in 1ms increments):
+    * 400,000 GB-seconds of compute time is free (this is equivalent to 400,000 seconds if the function is invoked with 1GB of RAM, or 3.2 million seconds if the function is invoked with 128MB of RAM).
+    * $1.00 per 600,000 GB-seconds thereafter.
 
 To prevent broken or stalled Lambda functions from accumulating runtime costs, a timeout can be configured of anywhere between 1 second and 15 minutes to automatically cancel function execution.
 
-## API Gateway
+### API Gateway
 
-![ApiGateway.svg](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/ApiGateway.svg)
+![API Gateway Diagram](../images/aws-certifications/api-gateway-diagram.drawio.svg)
 
-API Gateway provides tooling to configure a Rest API for clients to proxy requests to Lambda functions, letting third parties run these functions. This provides developers with a fully managed serverless service to create, publish, maintain, monitor, and secure APIs.
+API Gateway provides tooling to configure a Rest API for clients to proxy requests to Lambda functions, letting third parties run these functions.
+This provides developers with a fully managed serverless service to create, publish, maintain, monitor, and secure APIs.
 
-It supports both REST & Websocket APIs, as well as security, user authentication, API throttling, and API keys.
+It supports both REST & Websocket APIs, along with security, user authentication, API throttling, and API keys.
 
-## Batch
+### Batch
 
-**Batch** is a fully-managed batch processing service for any scale. In this context, a batch job is a unit of work with a defined start and end (as opposed to continuous work that might run on an EC2 instance, for example).
+**Batch** is a fully-managed batch processing service for any scale.
+In this context, a batch job is a unit of work with a defined start and end (as opposed to continuous work that might run on an EC2 instance, for example).
 
-**Batch** will dynamically provision EC2 instances or Spot instances with the right amount of compute or memory to accomodate the load necessary—simply schedule your batch jobs with AWS.
+**Batch** will dynamically provision EC2 instances or Spot instances with the right amount of compute or memory to accommodate the load necessary—simply schedule your batch jobs with AWS.
 
 Batch jobs are defined as Docker images and run on ECS, and is helpful for cost optimisations, letting you focus less on infrastructure.
 
-### Batch vs. Lambda
+#### Batch vs. Lambda
 
-Lambda Limitations
+Lambda Limitations:
 
-- There is a 15 minute time limit for all functions
-- There are a limited number of programming runtimes to pick from
-- There is limited temporary disk space
+* There is a 15 minute time limit for all functions
+* There are a limited number of programming runtimes to pick from
+* There is limited temporary disk space
 
-Batch Advantages
+Batch Advantages:
 
-- Has no time limit
-- Any runtime is supported as it’s packaged as a Docker image
-- Relies on EBS & instance store for disk space
-- Relies on EC2 instances that are managed on AWS
+* Has no time limit
+* Any runtime is supported as it’s packaged as a Docker image
+* Relies on EBS & instance store for disk space
+* Relies on EC2 instances that are managed on AWS
 
-## Lightsail
+### Lightsail
 
-**Lightsail** provides virtual servers, storage, databases, and networking with low and predictable pricing. It is a simpler alternative to using “complex” AWS services like EC2, RDS, ELB, EBS, Route 53, etc.
+**Lightsail** provides virtual servers, storage, databases, and networking with low and predictable pricing.
+It is a simpler alternative to using “complex” AWS services like EC2, RDS, ELB, EBS, Route 53, etc.
 
-This is great for individuals with minimal cloud experience, hosting simple web applications, and websites. It is highly available, but there is no auto-scaling, and it has limited AWS integrations.
+This is great for individuals with minimal cloud experience, hosting simple web applications, and websites.
+It is highly available, but there is no auto-scaling, and it has limited AWS integrations.
 
 # Section 11: Deployments & Managing Infrastructure at Scale
 
@@ -1239,3 +1247,6 @@ Session log data can also be sent to S3 or CloudWatch.
 [18]: https://aws.amazon.com/documentdb/features/
 [19]: https://aws.amazon.com/emr/
 [20]: https://hadoop.apache.org/
+[21]: https://docs.aws.amazon.com/lambda/latest/operatorguide/computing-power.html
+[22]: https://docs.aws.amazon.com/lambda/latest/dg/runtimes-custom.html
+[23]: https://docs.aws.amazon.com/lambda/latest/dg/runtimes-api.html
