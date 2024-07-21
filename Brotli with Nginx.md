@@ -52,8 +52,8 @@ This process must be repeated whenever `nginx` is updated via package manager as
 
 If you are dealing with PGP key issues with Nginx's package repositories:
 
-* [Updating the PGP Key for NGINX Software][3]
-* [Ubuntu installation guide][4]
+- [Updating the PGP Key for NGINX Software][3]
+- [Ubuntu installation guide][4]
 
 [1]: https://github.com/google/ngx_brotli
 [2]: https://github.com/google/ngx_brotli?tab=readme-ov-file#installation
