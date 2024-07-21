@@ -12,8 +12,10 @@ rule 'MD007', :indent => 4
 # Line length is disabled as I write according to https://sembr.org
 exclude_rule 'MD013'
 
-# Allow headers to have the same content in different nesting contexts
-rule 'MD024', :allow_different_nesting => true
+# Would prefer to allow headers to have the same content in different nesting contexts, but unfortunately even with
+# `allow_different_nesting` set, this does not consider parent-siblings as "different", so this rule must be disabled for now.
+# rule 'MD024', :allow_different_nesting => true
+exclude_rule 'MD024'
 
 # Allow trailing question marks in headers
 rule 'MD026', :punctuation => '.,;:!'
