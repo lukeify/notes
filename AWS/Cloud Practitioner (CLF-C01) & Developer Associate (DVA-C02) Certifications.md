@@ -40,10 +40,10 @@ Much of this information was common knowledge to me, but has been written down f
 
 ### AWS Global Infrastructure
 
-| Type               |                                                                                                                                                                      |
-|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Regions            | AWS has regions all around the world. Names are usually region-number format—and is a cluster of data centres near to each other. Most services are “region-scoped”. |
-| Availability Zones | Each region has many availability zones, usually three (min is 3, max is 6). These are named with a letter suffix after the region, for example ap-southeast-2a .    |
+| Type               |                                                                                                                                                                                            |
+|--------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Regions            | AWS has regions all around the world. Names are usually region-number format—and is a cluster of data centres near to each other. Most services are “region-scoped”.                       |
+| Availability Zones | Each region has many availability zones, usually three (min is 3, max is 6). These are named with a letter suffix after the region, for example <span data-nospell>ap-southeast-2a</span>. |
 
 Each AZ is one or more discrete data centres with redundant power, networking, and connectivity.
 This allows for separation, so that they’re isolated from issues.
@@ -181,7 +181,7 @@ Multi-factor authentication should always be required for the root account and I
 For MFA, there are several device options:
 
 - **Virtual MFA device** (such as Google Authenticator, Step Two, Bitwarden TOTP, etc)
-- **Universal 2nd Factor (U2F) Security Key**, which is a physical security device that allows support for multiple root and IAM users.
+- **Universal <span data-nospell>2nd</span> Factor (U2F) Security Key**, which is a physical security device that allows support for multiple root and IAM users.
 - **Hardware Key For MFA device.**
 - **Hardware Key For MFA device for AWS GovCloud (US).**
     This is provided by SurePassID for use within GovCloud applications.
@@ -351,7 +351,7 @@ We are responsible for:
 Each volume can be detached and re-attached from one EC2 instance to another very quickly, but each volume is bound to a specific availability zone, for example a volume in `us-east-1a` cannot be attached to an instance in `us-east-1b`.
 However, a user can perform a snapshot to move a volume across AZs.
 
-Each volume has a provisioned capacity of size in GBs, and performance in IOPS—this relates to your billing.
+Each volume has a provisioned capacity of size measured in gigabytes, and performance in IOPS—this relates to your billing.
 On the free tier, you receive 30GB of EBS storage of either General Purpose (SSD) or magnetic (HDD) per month.
 
 There is an important attribute named **Delete on Termination**, that controls the behaviour of the EBS volume when the corresponding EC2 instance is terminated.
@@ -380,7 +380,7 @@ They can come from three flavours:
 
 - **Public AMI**s. We can select from a list of default AMIs (such as Amazon Linux 2, Ubuntu, Windows Server, etc).
 - **Custom AMI**s are ones we create, allowing you to add your own software, configuration, and monitoring.
-    This can allow for a faster boot/configuration time because the software needed is pre-packaged within the image.
+    This can allow for a faster boot/configuration time because the software needed is prepackaged within the image.
 - Or select an **AWS Marketplace AMI**, made (and potentially sold) by someone else.
 
 The process of creating an AMI is relatively simple, and can be accomplished by right clicking on an instance, selecting “Image and templates”, then “Create an Image”.
@@ -472,7 +472,7 @@ It is also integrated with Microsoft Active Directory for user security.
 
 // TODO: insert diagram here
 
-#### FSx for NetApp ONTAP
+#### FSx for <span data-nospell>NetApp ONTAP</span>
 
 Not covered as part of this course.
 
@@ -515,12 +515,12 @@ While it does cost less to setup your own load balancer with an EC2 instance, it
 
 There are four flavours of load balancers offered by AWS:
 
-| Title                           | Layer        | Notes                                                                                                                                                 |
-|---------------------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Application Load Balancer (ALB) | Layer 7      | HTTP, HTTPS, & gRPC traffic only. Provides HTTP routing. Useful for a static DNS.                                                                     |
-| Network Load Balancer (NLB)     | Layer 4      | Ultra-high performance (millions of req/sec). Allows for both TCP & UDP. Provides a Static IP via Elastic IP.                                         |
-| Gateway Load Balancer (GWLB)    | Layer 3      | GENEVE Protocol on IP Packets. Routes traffic to firewalls that you manage on EC2 instances. Useful for intrusion detection & deep packet inspection. |
-| Classic Load Balancer           | Layers 4 & 7 | Retired in 2023, replaced by both ALB & NLB.                                                                                                          |
+| Title                           | Layer        | Notes                                                                                                                                                                     |
+|---------------------------------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Application Load Balancer (ALB) | Layer 7      | HTTP, HTTPS, & gRPC traffic only. Provides HTTP routing. Useful for a static DNS.                                                                                         |
+| Network Load Balancer (NLB)     | Layer 4      | Ultra-high performance (millions of req/sec). Allows for both TCP & UDP. Provides a Static IP via Elastic IP.                                                             |
+| Gateway Load Balancer (GWLB)    | Layer 3      | <span data-nospell>GENEVE</span> Protocol on IP Packets. Routes traffic to firewalls that you manage on EC2 instances. Useful for intrusion detection & deep packet inspection. |
+| Classic Load Balancer           | Layers 4 & 7 | Retired in 2023, replaced by both ALB & NLB.                                                                                                                              |
 
 #### Application Load Balancer
 
@@ -545,7 +545,7 @@ By utilising an **Auto-Scaling Group** (ASG), we can:
 - Automatically register new instances to a load balancer.
 - Replace & deregister unhealthy instances.
 
-This provides cost savings as we are always running at an optimal capacity. ASG’s can have the following scaling strategies:
+This provides cost savings as we are always running at an optimal capacity. ASG's can have the following scaling strategies:
 
 - **Manual scaling**, by updating the size of an ASG manually, in the AWS Management Console.
 - **Dynamic scaling**, by responding to changing demand, with the following implementations:
@@ -782,21 +782,21 @@ These services are:
         - **Snowcone SSD**, providing 14TB of SSD storage.
 - **Snowball Edge** is useful for large data cloud migrations, data-centre decommissioning, and disaster recovery.
     When used for data transfers:
-    - It is used to move TBs or PB’s in or out of AWS, providing an alternative to moving data over the network.
+    - It is used to move TBs or PB's in or out of AWS, providing an alternative to moving data over the network.
     - There is a fee per data transfer job.
     - It provides block storage and AWS S3-compatible object storage.
     - It comes in two flavours:
-        - **Snowball Edge Storage Optimized**, providing 80TB HDD capacity.
-        - **Snowball Edge Compute Optimized**, providing 42TB HDD or 28TB NVMe capacity.
+        - **Snowball Edge Storage Optimised**, providing 80TB HDD capacity.
+        - **Snowball Edge Compute Optimised**, providing 42TB HDD or 28TB NVMe capacity.
 - **Snowmobile** is a gigantic fucking truck, allowing you to transfer exabytes of capacity, with each snowmobile providing 100PB of capacity (if more transfer storage is needed, these can be combined in parallel).
     - Each snowmobile is temperature controlled, has GPS tracking, and 24/7 video surveillance.
     - More useful than Snowball if the data transferred is more than 10PB.
 
-|                  | Snowcone & Snowcone SSD        | Snowball Edge (Storage Optimized) | Snowmobile              |
+|                  | Snowcone & Snowcone SSD        | Snowball Edge (Storage Optimised) | Snowmobile              |
 |------------------|--------------------------------|-----------------------------------|-------------------------|
 | Storage Capacity | 8TB HDD, 14TB SSD              | 80TB Usable                       | 100 PB                  |
 | Migration Size   | Up to 24TB, online and offline | Up to petabytes, offline          | Up to exabytes, offline |
-| DataSync agent?  | Pre-installed                  | N/A                               | N/A                     |
+| DataSync agent?  | Preinstalled                   | N/A                               | N/A                     |
 
 #### Usage Process
 
@@ -919,7 +919,7 @@ These tools help reduce load away from databases for read intensive workloads.
 This is a fully-managed, highly-available proprietary NoSQL key-value *Database as a Service* with replication across 3 AZ's.
 Features:
 
-- Scales to millions/req/s, trillions of rows, 100s of TBs of storage
+- Scales to millions/requests/s, trillions of rows, 100s of terabytes of storage
 - Fast and consistent performance
 - Single-digit millisecond latency
 - Integrated with IAM
@@ -949,7 +949,7 @@ Instead of loading data continuously, data should be loaded infrequently at inte
 
 Other differentiating factors include that it provides columnar-based storage (as opposed to row-based storage), and provides a [Massively Parallel Query Execution (MPP)][17] environment.
 
-Pricing is pay as you go, based on provisioned instances; and has an SQL interface for performing queries, while allowing BI integrations such as AWS Quicksight or Tableau.
+Pricing is pay as you go, based on provisioned instances; and has an SQL interface for performing queries, while allowing BI integrations such as AWS QuickSight or Tableau.
 
 ### DocumentDB
 
@@ -988,7 +988,7 @@ It is compatible with the *Hyperledger Fabric*, *Ethereum*, & *Bitcoin* blockcha
 
 #### EMR
 
-[**Elastic MapReduce (EMR)**][19] is a tool for creating [Hadoop][20] clusters to analyze and process large amounts of data, by creating clusters of hundreds of EC2 instances to process this data.
+[**Elastic MapReduce (EMR)**][19] is a tool for creating [Hadoop][20] clusters to analyse and process large amounts of data, by creating clusters of hundreds of EC2 instances to process this data.
 EMR takes care of provisioning and configuring these instances for these tools.
 
 Some use cases of this include data processing, machine learning, web indexing, and general big data utilities.
@@ -1004,7 +1004,7 @@ Use cases include business intelligence, analytics, reporting, querying CloudTra
 #### QuickSight
 
 You can create interactive dashboards using the serverless machine learning-powered BI service called **QuickSight**.
-Uses cases include business analytics, building visualizations, performing ad-hoc analysis, and extracting business insights.
+Uses cases include business analytics, building visualisations, performing ad-hoc analysis, and extracting business insights.
 
 #### Glue
 
@@ -1070,7 +1070,7 @@ To prevent broken or stalled Lambda functions from accumulating runtime costs, a
 API Gateway provides tooling to configure a Rest API for clients to proxy requests to Lambda functions, letting third parties run these functions.
 This provides developers with a fully managed serverless service to create, publish, maintain, monitor, and secure APIs.
 
-It supports both REST & Websocket APIs, along with security, user authentication, API throttling, and API keys.
+It supports both REST & WebSocket APIs, along with security, user authentication, API throttling, and API keys.
 
 ### Batch
 
@@ -1118,7 +1118,7 @@ It is highly available, but there is no auto-scaling, and it has limited AWS int
 
 ### Cloud Development Kit (CDK)
 
-An alternative to CloudFormation’s declarative approach is to define cloud infrastructure imperatively in your preferred programming language of choice, and have [CDK][24] compile it down to a CloudFormation template, making it possible to have your infrastructure and application runtime code not only packaged together, but written in the same language.
+An alternative to CloudFormation's declarative approach is to define cloud infrastructure imperatively in your preferred programming language of choice, and have [CDK][24] compile it down to a CloudFormation template, making it possible to have your infrastructure and application runtime code not only packaged together, but written in the same language.
 
 A CDK application that you write is converted into a CloudFormation template using the CDK CLI.
 
@@ -1207,7 +1207,7 @@ Consisting of 13 products, the most important features are:
 - Run commands across an entire fleet of servers
 - Store parameter configuration with the SSM Parameter Store
 
-SSM requires the SSM agent to be present onto the systems we control, and it is installed by default on the Amazon Linux AMI and some Ubuntu AMI’s.
+SSM requires the SSM agent to be present onto the systems we control, and it is installed by default on the Amazon Linux AMI and some Ubuntu AMI's.
 It was previously called “Simple Systems Manager” which led to its abbreviation of SSM, which is still retained to this day.
 
 #### SSM Session Manager
