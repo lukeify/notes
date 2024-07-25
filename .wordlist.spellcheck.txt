@@ -5,8 +5,10 @@ AMI
 AMIs
 analytics
 APIs
+Artifacts
 artifact
 ASG
+ASGs
 Authenticator
 autosigning
 AZs
@@ -22,6 +24,7 @@ brotli
 Brotli
 Catalog
 catalog
+centric
 CDN
 CDK
 CIDR
@@ -29,6 +32,7 @@ CLI
 clientside
 CloudFlare
 CloudFormation
+CloudFormation's
 CloudKeys
 CloudShell
 CloudTrail
@@ -53,12 +57,14 @@ DAX
 deregister
 DHCP
 distractor
+DMS
 DNR
 DNS
 DocumentDB
 dropdown
 DSL
 EBS
+ECR
 ECS
 EFS
 ElastiCache
@@ -81,12 +87,15 @@ GPG
 Greengrass
 gRPC
 GWLB
+hoc
 HPC
 HTTP
 HTTPS
 Hyperledger
 IaaS
 IAM
+IDEs
+IIS
 integrations
 IOPS
 IoT
@@ -95,6 +104,7 @@ iPadOS
 iPhones
 IPs
 IPv
+js
 JSON
 keychain
 latencies
@@ -122,6 +132,7 @@ OLAP
 OLTP
 OpsHub
 PaaS
+PBs
 performant
 PiHole
 PiHole's
@@ -141,6 +152,7 @@ Rekognition
 ruleset
 rulesets
 runtime
+runtimes
 SaaS
 scalability
 scalable
@@ -166,6 +178,7 @@ subnet
 Subnet
 SurePassID
 symlink
+TBs
 TCP
 Teleporter
 Terraform
@@ -199,4 +212,5 @@ watchOS
 WebExtension
 WebExtensions
 WebKit
+WebSocket
 Xcode

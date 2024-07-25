@@ -515,12 +515,12 @@ While it does cost less to setup your own load balancer with an EC2 instance, it
 
 There are four flavours of load balancers offered by AWS:
 
-| Title                           | Layer        | Notes                                                                                                                                                                     |
-|---------------------------------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Application Load Balancer (ALB) | Layer 7      | HTTP, HTTPS, & gRPC traffic only. Provides HTTP routing. Useful for a static DNS.                                                                                         |
-| Network Load Balancer (NLB)     | Layer 4      | Ultra-high performance (millions of req/sec). Allows for both TCP & UDP. Provides a Static IP via Elastic IP.                                                             |
+| Title                           | Layer        | Notes                                                                                                                                                                           |
+|---------------------------------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Application Load Balancer (ALB) | Layer 7      | HTTP, HTTPS, & gRPC traffic only. Provides HTTP routing. Useful for a static DNS.                                                                                               |
+| Network Load Balancer (NLB)     | Layer 4      | Ultra-high performance (millions of requests/sec). Allows for both TCP & UDP. Provides a Static IP via Elastic IP.                                                              |
 | Gateway Load Balancer (GWLB)    | Layer 3      | <span data-nospell>GENEVE</span> Protocol on IP Packets. Routes traffic to firewalls that you manage on EC2 instances. Useful for intrusion detection & deep packet inspection. |
-| Classic Load Balancer           | Layers 4 & 7 | Retired in 2023, replaced by both ALB & NLB.                                                                                                                              |
+| Classic Load Balancer           | Layers 4 & 7 | Retired in 2023, replaced by both ALB & NLB.                                                                                                                                    |
 
 #### Application Load Balancer
 
@@ -545,7 +545,7 @@ By utilising an **Auto-Scaling Group** (ASG), we can:
 - Automatically register new instances to a load balancer.
 - Replace & deregister unhealthy instances.
 
-This provides cost savings as we are always running at an optimal capacity. ASG's can have the following scaling strategies:
+This provides cost savings as we are always running at an optimal capacity. ASGs can have the following scaling strategies:
 
 - **Manual scaling**, by updating the size of an ASG manually, in the AWS Management Console.
 - **Dynamic scaling**, by responding to changing demand, with the following implementations:
@@ -782,7 +782,7 @@ These services are:
         - **Snowcone SSD**, providing 14TB of SSD storage.
 - **Snowball Edge** is useful for large data cloud migrations, data-centre decommissioning, and disaster recovery.
     When used for data transfers:
-    - It is used to move TBs or PB's in or out of AWS, providing an alternative to moving data over the network.
+    - It is used to move TBs or PBs in or out of AWS, providing an alternative to moving data over the network.
     - There is a fee per data transfer job.
     - It provides block storage and AWS S3-compatible object storage.
     - It comes in two flavours:
@@ -823,11 +823,11 @@ The snow family devices providing edge computing are:
     - 2 CPUs, 4GB of memory, wired or wireless access
     - USB-C power using a cord or an optional battery
 - **Snowball Edge** devices can be run EC2 instances and execute AWS Lambda functions (using [AWS IoT Greengrass][15]), are available for long term deployment with 1 and 3 year discounted pricing available, and come in two flavours:
-    - **Compute Optimized**
+    - **Compute Optimised**
         - Up to 104 vCPUs, 416GiB of RAM, with an optional GPU
         - 28TB NVMe or 42TB HDD
         - Clustering can be enabled with up to 16 additional nodes for more storage
-    - **Storage Optimized**
+    - **Storage Optimised**
         - Up to 40 vCPUs, 80 GiB of RAM
         - 80TB of HDD storage
 
@@ -902,7 +902,7 @@ For example:
 
 ### Aurora
 
-This is a proprietary *Database as a Service* technology (not open sourced), that supports both **PostgreSQL** and **MySQL**, the benefit claimed is that Aurora is “AWS cloud optimized” and claims 5× performance improvement over MySQL on RDS, and 3× the performance improvement over PostgreSQL on RDS.
+This is a proprietary *Database as a Service* technology (not open sourced), that supports both **PostgreSQL** and **MySQL**, the benefit claimed is that Aurora is “AWS cloud optimised” and claims 5× performance improvement over MySQL on RDS, and 3× the performance improvement over PostgreSQL on RDS.
 Aurora storage automatically grows in increments of 10GB up to 128TB.
 
 Aurora also costs more than RDS (20% increase, but is more efficient), and is not in the free tier.
@@ -1004,7 +1004,7 @@ Use cases include business intelligence, analytics, reporting, querying CloudTra
 #### QuickSight
 
 You can create interactive dashboards using the serverless machine learning-powered BI service called **QuickSight**.
-Uses cases include business analytics, building visualisations, performing ad-hoc analysis, and extracting business insights.
+Uses cases include business analytics, building visualisations, performing ad hoc analysis, and extracting business insights.
 
 #### Glue
 
@@ -1207,7 +1207,7 @@ Consisting of 13 products, the most important features are:
 - Run commands across an entire fleet of servers
 - Store parameter configuration with the SSM Parameter Store
 
-SSM requires the SSM agent to be present onto the systems we control, and it is installed by default on the Amazon Linux AMI and some Ubuntu AMI's.
+SSM requires the SSM agent to be present onto the systems we control, and it is installed by default on the Amazon Linux AMI and some Ubuntu AMIs.
 It was previously called “Simple Systems Manager” which led to its abbreviation of SSM, which is still retained to this day.
 
 #### SSM Session Manager
