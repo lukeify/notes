@@ -5,8 +5,8 @@ AMI
 AMIs
 analytics
 APIs
-Artifacts
 artifact
+Artifacts
 ASG
 ASGs
 Authenticator
@@ -24,9 +24,9 @@ brotli
 Brotli
 Catalog
 catalog
-centric
-CDN
 CDK
+CDN
+centric
 CIDR
 CLI
 clientside
@@ -139,12 +139,12 @@ PiHole's
 PoE
 Postgres
 preprocessing
-Programmatically
 procedurally
+Programmatically
 QLDB
 QuickSight
-recreatable
 RDP
+recreatable
 RedShift
 regexes
 regexpFilter
@@ -189,8 +189,8 @@ TODO
 TOTP
 transcoding
 tvOS
-Udemy
 Ubiquiti
+Udemy
 UDID
 UDM
 UDP
