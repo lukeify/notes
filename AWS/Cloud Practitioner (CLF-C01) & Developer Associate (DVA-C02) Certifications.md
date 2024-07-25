@@ -996,7 +996,7 @@ Some use cases of this include data processing, machine learning, web indexing, 
 #### Athena
 
 **Amazon Athena** is a serverless query service to perform analytics against S3 objects, using standard SQL language for queries.
-It supports many file types including CSV, JSON, ORC, Avro, and Parquet.
+It supports many file types including CSV, JSON, ORC, <span data-nospell>Avro</span>, and Parquet.
 
 Athena is built on Presto, and is priced at a rate of $5/TB of data scanned.
 Use cases include business intelligence, analytics, reporting, querying CloudTrail logs, and more.
