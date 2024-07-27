@@ -40,15 +40,15 @@ Much of this information was common knowledge to me, but has been written down f
 
 ### AWS Global Infrastructure
 
-| Type               |                                                                                                                                                                                            |
-|--------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Regions            | AWS has regions all around the world. Names are usually region-number format—and is a cluster of data centres near to each other. Most services are “region-scoped”.                       |
-| Availability Zones | Each region has many availability zones, usually three (min is 3, max is 6). These are named with a letter suffix after the region, for example <span data-nospell>ap-southeast-2a</span>. |
+| Type               |                                                                                                                                                                             |
+|--------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Regions            | AWS has regions all around the world. Names are usually in a `region-number` format—and is a cluster of data centres near to each other. Most services are “region-scoped”. |
+| Availability Zones | Each region has many availability zones, usually three (min is 3, max is 6). These are named with a letter suffix after the region, for example `ap-southeast-2a`.          |
 
-Each AZ is one or more discrete data centres with redundant power, networking, and connectivity.
+Each AZ is composed one or more discrete data centres with redundant power, networking, and connectivity.
 This allows for separation, so that they’re isolated from issues.
 
-| Infrastructure Type               |                                                                              |
+| Infrastructure Type               | Description                                                                  |
 |-----------------------------------|------------------------------------------------------------------------------|
 | Data Zones                        |                                                                              |
 | Edge Locations/Points of presence | Amazon has 400+ points of presence/edge location that provide a CDN service. |
@@ -92,7 +92,7 @@ A policy consists of:
 - One or more **Statement**s, defining what permissions are granted or not granted.
     Within a statement, the following properties can be found:
     - A **Sid**, which is an optional name or identifier for the statement that you can provide.
-    - An **Effect**, indicating if the statement is to allow or deny access (The strings either `Allow` or `Deny`).
+    - An **Effect**, indicating if the statement is to allow or deny access (A string of either `Allow` or `Deny`).
     - The **Principal** which defines the user/account/role that the statement applies to.
     - The **Action**, which is an array of actions this statement allows or denies.
     - The **Resource** is an array of resources for which the actions apply to.
@@ -205,7 +205,7 @@ An alternative to issuing commands with the AWS CLI is to use CloudShell within 
 
 AWS is responsible for:
 
-- Infrastructure (global network security)
+- Infrastructure (global network security).
 - Configuration and vulnerability analysis.
 - Compliance validation.
 
@@ -221,14 +221,14 @@ We are responsible for:
 
 EC2 (Elastic Compute Cloud) provides Infrastructure as a Service, and consists of many capabilities:
 
-- Renting virtual machines, called instances (EC2)
-- Storing data on virtual drives (EBS)
-- Distributing load across machines (ELB)
-- Scaling the services using an auto-scaling group (ASG)
+- Renting virtual machines, called instances (EC2).
+- Storing data on virtual drives (EBS).
+- Distributing load across machines (ELB).
+- Scaling the services using an auto-scaling group (ASG).
 
 ### EC2 User Data
 
-When an EC2 instance starts, we can bootstrap our machines using an [EC2 User Data][1] script that is one once on instance first start; and can be used to automate tasks such as updates, software, download repositories, packages, or utilities—this runs as root user.
+When an EC2 instance starts, we can bootstrap our machines using an [EC2 User Data][1] script that is run once on instance first start; and can be used to automate tasks such as updates, software changes, downloading repositories, packages, or utilities—this runs as the root user.
 
 ### EC2 Instance Types
 
@@ -236,11 +236,12 @@ There are six classes of EC2 instance types, [these can be found here][2].
 
 - **General Purpose**, which are great for a diversity of workloads such as web servers, and offer a balance between compute, memory, and networking.
     The class prefix is `t` or `m`.
-- **Compute Optimised**, optimised for compute-intensive tasks, such as batch process workloads, media transcoding, scientific modelling, dedicated gaming servers, etc.
+- **Compute Optimised**, optimised for compute-intensive tasks, such as batch processing workloads, media transcoding, scientific modelling, dedicated gaming servers, etc.
     The class prefix for this group is `c`.
 - **Memory Optimised** instances support processing large data sets in memory, such as databases, web cache stores, data modelling, etc.
-    This group is prefixed as `r` (as well as `x` and `z`).
+    This group is prefixed as `r` (as well as `u`, `x`, and `z`).
 - **Accelerated Computing** provides access to accelerators and coprocessors to perform specific operations in hardware using CUDA, etc.
+    This group has multiple prefixes, including `p`, `g`, `trn`, `inf`, `dl`, `f`, and `vt`.
 - **Storage Optimised** instances support storage-intensive tasks that require high read and write access, this could be file storage systems, web caches, etc.
     This group is prefixed with `i`, `d`, or `h`.
 - **HPC Optimised** support the highest end performance computing tasks, such as deep learning, weather forecasting, and other scientific applications.
@@ -248,27 +249,25 @@ There are six classes of EC2 instance types, [these can be found here][2].
 
 The instance type naming convention is as follows, for `m5.2xlarge`  for example, `m` is the instance class, `5` is the generation of hardware that the instance class runs, and `2xlarge` represents the size within the instance class.
 
-[Amazon EC2 Instance Comparison](https://instances.vantage.sh/)
-
-A useful comparison between EC2 instances
+A useful comparison between EC2 instances: [Amazon EC2 Instance Comparison](https://instances.vantage.sh/).
 
 ### Security Groups
 
 [Control traffic to your AWS resources using security groups - Amazon Virtual Private Cloud][3]
 
-**Security Groups** are the fundamental entity of network security on AWS, and controls how traffic is allowed into or out of our EC2 instances.
-Containing a series of **allow rules**, each rule can reference and IP, or another security group.
-They act like a firewall around our instances, and regulate:
+**Security Groups** are the fundamental entity of network security on AWS, and controls how traffic is allowed into or out of EC2 instances.
+Containing a series of **allow rules**, each rule can reference an IP or another security group.
+They act like a firewall around instances, and regulate:
 
-- Access to ports
-- Authorised IP ranges (both IPv4 and IPv6)
-- Control of the inbound network (to the instance)
-- Control of the outbound network (from the instance)
+- Access to ports.
+- Authorised IP ranges (both IPv4 and IPv6).
+- Control of the inbound network (to the instance).
+- Control of the outbound network (from the instance).
 
 Other things to know:
 
-- Security Groups can be attached to multiple instances, and each instance can have multiple security groups.
-- Security groups are specific to a Region or VPC.
+- Security groups can be attached to multiple instances, and each instance can have multiple security groups.
+- Security groups are specific to a region or VPC.
 - It’s good to maintain one separate security group for SSH access.
 - All inbound traffic is blocked by default, and all outbound traffic is allowed by default.
 - Security groups can allow for a layer of indirection, by allowing a security group to refer to another security group (which may be attached to another instance), the former security group does not need any knowledge of the EC2 instance that is directing traffic to it.
@@ -277,8 +276,8 @@ Important ports to know:
 
 | Port | Usage                                                               |
 |------|---------------------------------------------------------------------|
-| 21   | FTP                                                                 |
-| 22   | SSH, SFTP                                                           |
+| 21   | FTP.                                                                |
+| 22   | SSH, SFTP.                                                          |
 | 80   | HTTP, for access to websites.                                       |
 | 443  | HTTPS, for access to secure websites over TLS.                      |
 | 3389 | RDP (Remote Desktop Protocol), used to log into a Windows instance. |
@@ -297,21 +296,21 @@ Note that if SSH access is disallowed via a Security Group, then EC2 Instance Co
 
 ### EC2 Instance IAM Roles
 
-IAM Roles can be attached to EC2 instances in the “Actions” dropdown of the EC2 console, under > “Security” > “Modify IAM Role”.
+**IAM Roles** can be attached to EC2 instances in the “Actions” dropdown of the EC2 console, under > “Security” > “Modify IAM Role”.
 This is the preferred way to grant permissions to an EC2 instance—never attach a personal set of AWS credentials to an EC2 instance.
 
 ### Purchasing Options
 
 - **On-demand instances**, short workloads, with predictable pricing, and you pay by the second; after the first minute for both Windows & Linux, [and after 24 hours for Mac][6].
-    These have the highest ongoing cost, but has no upfront payment and no long-term commitment.
+    These have the highest ongoing cost, but have no upfront payment and no long-term commitment.
 - **Reserved (1 or 3 years)**, useful for long workloads or where there is knowledge that the instance will be needed for a long duration, with up to a 72% discount compared to On-demand.
     You reserve specific instance attributes (instance type, region, tenancy, OS); and can pay with no upfront cost, partially upfront, or fully upfront.
     The reserved instance can be scoped to a region, or a zone; and can be bought or sold in the Reserved Instance Marketplace.
 - **Convertible Reserved Instances** can be additionally used to change the instance type parameters (instance type, instance family, OS, scope, and tenancy) over time—this provides less discount (66%).
 - **Saving plans (1 or 3 years)**, commit to a specific amount of usage, for long workloads; which also offer a 72% discount, but requires a commitment to a certain amount of usage (for example $10/hour for 1 to 3 years).
     Any usage beyond this is billed at the on-demand price.
-    Savings plans lock you to a specific instance class & AWS region (for example `m5` in `us-east-1`), bit is flexible across instance size, OS, and tenancy.
-- **Spot Instances**, use short workloads very cheaply (up to 90% discount), but instances can be taken back over by AWS on short notice, making them unreliable; as if your bid price is less than the current spot price, you will lose that instance.
+    Savings plans lock you to a specific instance class & AWS region (for example `m5` in `us-east-1`), but is flexible across instance size, OS, and tenancy.
+- **Spot Instances** lets you run short workloads very cheaply (up to 90% discount), but instances can be taken back over by AWS on short notice, making them unreliable; as if your bid price is less than the current spot price, you will lose that instance.
     This makes them good for short jobs that are resilient to failure, workloads with a flexible start or end time; but are not suitable for critical jobs or databases.
 - **Dedicated Hosts** allows you to book an entire physical server and control instance placement, addressing regulatory and compliance requirements, or use your existing server-bound software licences (per-socket, per-core, per-VM software licences).
     Dedicated hosts can be purchased on-demand, or reserved (for 1 or 3 years); this makes them the most expensive option on AWS.
@@ -336,7 +335,7 @@ AWS is responsible for:
 
 We are responsible for:
 
-- Security Group rules.
+- Security group rules.
 - Operating system patches and updates.
 - Software and utilities installed on the EC2 instance.
 - IAM Roles assigned to EC2 & IAM user access management.
@@ -359,24 +358,22 @@ There is an important attribute named **Delete on Termination**, that controls t
 - By default, the root EBS volume is deleted (attribute enabled)
 - By default, any other attached EBS volume is not deleted (attribute disabled).
 
-[Make an Amazon EBS volume available for use on Linux - Amazon Elastic Compute Cloud][9]
-
-Once an EBS volume is created, this link provides a guide on how to attach a volume.
+Once an EBS volume is created, this link provides a guide on how to attach a volume: [Make an Amazon EBS volume available for use on Linux - Amazon Elastic Compute Cloud][9].
 
 ### Snapshots
 
 Snapshots allow you to take a backup of a volume at a point in time.
 You don’t need to detach a volume to make a snapshot, *but it is recommended*.
-Snapshots can be copied across between AZ’s and regions, making them useful as a mechanism of effectively moving around volumes.
+Snapshots can be copied between AZs and regions, making them useful as a mechanism of effectively moving volumes around.
 
-- **EBS Snapshot Archive** allows you to move a snapshot to a slower, but cheaper location of storage, giving up a 75% cheaper, but requires 24 to 72 hours to restore from the archive.
+- **EBS Snapshot Archive** allows you to move a snapshot to a slower, but cheaper location of storage—up to 75% cheaper—but requires 24–72 hours to restore from the archive.
 - **Recycle Bin for ECS Snapshots** provides a mechanism to retain deleted snapshots so you can recover them after accidental deletion, with a user-specified retention time (from 1 day to 1 year).
 
 ### Amazon Machine Images
 
 AMIs represent a customisation of an EC2 image, and define what the EC2 instance runs.
 AMIs are built for a specific region, and can be copied across regions.
-They can come from three flavours:
+They come in three flavours:
 
 - **Public AMI**s. We can select from a list of default AMIs (such as Amazon Linux 2, Ubuntu, Windows Server, etc).
 - **Custom AMI**s are ones we create, allowing you to add your own software, configuration, and monitoring.
@@ -406,11 +403,11 @@ This is a free service, paying only for the base services, such as the builder &
 ### EC2 Instance Store
 
 EBS volumes are network drives with good but limited performance.
-For higher performance, EC2 Instance Store can be used which utilises a physical connection on the server to a hardware disk.
+For higher performance, **EC2 Instance Store** can be used which utilises a physical connection on the server to a hardware disk.
 This provides better I/O performance.
 However, if you stop or terminate the associated EC2 instance, the data stored in the instance store will be lost, as the data is ephemeral.
 
-This makes them good for buffers, caches, or temporary content—this makes backup and replication of your content your responsibility.
+This makes them good for buffers, caches, or temporary content—but also makes backup and replication of the content your responsibility.
 
 ### Elastic File System (EFS)
 
@@ -507,20 +504,20 @@ Not covered as part of this course.
 - Expose a single point of access (DNS) to your application.
 - Seamlessly handle failures of downstream instances.
 - Do regular health checks on your instances.
-- Provide SSL Termination to your websites.
+- Provide SSL termination to your websites.
 - High availability across zones.
 
-AWS’s implementation of load balancing are called **Elastic Load Balancers**, and is a managed load balancer: AWS guarantees it will be working, takes responsibility for upgrades, maintenance, and high availability; while providing only a few configuration settings.
+AWS's implementation of load balancing are called **Elastic Load Balancers**, and is a managed load balancer: AWS guarantees it will be working, takes responsibility for upgrades, maintenance, and high availability; while providing only a few configuration settings.
 While it does cost less to setup your own load balancer with an EC2 instance, it will be a lot more effort.
 
 There are four flavours of load balancers offered by AWS:
 
-| Title                           | Layer        | Notes                                                                                                                                                                           |
-|---------------------------------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Application Load Balancer (ALB) | Layer 7      | HTTP, HTTPS, & gRPC traffic only. Provides HTTP routing. Useful for a static DNS.                                                                                               |
-| Network Load Balancer (NLB)     | Layer 4      | Ultra-high performance (millions of requests/sec). Allows for both TCP & UDP. Provides a Static IP via Elastic IP.                                                              |
-| Gateway Load Balancer (GWLB)    | Layer 3      | <span data-nospell>GENEVE</span> Protocol on IP Packets. Routes traffic to firewalls that you manage on EC2 instances. Useful for intrusion detection & deep packet inspection. |
-| Classic Load Balancer           | Layers 4 & 7 | Retired in 2023, replaced by both ALB & NLB.                                                                                                                                    |
+| Title                           | Layer                       | Notes                                                                                                                                                                           |
+|---------------------------------|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Application Load Balancer (ALB) | Layer&nbsp;7                | HTTP, HTTPS, & gRPC traffic only. Provides HTTP routing. Useful for a static DNS.                                                                                               |
+| Network Load Balancer (NLB)     | Layer&nbsp;4                | Ultra-high performance (millions of requests/sec). Allows for both TCP & UDP. Provides a Static IP via Elastic IP.                                                              |
+| Gateway Load Balancer (GWLB)    | Layer&nbsp;3                | <span data-nospell>GENEVE</span> Protocol on IP Packets. Routes traffic to firewalls that you manage on EC2 instances. Useful for intrusion detection & deep packet inspection. |
+| Classic Load Balancer           | Layers&nbsp;4&nbsp;&&nbsp;7 | Retired in 2023, replaced by both ALB & NLB.                                                                                                                                    |
 
 #### Application Load Balancer
 
@@ -559,12 +556,12 @@ This provides cost savings as we are always running at an optimal capacity. ASGs
 
 Amazon S3 is one of the main products on AWS. It can be used for many purposes:
 
-- Backup, storage, archiving, and disaster recovery
-- Extensible to hybrid cloud storage (a mix of on-premises, while scaling into the cloud)
-- Application & media hosting
-- Data “lakes” & big data analytics
-- Software delivery
-- Static website hosting
+- Backup, storage, archiving, and disaster recovery.
+- Extensible to hybrid cloud storage (a mix of on-premises, while scaling into the cloud).
+- Application & media hosting.
+- Data “lakes” & big data analytics.
+- Software delivery.
+- Static website hosting.
 
 ### Terminology
 
@@ -597,9 +594,9 @@ The maximum object size is **5TB**, and if the file is more than **5GB**, you mu
 
 Objects can contain additional information:
 
-- **Metadata**, which is a list of text-based key-value pairs
-- **Tags** which are also Unicode-based key-value pairs, and are useful for storing security & lifecycle policy information
-- a **Version ID**, if versioning is enabled
+- **Metadata**, which is a list of text-based key-value pairs.
+- **Tags** which are also Unicode-based key-value pairs, and are useful for storing security & lifecycle policy information.
+- A **Version ID**, if versioning is enabled.
 
 ### S3 Security
 
@@ -613,7 +610,7 @@ Security for S3 can be implemented in many ways. Overall, note that an IAM princ
 
 #### Resource-based security
 
-- **Bucket Policies** are bucket wide JSON-based policies that are similar to IAM policies that can be configured within the S3 console, allowing other accounts to access—this is the most common method.
+- **Bucket Policies** are bucket-wide JSON-based policies that are similar to IAM policies that can be configured within the S3 console, allowing other accounts to access—this is the most common method.
     For example:
 
 ```json
@@ -677,7 +674,7 @@ Amazon S3 objects can be versioned at the bucket level—so if a new object is a
 This prevents unintentional deletes by allowing previous versions to be rolled back at a later date.
 Additional information:
 
-- Any file that is not versioned prior to enabling versioning will have a version `null`.
+- Any file that is not versioned prior to enabling versioning will have a version of `null`.
 - Suspending versioning does not delete previous versions of files.
 
 ![S3 Versioning Diagram](../images/aws-certifications/s3-versioning-diagram.drawio.svg)
@@ -754,18 +751,18 @@ The user can also encrypt a file before uploading it (**Clientside Encryption**)
 
 AWS is responsible for:
 
-- The infrastructure of S3 (global security, durability, availability, the ability to sustain concurrent loss of data in two facilities, etc)
-- Configuration and vulnerability analysis
-- Compliance validation
+- The infrastructure of S3 (global security, durability, availability, the ability to sustain concurrent loss of data in two facilities, etc.).
+- Configuration and vulnerability analysis.
+- Compliance validation.
 
 We are responsible for:
 
-- Versioning
-- Bucket Policies
-- Replication Setup
-- Logging & Monitoring
-- Using the most optimal Storage class
-- Data encryption at rest and in transit
+- Versioning.
+- Bucket policies.
+- Replication setup.
+- Logging & monitoring.
+- Using the most optimal storage class.
+- Data encryption at rest and in transit.
 
 ### Snow Family
 
@@ -800,21 +797,21 @@ These services are:
 
 #### Usage Process
 
-1. Request Snowball devices from the AWS Console for delivery
-2. Install the snowball client / AWS OpsHub on your servers
-3. Connect the snowball device to your servers and copy files using the client
-4. Ship back the device to the AWS facility on data transfer completion
-5. Data will appear in an S3 bucket
-6. Snowball is wiped according to NIST specifications
+1. Request Snowball devices from the AWS Console for delivery.
+2. Install the snowball client / AWS OpsHub on your servers.
+3. Connect the snowball device to your servers and copy files using the client.
+4. Ship back the device to the AWS facility on data transfer completion.
+5. Data will appear in an S3 bucket.
+6. Snowball is wiped according to NIST specifications.
 
 #### Edge Computing with Snow Family devices
 
 Snow family devices can also be used to process data in an *edge location*—even a location that does not have internet access.
 The use cases include:
 
-- Data preprocessing
-- Machine learning at the edge
-- Transcoding media streams
+- Data preprocessing.
+- Machine learning at the edge.
+- Transcoding media streams.
 
 Eventually, the data can be shipped back to an AWS facility for cloud integration.
 The snow family devices providing edge computing are:
@@ -838,8 +835,8 @@ Historically, to use Snow Family devices, a CLI tool was needed to interface wit
 - Unlock and configure single or clustered devices,
 - Transfer files,
 - Launch and manage EC2 instances,
-- Monitor device metrics (such as storage capacity, active instances, etc),
-- Launch compatible AWS services locally (EC2, DataSync, Network File System)
+- Monitor device metrics (such as storage capacity, active instances, etc.),
+- Launch compatible AWS services locally (EC2, DataSync, Network File System).
 
 ### Storage Gateway
 
@@ -871,14 +868,14 @@ You could also run databases on EC2 instances, but this non-managed approach req
 **Relational Database Service** is a *managed database service* for database types that use SQL as a query language, for example Postgres, MySQL, MariaDB, Oracle, SQL Server, as well as Aurora (an AWS proprietary solution).
 This gives us:
 
-- Automated provisioning, OS patching
+- Automated provisioning, OS patching.
 - Continuous backups and restore to a specific timestamp (via point-in-time restore).
-- Monitoring dashboards
-- Read replicas for improved performance
-- Multi-AZ setup for disaster recovery
-- Maintenance windows for upgrades
-- Scaling capability (both horizontal and vertical)
-- Storage is backed by EBS (`gp2` or `io1`)
+- Monitoring dashboards.
+- Read replicas for improved performance.
+- Multi-AZ setup for disaster recovery.
+- Maintenance windows for upgrades.
+- Scaling capability (both horizontal and vertical).
+- Storage is backed by EBS (`gp2` or `io1`).
 
 ![RDS Solution Architecture Diagram](../images/aws-certifications/rds-solution-architecture-diagram.drawio.svg)
 
@@ -916,14 +913,14 @@ These tools help reduce load away from databases for read intensive workloads.
 
 ### DynamoDB
 
-This is a fully-managed, highly-available proprietary NoSQL key-value *Database as a Service* with replication across 3 AZ's.
+This is a fully-managed, highly-available proprietary NoSQL key-value *Database as a Service* with replication across 3 AZs.
 Features:
 
-- Scales to millions/requests/s, trillions of rows, 100s of terabytes of storage
-- Fast and consistent performance
-- Single-digit millisecond latency
-- Integrated with IAM
-- Has both a Standard and Infrequent Access (IA) table class
+- Scales to millions/requests/s, trillions of rows, 100s of terabytes of storage.
+- Fast and consistent performance.
+- Single-digit millisecond latency.
+- Integrated with IAM.
+- Has both a Standard and Infrequent Access (IA) table class.
 
 // TODO: Structure of DynamoDB data
 
@@ -964,7 +961,7 @@ Neptune is a fully-managed graph database that is highly available across 3 AZs,
 
 ### QLDB
 
-Quantum Ledge Database is a fully managed, serverless, highly available (3 AZ replication) ledger database useful for reviewing and capturing history made to application data over time.
+Quantum Ledger Database is a fully managed, serverless, highly available (3 AZ replication) ledger database useful for reviewing and capturing history made to application data over time.
 
 - QLDB provides immutability that can be cryptographically verified.
     Behind the scenes, a *journal* captures sequences of modifications to your data, and then recomputes a cryptographic hash that can provide the data prior has not been modified or deleted.
@@ -979,8 +976,8 @@ Note that this is a **centralised solution**, unlike Managed Blockchain which pr
 Blockchains make it possible to build applications where multiple parties can execute transactions without the need for a trusted, central authority.
 Unlike QLDB, Amazon Managed Blockchain can be used to:
 
-- Join public blockchain networks
-- Create scalable private networks
+- Join public blockchain networks.
+- Create scalable private networks.
 
 It is compatible with the *Hyperledger Fabric*, *Ethereum*, & *Bitcoin* blockchain frameworks.
 
@@ -1004,7 +1001,7 @@ Use cases include business intelligence, analytics, reporting, querying CloudTra
 #### QuickSight
 
 You can create interactive dashboards using the serverless machine learning-powered BI service called **QuickSight**.
-Uses cases include business analytics, building visualisations, performing ad hoc analysis, and extracting business insights.
+Use cases include business analytics, building visualisations, performing ad hoc analysis, and extracting business insights.
 
 #### Glue
 
@@ -1013,7 +1010,7 @@ Instead of using services for this, it is a fully serverless service that can be
 
 ![GLue ETL Diagram](../images/aws-certifications/glue-etl.drawio.svg)
 
-There is also **Glue Data Catalog** (part of the Glue family), is a catalog of your datasets within your AWS infrastructure, which can be used by other AWS services such as Athena, Redshift, EMR, to build schemas for those datasets.
+There is also **Glue Data Catalog** (part of the Glue family), that is a catalog of your datasets within your AWS infrastructure, which can be used by other AWS services such as Athena, Redshift, EMR, to build schemas for those datasets.
 
 #### Database Migration Service
 
@@ -1021,30 +1018,30 @@ There is also **Glue Data Catalog** (part of the Glue family), is a catalog of y
 Additionally, the source database remains available during the migration.
 It supports both:
 
-- **Homogeneous migrations**, i.e. an Oracle database to an AWS Oracle database
-- **Heterogeneous migrations**, i.e. Microsoft SQL Server to Aurora
+- **Homogeneous migrations**, i.e. an Oracle database to an AWS Oracle database.
+- **Heterogeneous migrations**, i.e. Microsoft SQL Server to Aurora.
 
 ## Section 10: Other Compute Services
 
 ### Elastic Container Service (ECS)
 
-Elastic Container Service (ECS) lets us launch docker containers on AWS.
+**Elastic Container Service (ECS)** lets us launch docker containers on AWS.
 You must provision and maintain the underlying infrastructure (such as the EC2 instances that the containers will run on), but AWS will take care of starting & stopping those containers.
 
 ### Fargate
 
-Fargate takes ECS on step further: you do no need to provision EC2 instances to run your docker containers on, AWS will run the containers using the RAM & CPU you need.
+**Fargate** takes ECS on step further: you do not need to provision EC2 instances to run your docker containers on, AWS will run the containers using only the RAM & CPU you need.
 This makes it a *serverless* offering.
 
 // TODO: Fargate diagram
 
 ### Elastic Container Registry (ECR)
 
-Elastic Container Registry (ECR) is a private docker registry on AWS used to host and store Docker images that can then be run via ECS or Fargate.
+**Elastic Container Registry (ECR)** is a private docker registry on AWS used to host and store Docker images that can then be run via ECS or Fargate.
 
 ### Lambda
 
-Lambda is a serverless Functions-as-a-Service tool that runs specified compute tasks on demand in short executions, without having to manage servers, or deal with scaling.
+**Lambda** is a serverless Function-as-a-Service tool that runs specified compute tasks on demand in short executions, without having to manage servers, or deal with scaling.
 
 Lambda is *event-driven*, and functions are invoked by AWS when needed.
 Each function can be allocated [up to 10,240MB of RAM for that function’s execution][21], and RAM allocation is the primary mechanism through which Lambdas can be made more performant.
@@ -1067,7 +1064,7 @@ To prevent broken or stalled Lambda functions from accumulating runtime costs, a
 
 ![API Gateway Diagram](../images/aws-certifications/api-gateway-diagram.drawio.svg)
 
-API Gateway provides tooling to configure a Rest API for clients to proxy requests to Lambda functions, letting third parties run these functions.
+**API Gateway** provides tooling to configure a Rest API for clients to proxy requests to Lambda functions, letting third parties run these functions.
 This provides developers with a fully managed serverless service to create, publish, maintain, monitor, and secure APIs.
 
 It supports both REST & WebSocket APIs, along with security, user authentication, API throttling, and API keys.
@@ -1085,16 +1082,16 @@ Batch jobs are defined as Docker images and run on ECS, and is helpful for cost 
 
 Lambda Limitations:
 
-- There is a 15 minute time limit for all functions
-- There are a limited number of programming runtimes to pick from
-- There is limited temporary disk space
+- There is a 15 minute time limit for all functions.
+- There are a limited number of programming runtimes to pick from.
+- There is limited temporary disk space.
 
 Batch Advantages:
 
-- Has no time limit
-- Any runtime is supported as it’s packaged as a Docker image
-- Relies on EBS & instance store for disk space
-- Relies on EC2 instances that are managed on AWS
+- Has no time limit.
+- Any runtime is supported as it’s packaged as a Docker image.
+- Relies on EBS & instance store for disk space.
+- Relies on EC2 instances that are managed on AWS.
 
 ### Lightsail
 
@@ -1128,7 +1125,7 @@ A CDK application that you write is converted into a CloudFormation template usi
 Beanstalk handles:
 
 - Instance configuration and the underlying OS.
-- The deployment strategy (although it is developer-configuration).
+- The deployment strategy (although it is developer-configured).
 - Capacity provisioning, load balancing, and auto-scaling.
 - Application health monitoring and responsiveness.
 
@@ -1172,11 +1169,11 @@ CodeArtifact is a package and software management repository ("artifact manageme
 
 #### CodeBuild
 
-**CodeBuild** is a serverless Continuous Integration (CI) tool that can build source code, run tests, and product packages ready to be deployed. Pricing is pay-as-you-go for only the resources you use, and includes 100 build minutes per month as a free tier.
+**CodeBuild** is a serverless Continuous Integration (CI) tool that can build source code, run tests, and product packages ready to be deployed. Pricing is pay-as-you-go for only the resources you use, and includes 100 build minutes per month on the free tier.
 
 #### CodeDeploy
 
-**CodeDeploy** lets us deploy our application automatically independent of CloudFormation or ElasticBeanstalk, and works with EC2 instances as well as On-premise Servers.
+**CodeDeploy** lets us deploy our application automatically, independent of CloudFormation or ElasticBeanstalk, and works with EC2 instances as well as on-premise servers.
 It is therefore a hybrid service.
 
 These servers or instances must be provisioned and configured ahead of time using the **CodeDeploy Agent**.
@@ -1203,16 +1200,16 @@ It is also compatible with many third-party services (GitHub, etc.).
 This tool helps you manage your EC2 and on-premise systems at scale (this makes it another hybrid AWS service), allowing you to receive operational insights about the state of your infrastructure.
 Consisting of 13 products, the most important features are:
 
-- Patching automation for enhanced compliance
-- Run commands across an entire fleet of servers
-- Store parameter configuration with the SSM Parameter Store
+- Patching automation for enhanced compliance.
+- Run commands across an entire fleet of servers.
+- Store parameter configuration with the SSM Parameter Store.
 
 SSM requires the SSM agent to be present onto the systems we control, and it is installed by default on the Amazon Linux AMI and some Ubuntu AMIs.
 It was previously called “Simple Systems Manager” which led to its abbreviation of SSM, which is still retained to this day.
 
 #### SSM Session Manager
 
-Session Manager is a feature of SSM that lets you start a secure show on your EC2 and on-premise servers without needing SSH access, bastion hosts, or SSH keys needed.
+Session Manager is a feature of SSM that lets you start a secure connection to your EC2 and on-premise servers without needing SSH access, bastion hosts, or SSH keys.
 This lets you close port 22 (normally used for SSH).
 
 The EC2 instance has an SSM Agent installed on it, and that agent is connected to the Session Manager service.
