@@ -1,6 +1,6 @@
 # Cloud Practitioner (<span data-nospell>CLF</span>-C01) & Developer Associate (<span data-nospell>DVA</span>-C02) Certifications
 
-Notes taken during studies for these AWS certifications, and has been organised into sections that map to the Udemy course I was following.
+Notes taken during studies for these AWS certifications, and have been organised into sections that map to the Udemy course I was following.
 Much of this information was common knowledge to me, but has been written down for the purposes of keeping notes on topics that may be questions within the exams.
 
 ## Section 3: What is cloud computing?
@@ -9,8 +9,8 @@ Much of this information was common knowledge to me, but has been written down f
 
 - **Private cloud** contains cloud services used by a single organisation, and not exposed to the public.
 - **Public cloud** refers to cloud resources owned and operated by a third party service provider—and delivered over the internet (GCP, Azure, AWS).
-- **Hybrid cloud** mixes both of the above, and supports some on-premise services, with extension and more capabilities via the public cloud.
-    This is good for data governance and sensitive documents.
+- **Hybrid cloud** mixes both of the above, and supports some on-premise services, with extensions and more capabilities via the public cloud.
+    This is useful for data governance and sensitive documents.
 
 ### Cloud computing types
 
@@ -32,7 +32,7 @@ Much of this information was common knowledge to me, but has been written down f
 
 | Year | Event                                                    |
 |------|----------------------------------------------------------|
-| 2002 | Internally launched                                      |
+| 2002 | Internally launched.                                     |
 | 2003 | Amazon identified infrastructure as their core strength. |
 | 2004 | Publicly launched with SQS.                              |
 | 2006 | Relaunched with SQS, EC2, & S3.                          |
@@ -67,7 +67,7 @@ Factors that matter:
 
 ### Shared Responsibility Model
 
-![](https://d1.awsstatic.com/security-center/Shared_Responsibility_Model_V2.59d1eccec334b366627e9295b304202faf7b899b.jpg)
+![Shared Responsibility Model Diagram](https://d1.awsstatic.com/security-center/Shared_Responsibility_Model_V2.59d1eccec334b366627e9295b304202faf7b899b.jpg)
 
 Users are responsible for all security **in the cloud**, while AWS is responsible for security **of the cloud**.
 
@@ -960,7 +960,7 @@ DocumentDB storage automatically grows in increments of 10GB up to [128TiB][18].
 
 ### Neptune
 
-Neptune is a fully-managed graph database that is highly available across 3 AZ's, with up to 15 read replicas; and is useful for building and running applications with highly connected datasets, such as knowledge graphs, fraud detection, recommendation engines, and social networking.
+Neptune is a fully-managed graph database that is highly available across 3 AZs, with up to 15 read replicas; and is useful for building and running applications with highly connected datasets, such as knowledge graphs, fraud detection, recommendation engines, and social networking.
 
 ### QLDB
 
@@ -1011,7 +1011,7 @@ Uses cases include business analytics, building visualisations, performing ad ho
 **Glue** is a managed **extract, transform, and load (ETL)** service that can be used to prepare and transform your data for analytics.
 Instead of using services for this, it is a fully serverless service that can be placed in your data pipeline before it is then loaded into another service or database.
 
-![GlueETL.svg](Cloud%20Practitioner%20(CLF-C01)%2085d2aae2a2d845babd8d884ace9fba86/GlueETL.svg)
+![GLue ETL Diagram](../images/aws-certifications/glue-etl.drawio.svg)
 
 There is also **Glue Data Catalog** (part of the Glue family), is a catalog of your datasets within your AWS infrastructure, which can be used by other AWS services such as Athena, Redshift, EMR, to build schemas for those datasets.
 
@@ -1196,11 +1196,11 @@ It is also compatible with many third-party services (GitHub, etc.).
 
 ### Cloud9
 
-**Cloud9** is a cloud IDE for writing, running, and debugging code—accessible via your web browser; and also allows for code collaboration in real time (like most IDEs).
+**Cloud9** is a cloud IDE for writing, running, and debugging code—accessible via your web browser; and also allows for code collaboration in real-time (like most IDEs).
 
 ### Systems Manager (SSM)
 
-This tool helps you manage your EC2 and On-premise systems at scale (this makes it another Hybrid AWS service), allowing you to receive operational insights about the state of your infrastructure.
+This tool helps you manage your EC2 and on-premise systems at scale (this makes it another hybrid AWS service), allowing you to receive operational insights about the state of your infrastructure.
 Consisting of 13 products, the most important features are:
 
 - Patching automation for enhanced compliance
