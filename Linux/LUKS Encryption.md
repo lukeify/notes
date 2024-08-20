@@ -30,10 +30,10 @@ dd if=/dev/zero of=/contents.image bs=1M count=1024
 
 Options:
 
-* `if` input file (`/dev/zero` being a stream of zeroes).
-* `of` output file
-* `bs` refers to the block-size in bytes.
-* `count` copies `bs` number of blocks.
+- `if` input file (`/dev/zero` being a stream of zeroes).
+- `of` output file
+- `bs` refers to the block-size in bytes.
+- `count` copies `bs` number of blocks.
 
 Set up a _loop device_ the file should be associated with, using `losetup`
 A loop device is a file/pseudo-device that acts as a block-based device.
@@ -44,8 +44,8 @@ sudo losetup -f --show contents.image
 
 Alternatively, instead of `-f` and `--show`, the name of a specific device could be given, for example `/dev/loop1`.
 
-* `-f` will find the first free loop device available for you.
-* `--show` will then print the name of that loop device.
+- `-f` will find the first free loop device available for you.
+- `--show` will then print the name of that loop device.
 
 Now with the loop device is associated with the encrypted file, we can format its contents.
 This will product a warning indicating anything in the device will be overwritten, but this is okay since we generated the file with `dd` anyway.
@@ -169,7 +169,7 @@ sudo lsblk -f
 
 ## Other reading
 
-* [Ergonomics of `cryptsetup`][11]
+- [Ergonomics of `cryptsetup`][11]
 
 [1]: https://askubuntu.com/a/1259424
 [2]: https://nuetzlich.net/gocryptfs/threat_model/
