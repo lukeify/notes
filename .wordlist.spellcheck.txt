@@ -15,6 +15,7 @@ AZs
 Balancer
 balancer
 balancers
+biometric
 Bitwarden
 Blockchain
 blockchain
@@ -22,6 +23,7 @@ Blockchains
 blocklists
 brotli
 Brotli
+capacitive
 Catalog
 catalog
 CDK
@@ -29,6 +31,7 @@ CDN
 centric
 CIDR
 CLI
+ClientPIN
 clientside
 CloudFlare
 CloudFormation
@@ -107,10 +110,14 @@ IPv
 js
 JSON
 keychain
+keyfiles
+keyslot
+keyslots
 latencies
 lifecycle
 Lightsail
 lookups
+LUKS
 macOS
 macOS's
 MapReduce
@@ -137,6 +144,7 @@ PBs
 performant
 PiHole
 PiHole's
+PINs
 PoE
 Postgres
 preprocessing
@@ -175,6 +183,7 @@ SSHing
 SSL
 SSM
 StackOverflow
+subcommands
 subnet
 Subnet
 SurePassID
@@ -202,6 +211,7 @@ unarchiving
 UniFi
 unsandboxed
 updatable
+userVerification
 uYouEnhanced
 vCPUs
 vDev
@@ -215,3 +225,4 @@ WebExtensions
 WebKit
 WebSocket
 Xcode
+YubiKey
