@@ -3,7 +3,7 @@
 LUKS (Linux Unified Key Setup) is a disk encryption specification, and the `cryptsetup` package can create encrypted block devices utilising this specification.
 These block devices can be unlocked using passphrases, keyfiles, or even FIDO2 devices.
 
-There exists two main version of LUKS.
+There exists two main versions of LUKS.
 The original version is now discouraged in favour of LUKS2 (`cryptsetup`by default will use LUKS2), which utilises the `Argon2` key derivation function whilst the original version utilised `PBKDF2`.
 [This answer goes into further detail on the differences][1].
 
@@ -14,7 +14,7 @@ For example, tools like `gocryptfs` can encrypt files within an image, but the f
 Deducing you have a music album based on the file sizes of the contents, for example.
 
 On the other hand, block device encryption has some drawbacks.
-Backing up to cloud storage requires a full re-upload of the block image every time the contents change, for example.
+Backing up to cloud storage can often require a full re-upload of the block image every time the contents change, for example.
 Whereas with `gocryptfs` only the changed (encrypted) files within the image need be uploaded.
 
 More general information about device encryption can be found in the [Arch Linux wiki][3].
@@ -31,11 +31,11 @@ dd if=/dev/zero of=/contents.image bs=1M count=1024
 Options:
 
 - `if` input file (`/dev/zero` being a stream of zeroes).
-- `of` output file
+- `of` output file.
 - `bs` refers to the block-size in bytes.
 - `count` copies `bs` number of blocks.
 
-Set up a _loop device_ the file should be associated with, using `losetup`
+Set up a _loop device_ the file should be associated with, using `losetup`.
 A loop device is a file/pseudo-device that acts as a block-based device.
 
 ```shell
@@ -47,8 +47,8 @@ Alternatively, instead of `-f` and `--show`, the name of a specific device could
 - `-f` will find the first free loop device available for you.
 - `--show` will then print the name of that loop device.
 
-Now with the loop device is associated with the encrypted file, we can format its contents.
-This will product a warning indicating anything in the device will be overwritten, but this is okay since we generated the file with `dd` anyway.
+Now with the loop device associated with the encrypted file, we can format its contents.
+This will product a warning indicating anything in the device will be overwritten, but this is okay since we generated a meaningless file with `dd` anyway.
 
 Note that by default this command will use the `LUKS2` format:
 
@@ -56,7 +56,7 @@ Note that by default this command will use the `LUKS2` format:
 sudo cryptsetup luksFormat /dev/loop1
 ```
 
-`cryptsetup` will ask for a passphrase—this can be left blank since the keyslot this passphrase will be inserted into will be deleted anyway once a FIDO2 device is associated with the device.
+`cryptsetup` will ask for a passphrase—this can be left blank since the keyslot this passphrase will be inserted into will be deleted once a FIDO2 device is associated with the device.
 More details on `cryptsetup` can be read on the [Arch Linux wiki][4], whilst the `cryptsetup` [man page][5] is incredibly useful when needing to refer to its subcommands.
 Next, add a FIDO2 keyslot to the device using `systemd-cryptenroll`:
 
@@ -143,7 +143,7 @@ Shorthand commands:
 
 ```shell
 sudo umount /mnt
-sudo cryptsetup close contents.encryptedvol
+sudo cryptsetup close contents.unencrypted
 sudo losetup -d /dev/loop1
 ```
 
