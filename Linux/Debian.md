@@ -87,7 +87,8 @@ Initial guide followed: https://ianlecorbeau.github.io/blog/debian-live-build.ht
 
 ```sh
 #!/bin/sh
-lb config -d bookworm --backports true --debian-installer live \
+lb config -d bookworm --backports true \
+    --debian-installer live \
     --debian-installer-distribution bookworm \
     --archive-areas "main contrib non-free non-free-firmware" \
     --debootstrap-options "--variant=minbase" \
