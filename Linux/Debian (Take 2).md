@@ -44,3 +44,6 @@ Install `qemu-kvm` `qemu-utils` for the purposes of live-build testing.
 Installed and configured `apt-cacher-ng`
 
 ## live-build specific configuration
+
+Create a fake "disk" for live-build to install to with `qemu-img create -f disk_image.qcow2 12G`
+Attempted to test the live-build with `kvm -m 2048M -cdrom live-image-amd64.hybrid.iso -hda disk_image.qcow2 -boot d`
