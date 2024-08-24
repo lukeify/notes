@@ -23,7 +23,7 @@ The instructions present in the installation guide on [<span data-nospell>google
     cd ../../../..
     ```
 
-    If updating the cloned repository, run `git pull --recruse-submodules` instead.
+    If updating the cloned repository, run `git pull --recurse-submodules` instead.
 
 3. Switch to the `nginx` directory and run the "Dynamically loaded" steps, taking care to ensure the compilation output from `nginx -V` is included when running `./configure`.
 
