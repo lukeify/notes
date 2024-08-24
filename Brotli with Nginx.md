@@ -8,8 +8,8 @@ The instructions present in the installation guide on [<span data-nospell>google
 1. Clone the latest version of `nginx` that is installed on your system.
 
     ```bash
-    wget https://nginx.org/download/nginx-1.27.0.tar.gz
-    tar -xf nginx-1.27.0.tar.gz
+    wget https://nginx.org/download/nginx-1.27.1.tar.gz
+    tar -xf nginx-1.27.1.tar.gz
     ```
 
 2. Clone `ngx_brotli`, and follow the steps listed in the first "Statically compiled" section of the repository.
@@ -28,7 +28,7 @@ The instructions present in the installation guide on [<span data-nospell>google
 3. Switch to the `nginx` directory and run the "Dynamically loaded" steps, taking care to ensure the compilation output from `nginx -V` is included when running `./configure`.
 
     ```bash
-    cd nginx-1.27.0
+    cd nginx-1.27.1
     ./configure --with-compat --add-dynamic-module=/path/to/ngx_brotli
     ```
 
