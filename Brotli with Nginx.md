@@ -56,7 +56,12 @@ If you are dealing with PGP key issues with Nginx's package repositories:
 - [Updating the PGP Key for NGINX Software][3]
 - [Ubuntu installation guide][4]
 
+## Automation
+
+I have automated this process somewhat—see the corresponding script in the repository [lukeify/scripts][5].
+
 [1]: https://github.com/google/ngx_brotli
 [2]: https://github.com/google/ngx_brotli?tab=readme-ov-file#installation
 [3]: https://blog.nginx.org/blog/updating-pgp-key-for-nginx-software
 [4]: https://nginx.org/en/linux_packages.html#Ubuntu
+[5]: https://github.com/lukeify/scripts/blob/main/src/compile_brotli_for_nginx.sh
