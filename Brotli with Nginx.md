@@ -8,8 +8,8 @@ The instructions present in the installation guide on [<span data-nospell>google
 1. Clone the latest version of `nginx` that is installed on your system.
 
     ```bash
-    wget https://nginx.org/download/nginx-1.27.0.tar.gz
-    tar -xf nginx-1.27.0.tar.gz
+    wget https://nginx.org/download/nginx-1.27.1.tar.gz
+    tar -xf nginx-1.27.1.tar.gz
     ```
 
 2. Clone `ngx_brotli`, and follow the steps listed in the first "Statically compiled" section of the repository.
@@ -23,13 +23,14 @@ The instructions present in the installation guide on [<span data-nospell>google
     cd ../../../..
     ```
 
-    If updating the cloned repository, run `git pull --recruse-submodules` instead.
+    If updating the cloned repository, run `git pull --recurse-submodules` instead.
 
 3. Switch to the `nginx` directory and run the "Dynamically loaded" steps, taking care to ensure the compilation output from `nginx -V` is included when running `./configure`.
 
     ```bash
-    cd nginx-1.27.0
-    ./configure --with-compat --add-dynamic-module=/path/to/ngx_brotli
+    cd nginx-1.27.1
+   # Provide the path to the built `nginx_brotli`
+    ./configure --with-compat --add-dynamic-module=../ngx_brotli
     ```
 
 4. Move the compiled module files:
@@ -55,7 +56,12 @@ If you are dealing with PGP key issues with Nginx's package repositories:
 - [Updating the PGP Key for NGINX Software][3]
 - [Ubuntu installation guide][4]
 
+## Automation
+
+I have automated this process somewhat—see the corresponding script in the repository [lukeify/scripts][5].
+
 [1]: https://github.com/google/ngx_brotli
 [2]: https://github.com/google/ngx_brotli?tab=readme-ov-file#installation
 [3]: https://blog.nginx.org/blog/updating-pgp-key-for-nginx-software
 [4]: https://nginx.org/en/linux_packages.html#Ubuntu
+[5]: https://github.com/lukeify/scripts/blob/main/src/compile_brotli_for_nginx.sh
