@@ -29,7 +29,8 @@ The instructions present in the installation guide on [<span data-nospell>google
 
     ```bash
     cd nginx-1.27.1
-    ./configure --with-compat --add-dynamic-module=/path/to/ngx_brotli
+   # Provide the path to the built `nginx_brotli`
+    ./configure --with-compat --add-dynamic-module=../ngx_brotli
     ```
 
 4. Move the compiled module files:
