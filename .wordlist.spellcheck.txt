@@ -117,6 +117,7 @@ latencies
 lifecycle
 Lightsail
 lookups
+lukeify
 LUKS
 macOS
 macOS's
