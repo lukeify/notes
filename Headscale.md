@@ -20,9 +20,23 @@ Debugging headscale run failures can be done with `journalctl -u headscale.servi
 ### Reverse Proxy Configuration
 
 By default, Headscale does not provide out of the box configuration to be located behind a reverse proxy, [and such resources are community maintained][2b].
+With NGINX however, the process is reasonably simple:
 
-TODO: Document
-TODO: Replace understanding about headscale TLS with TLS termination at nginx
+1. Unset any TLS configuration settings from the Headscale `config.yaml` file:
+   1. `acme_url` (left set for documentation purposes),
+   2. `acme_email`,
+   3. `tls_letsencrypt_hostname`,
+   4. `tls_letsencrypt_cache_dir` (left set for documentation purposes),
+   5. `tls_letsencrypt_challenge_type` (left set for documentation purposes),
+   6. `tls_letsencrypt_listen`,
+   7. `tls_cert_path`,
+   8. `tls_key_path`
+
+   Note that the `server_url` setting retains its `https://` suffix.
+2. Introduce an `nginx` [configuration][2c] that enables SSL termination at the `nginx` level before passing on the traffic with the `proxy_*` directives.
+   It's important to set the `Upgrade` and `Connection` headers appropriately in the proxy configuration—this is needed to pass WebSockets through.
+3. Generate an SSL certificate for the server using `certbot`.
+4. Restart `nginx` and `headscale`.
 
 ## Tailnet naming
 
@@ -57,6 +71,7 @@ Provide a tailnet policy file by specifying a filename to the `acl_policy_path` 
 [1]: https://headscale.net
 [2]: https://headscale.net/running-headscale-linux/
 [2b]: https://headscale.net/reverse-proxy/
+[2c]: https://headscale.net/reverse-proxy/#nginx
 [3]: https://tailscale.com/kb/1065/macos-variants
 [4]: https://tailscale.com/kb/1065/macos-variants#comparison-table
 [5]: https://github.com/tailscale/hujson
