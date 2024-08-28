@@ -58,6 +58,8 @@ A tailnet policy file can be provided to Headscale to implement access control v
 This file is written in [HuJSON][5] (Human JSON), which is a Tailscale implementation of [JWCC][6] ("JSON with Commas and Comments").
 Provide a tailnet policy file by specifying a filename to the `acl_policy_path` key within the Headscale configuration.
 
+Note that `Headscale` will fail to start if provided a policy file with zero ACL's inside of it—even an empty `acls` array is not sufficient.
+
 ## CLI Notes
 
 * Currently, it is only possible to expire API keys generated from the Headscale server, not delete them.
