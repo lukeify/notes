@@ -38,6 +38,13 @@ With NGINX however, the process is reasonably simple:
 3. Generate an SSL certificate for the server using `certbot`.
 4. Restart `nginx` and `headscale`.
 
+### Metrics
+
+Metrics can be made public by configuring a separate `nginx` location block that points to the `metrics_listen_addr` specified in the Headscale configuration.
+This is a response in "Prometheus Exposition Format", with each metric being annotated with metadata prefixed with `# HELP` and `# TYPE`.
+
+TODO: How can this be made private?
+
 ## Tailnet naming
 
 Your client will initially report your Tailnet name as being `user@example.com` (where `user` is the username you provided).
@@ -84,5 +91,4 @@ Note that `Headscale` will fail to start if provided a policy file with zero ACL
 
 TODOS:
 
-* How to make metrics internal only?
 * How to enable GRPC for remotely controlling headscale server via the CLI?
