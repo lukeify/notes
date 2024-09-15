@@ -67,11 +67,41 @@ Provide a tailnet policy file by specifying a filename to the `acl_policy_path` 
 
 Note that `Headscale` will fail to start if provided a policy file with zero ACL's inside of it—even an empty `acls` array is not sufficient.
 
-## CLI Notes
+## Tailscale CLI
+
+Tailscale ships with two command line tools.
+These are installed on nodes that participate in the tailnet:
+
+* `tailscaled`, a daemon which manages networking and usually is not interacted with. [Flags that can be passed here][6a].
+* `tailscale`, the CLI to manage the tailscale network, login, logout, etc. [Command reference here][6b].
+
+### CLI Notes
 
 * Currently, it is only possible to expire API keys generated from the Headscale server, not delete them.
     Deleting keys involves [modifying the contents of the SQLite database][7] Headscale uses to store information within.
     However, this [feature has been landed][8] on the main branch for the next release.
+
+## Headscale UI
+
+Headscale does not ship with a native GUI, you can self-host [headscale-ui][9]—a third-party GUI for the headscale project—instead.
+This is a static site that is expected to be hosted from the same subdomain that the Headscale control server runs on, under the `web/` subdirectory.
+Built with svelte, it can be initialised with:
+
+```bash
+npm install
+npm run build
+```
+
+And then served over `nginx` via:
+
+```nginx
+location /web {
+    alias /var/www/headscale-ui-2024.02.24-beta1/build/;
+    index index.html;
+}
+```
+
+Provide it with an API key to address your headscale control server by generating one with `sudo headscale apikeys create`.
 
 ## Usage with Fly.io
 
@@ -85,8 +115,11 @@ Note that `Headscale` will fail to start if provided a policy file with zero ACL
 [4]: https://tailscale.com/kb/1065/macos-variants#comparison-table
 [5]: https://github.com/tailscale/hujson
 [6]: https://nigeltao.github.io/blog/2021/json-with-commas-comments.html
+[6a]: https://tailscale.com/kb/1278/tailscaled#flags-to-tailscaled
+[6b]: https://tailscale.com/kb/1080/cli#command-reference
 [7]: https://github.com/juanfont/headscale/issues/1667#issuecomment-1951606032
 [8]: https://github.com/juanfont/headscale/pull/1702
+[9]: https://github.com/gurucomputing/headscale-ui
 
 
 TODOS:
