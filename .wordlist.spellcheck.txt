@@ -40,6 +40,7 @@ CloudKeys
 CloudShell
 CloudTrail
 CloudWatch
+CNAME
 CodeArtifact
 CodeBuild
 CodeCommit
@@ -90,10 +91,13 @@ GPG
 Greengrass
 gRPC
 GWLB
+Headscale
+headscale
 hoc
 HPC
 HTTP
 HTTPS
+HuJSON
 Hyperledger
 IaaS
 IAM
@@ -109,6 +113,7 @@ IPs
 IPv
 js
 JSON
+JWCC
 keychain
 keyfiles
 keyslot
@@ -116,6 +121,7 @@ keyslots
 latencies
 lifecycle
 Lightsail
+LetsEncrypt
 lookups
 lukeify
 LUKS
@@ -189,6 +195,9 @@ subnet
 Subnet
 SurePassID
 symlink
+tailnet
+Tailscale
+tailscale
 TBs
 TCP
 Teleporter
@@ -225,5 +234,6 @@ WebExtension
 WebExtensions
 WebKit
 WebSocket
+WebSockets
 Xcode
 YubiKey
