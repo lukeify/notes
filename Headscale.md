@@ -67,6 +67,10 @@ Provide a tailnet policy file by specifying a filename to the `acl_policy_path` 
 
 Note that `Headscale` will fail to start if provided a policy file with zero ACL's inside of it—even an empty `acls` array is not sufficient.
 
+## Nodes
+
+https://tailscale.com/kb/1111/ephemeral-nodes
+
 ## Tailscale CLI
 
 Tailscale ships with two command line tools.
@@ -103,9 +107,49 @@ location /web {
 
 Provide it with an API key to address your headscale control server by generating one with `sudo headscale apikeys create`.
 
-## Usage with Fly.io
+## DNS
 
-* How to run tailscale in an image for fly.io?
+Tailscale clients can use the DNS provided by the tailscale control server when configured, or can ignore it with `--accept-dns=false` (documentation) argument to the tailscale CLI.
+
+Additionally, extra A (or [AAAA][10]) DNS records can be provided to associate node IP addresses with human-friendly domain names.
+This can be configured in the headscale `config.yaml` file:
+
+```yaml
+dns:
+  extra_records:
+    - name: "my.dns.record.example"
+      type: "A"
+      value: "100.64.0.1"
+```
+
+Confirm your record via `dig`.
+
+TODO:
+
+https://tailscale.com/kb/1054/dns
+https://tailscale.com/kb/1081/magicdns
+https://tailscale.com/kb/1033/ip-and-dns-addresses?tab=macos
+
+## Headscale API
+
+Compared to the [Tailscale API][11], Headscale's functionality and documentation is thin.
+Requests to the Headscale can be made at your headscale control plane's endpoint, with authentication taking place via a `Authorization` header being provided an API key generated from `sudo headscale apikeys create`:
+
+```bash
+curl https://hs.example/api/v1/ \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <API_KEY>"
+```
+
+A full list of API endpoints for Headscale can be found and viewed using the OpenAPI Specification plugin within IntelliJ to explore the [`gen/go/openapiv2/headscale/v1/headscale.swagger.json`][12] file.
+
+## Usage with <span data-nospell>Fly.io</span>
+
+* How to run tailscale in an image for <span data-nospell>fly.io</span>?
+
+## Further reading & watching
+
+* [Self Host Tailscale with Headscale - How To Setup][13] by Jim's Garage, YouTube
 
 [1]: https://headscale.net
 [2]: https://headscale.net/running-headscale-linux/
@@ -120,7 +164,10 @@ Provide it with an API key to address your headscale control server by generatin
 [7]: https://github.com/juanfont/headscale/issues/1667#issuecomment-1951606032
 [8]: https://github.com/juanfont/headscale/pull/1702
 [9]: https://github.com/gurucomputing/headscale-ui
-
+[10]: https://github.com/tailscale/tailscale/blob/6edf357b96b28ee1be659a70232c0135b2ffedfd/ipn/ipnlocal/local.go#L2989-L3007
+[11]: https://tailscale.com/api
+[12]: https://github.com/juanfont/headscale/blob/main/gen/openapiv2/headscale/v1/headscale.swagger.json
+[13]: https://www.youtube.com/watch?v=OECp6Pj2ihg
 
 TODOS:
 
