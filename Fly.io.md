@@ -21,20 +21,56 @@ Apps that are shutdown but persist on Fly.io accumulate a RootFS storage fee of 
 
 An example deployment flow using `fly.io` for a Ruby on Rails app.
 
+### Initialization
+
+Although fly.io can create deploy an application from a repository with a single command (`flyctl launch`), this reduces the amount of customisation available.
+Additionally, often secrets that are required for the Rails app to boot will not be present in the initial Docker machine image that fly.io will create and changes will be needed.
+Instead, an application can be registered using:
+
+```bash
+fly apps create APP_NAME
+```
+
+This will create an instance of an application with no machines attached.
+
 ### Integrating secrets
 
-`flyctl launch --no-deploy`
+Secrets can be added to an application without redeploying using the staging command:
+
+```bash
+fly secrets set SECREY_KEY=secret_value --stage
+```
 
 Add TAILSCALE_AUTHKEY secret
 Add RAILS_SECRET_KEY_BASE secret
 
-`flyctl deploy`
+### Attaching services
+
+
+
+### Build configuration
+
+### Launching
+
+
+`fly deploy` will automatically provision 2 machines.
+Specifying false high availability will reduce this to one—this is beneficial for non-production environments.
+There does not appear to be a `fly.toml` configuration for this.
+
+```bash
+flyctl deploy --ha=false
+```
+
+
+```bash
+flyctl launch --no-deploy
+```
+
 
 https://community.fly.io/t/setting-secrets-before-the-first-deployment-does-nothing/5589/7
 
 
 ### Runtime secrets
-
 
 ### Networking
 
