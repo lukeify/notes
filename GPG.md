@@ -53,6 +53,14 @@ git config --global commit.gpgsign true
 Once a commit is made, you will be asked to allow `pinetry-mac` to add items to your macOS keychain to enable automatic signing going forward.
 This is a one-time operation.
 
+# "GPG failed to sign the data"
+
+Sometimes the `gpg-agent` on macOS can hang. This can be checked by running:
+
+```shell
+gpg --list-secret-keys --keyid-format=long
+```
+
 [1]: https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
 [2]: https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account
 [3]: https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key
