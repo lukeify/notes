@@ -57,6 +57,65 @@ Providing `null` is defined in the spec as returning the entire storage contents
 
 Unfortunately, Safari (both macOS and iOS) [does not support this functionality][7], so you must manually store all keys and provide that as an array to retrieve all contents.
 
+## etc etc
+
+## Methods which do not work in Safari
+
+* `onRuleMatchedDebug`
+* `updateStaticRules`
+* `getAvailableStaticRuleCount`
+
+## Content script gotchas
+
+1. Can't use `scripting` in content scripts.
+2. Can't get active tab in content scripts.
+3. Module imports? not happening.
+
+https://github.com/w3c/webextensions/issues/403
+
+# Browser compatibility
+
+## `hostPermissions` compatibility
+
+### Google Chrome
+
+Works with host permissions:
+
+```json
+"host_permissions": [
+    "<all_urls>"
+]
+```
+
+Does not work if:
+
+```json
+"host_permissions": [
+    "*://i.redd.it/*",
+    "*://old.reddit.com/*",
+    "*://reddit.com/*"
+]
+```
+
+### Apple Safari
+
+### Mozilla Firefox
+
+## `modifyHeaders` compatibility
+
+```json
+"action": {
+    "type": "modifyHeaders",
+    "requestHeaders": [
+        {
+            "header": "Accept",
+            "operation": "set",
+            "value": "image/webp,image/jpeg,image/png"
+        }
+    ]
+}
+```
+
 [1]: https://developer.chrome.com/docs/extensions/reference/api/declarativeNetRequest#method-updateStaticRules
 [2]: https://chromium.googlesource.com/chromium/src/+/86cf9e194ae801b3bfde08c253a7a12dae6b0cb7/chrome/test/data/extensions/api_test/declarative_net_request/update_static_rules/background.js
 [3]: https://bugs.webkit.org/show_bug.cgi?id=261039
