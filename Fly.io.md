@@ -84,6 +84,11 @@ https://fly.io/docs/blueprints/connect-private-network-wireguard/
 https://tailscale.com/kb/1132/flydotio
 https://community.fly.io/t/accessing-an-external-non-public-resource-from-your-fly-io-app/10180
 https://community.fly.io/t/connecting-your-fly-apps-to-your-tailscale-tailnet/17828
+https://thisisfranklin.com/2023/01/13/running-rails-on-flyio-with-tailscale.html
+https://fly.io/docs/networking/flycast/
+https://fly.io/docs/blueprints/autostart-internal-apps/
+https://tailscale.com/kb/1153/enabling-https
+https://tailscale.com/kb/1054/dns
 
 [1]: https://fly.io/docs/about/pricing/
 [2]: https://community.fly.io/t/we-are-going-to-start-collecting-charges-for-stopped-machines-rootfs-starting-april-25th/17825
