@@ -41,7 +41,14 @@ chmod 600 ~/.gnupg/*
 gpg --import ~/.gnupg/private.key
 ```
 
-Once imported, the signing key summary will be displayed, and it can be used for autosigning via `git`:
+Once imported, the signing key summary will be displayed.
+Next, it must be trusted "ultimately" by importing the `trust.gpg` file:
+
+```shell
+gpg --import-ownertrust ~/.gnupg/trust.gpg
+```
+
+Now it can be used for autosigning via `git`:
 
 ```shell
 # Add your signing key ID to git's config.
