@@ -16,16 +16,13 @@ To configure a key locally, or otherwise use an existing key on a machine:
 - [Telling Git about your signing key][3]
 - [Sign git commits on GitHub with GPG in macOS][4]
 
-I used these guides to configure a GPG key to be used for autosigning via `git`, in this order:
+Install `gpg` if it's not already on your system.
 
 ```shell
-# Add your signing key ID to git's config.
-git config --global commit.signingkey $(gpg --list-secret-keys --keyid-format=long | awk '/^sec/ {split($2, a, "/"); print a[2]}')
-# Automatically sign commits with the above key.
-git config --global commit.gpgsign true
+brew install gpg
 ```
 
-Finally we can use `pinentry-mac` to save our GPG credentials to macOS's keychain so we don't need to enter our key's password on every commit:
+We can use `pinentry-mac` to save our GPG credentials to macOS's keychain so we don't need to enter our key's password on every commit:
 
 ```shell
 brew install pinentry-mac
@@ -35,7 +32,41 @@ echo 'export GPG_TTY=$(tty)' >> ~/.zshrc
 gpgconf --kill gpg-agent
 ```
 
+Place the keys into `~/.gnupg` and ensure they have the correct permissions.
+Finally import the private key:
+
+```shell
+chmod 700 ~/.gnupg
+chmod 600 ~/.gnupg/*
+gpg --import ~/.gnupg/private.key
+```
+
+Once imported, the signing key summary will be displayed.
+Next, it must be trusted "ultimately" by importing the `trust.gpg` file:
+
+```shell
+gpg --import-ownertrust ~/.gnupg/trust.gpg
+```
+
+Now it can be used for autosigning via `git`:
+
+```shell
+# Add your signing key ID to git's config.
+git config --global commit.signingkey $(gpg --list-secret-keys --keyid-format=long | awk '/^sec/ {split($2, a, "/"); print a[2]}')
+# Automatically sign commits with the above key.
+git config --global commit.gpgsign true
+```
+
 Once a commit is made, you will be asked to allow `pinetry-mac` to add items to your macOS keychain to enable automatic signing going forward.
+This is a one-time operation.
+
+# "GPG failed to sign the data"
+
+Sometimes the `gpg-agent` on macOS can hang. This can be checked by running:
+
+```shell
+gpg --list-secret-keys --keyid-format=long
+```
 
 [1]: https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
 [2]: https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account
